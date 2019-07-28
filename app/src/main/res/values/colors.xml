@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#af3d56</color>
+    <color name="colorPrimaryDark">#af3d56</color>
+    <color name="colorPrimaryDarker">#af3d56</color>
+    <color name="colorAccent">#FFFFFF</color>
+
+    <color name="green">#00FF00</color>
+    <color name="gray">#ADACAC</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="orange">#FFA500</color>
+    <color name="pure_yellow">#FFFF66</color>
+    <color name="dark_moderate_violet">#8E44AD</color>
+    <color name="strong_red">#C0392B</color>
+    <color name="basic_red">#FF0000</color>
+
+    <color name="login_inputs_color">#af3d56</color>
+    <color name="sfl_placeholder">#8a000000</color>
+</resources>

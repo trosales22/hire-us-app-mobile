@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardView_talents"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        card_view:cardCornerRadius="4dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <ImageView
+                android:id="@+id/imgTalentDisplayPhoto"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="10dp"
+                android:background="@color/gray"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <TextView
+                android:id="@+id/lblTalentFullname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/imgTalentDisplayPhoto"
+                android:layout_marginStart="5dp"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:background="@color/gray"
+                android:foreground="@color/gray"
+                android:layout_marginBottom="5dp"
+                android:gravity="start"
+                android:text="Talent Fullname" />
+
+            <TextView
+                android:id="@+id/lblTalentCategories"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/imgTalentDisplayPhoto"
+                android:layout_below="@id/lblTalentFullname"
+                android:layout_marginStart="5dp"
+                android:textSize="18sp"
+                android:textColor="@color/gray"
+                android:background="@color/gray"
+                android:foreground="@color/gray"
+                android:gravity="start"
+                android:text="Categories" />
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>
