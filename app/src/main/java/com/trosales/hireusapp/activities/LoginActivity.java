@@ -21,7 +21,7 @@ public class LoginActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         btnLoginUser.setOnClickListener(v -> {
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(this, HomeActivity.class));
         });
     }
 }

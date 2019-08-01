@@ -14,7 +14,7 @@
     </style>
 
     <style name="AppTheme.NoActionBar.NavigationView">
-        <item name="colorPrimary">@color/login_inputs_color</item>
+        <item name="colorPrimary">@color/colorPrimaryDark</item>
         <item name="color">@color/black</item>
     </style>
 
