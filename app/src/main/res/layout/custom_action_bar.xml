@@ -1,0 +1,48 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width = "match_parent"
+    android:layout_height = "?android:attr/actionBarSize"
+    android:gravity = "center_vertical"
+    android:padding = "5dp"
+    android:weightSum = "1">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        android:layout_weight="0.6">
+
+        <ImageView
+            android:layout_width = "?android:attr/actionBarSize"
+            android:layout_height = "?android:attr/actionBarSize"
+            android:src = "@drawable/hire_us_logo"
+            android:padding = "5dp"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id = "@+id/appName"
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content"
+                android:layout_marginStart = "10dp"
+                android:text = "HIRE US"
+                android:textSize = "15sp"
+                android:textColor = "#000"
+                android:textStyle = "bold" />
+
+            <TextView
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content"
+                android:layout_marginStart = "10dp"
+                android:text = "&quot;A booking application that will cater market in entertainment and events industry.&quot;"
+                android:textSize = "12sp"
+                android:textColor="@color/black"
+                android:textStyle="italic"
+                android:layout_below="@id/appName"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+</LinearLayout>

@@ -16,8 +16,8 @@
     <color name="basic_red">#FF0000</color>
     <color name="strong_cyan">#06beb6</color>
     <color name="moderate_cyan">#48b1bf</color>
+    <color name="very_dark_cyan">#003f3f</color>
 
-    <color name="login_inputs_color">#af3d56</color>
     <color name="sfl_placeholder">#8a000000</color>
 
     <array name="colors">

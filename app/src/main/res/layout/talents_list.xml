@@ -44,12 +44,12 @@
                 android:text="Talent Fullname" />
 
             <TextView
-                android:id="@+id/lblTalentHeight"
+                android:id="@+id/lblTalentHeightAndAge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@id/imgTalentDisplayPhoto"
                 android:layout_below="@id/lblTalentFullname"
-                android:drawableStart="@drawable/ic_accessibility_black"
+                android:drawableStart="@drawable/ic_info_black"
                 android:drawablePadding="5dp"
                 android:paddingStart="5dp"
                 android:layout_marginStart="5dp"
@@ -58,43 +58,7 @@
                 android:textSize="18sp"
                 android:textColor="@color/black"
                 android:gravity="start"
-                android:text="Talent Height"
-                card_view:ignore="RtlSymmetry" />
-
-            <TextView
-                android:id="@+id/lblTalentEmail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toEndOf="@id/imgTalentDisplayPhoto"
-                android:layout_below="@id/lblTalentHeight"
-                android:drawableStart="@drawable/ic_email_black"
-                android:drawablePadding="5dp"
-                android:paddingStart="5dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginBottom="5dp"
-                android:textSize="18sp"
-                android:textColor="@color/black"
-                android:gravity="start"
-                android:text="Talent Email"
-                card_view:ignore="RtlSymmetry" />
-
-            <TextView
-                android:id="@+id/lblTalentContactNumber"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toEndOf="@id/imgTalentDisplayPhoto"
-                android:layout_below="@id/lblTalentEmail"
-                android:drawableStart="@drawable/ic_contact_phone_black"
-                android:drawablePadding="5dp"
-                android:paddingStart="5dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginBottom="5dp"
-                android:textSize="18sp"
-                android:textColor="@color/black"
-                android:gravity="start"
-                android:text="Talent Contact Number"
+                android:text="Talent Height &amp; Age"
                 card_view:ignore="RtlSymmetry" />
 
             <TextView
@@ -102,7 +66,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@id/imgTalentDisplayPhoto"
-                android:layout_below="@id/lblTalentContactNumber"
+                android:layout_below="@id/lblTalentHeightAndAge"
                 android:drawableStart="@drawable/ic_my_location_black"
                 android:drawablePadding="5dp"
                 android:paddingStart="5dp"
@@ -126,8 +90,8 @@
                 android:textStyle="bold"
                 android:textSize="15sp"
                 android:padding="5dp"
-                android:textColor="@color/login_inputs_color"
-                android:text="Comedians" />
+                android:textColor="@color/colorPrimaryDarker"
+                android:text="Categories" />
 
         </RelativeLayout>
 

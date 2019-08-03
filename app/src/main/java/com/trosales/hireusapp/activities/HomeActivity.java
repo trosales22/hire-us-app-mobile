@@ -1,73 +1,73 @@
 package com.trosales.hireusapp.activities;
 
 import android.os.Bundle;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import android.os.Handler;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.annotation.NonNull;
-import android.view.MenuItem;
-import android.widget.TextView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.ethanhua.skeleton.Skeleton;
+import com.ethanhua.skeleton.SkeletonScreen;
 import com.trosales.hireusapp.R;
+import com.trosales.hireusapp.classes.adapters.TalentsAdapter;
 import com.trosales.hireusapp.classes.beans.Categories;
-import com.trosales.hireusapp.fragments.HomeFragment;
+import com.trosales.hireusapp.classes.constants.EndPoints;
+import com.trosales.hireusapp.classes.constants.Tags;
+import com.trosales.hireusapp.classes.wrappers.TalentsDO;
 import com.yalantis.filter.adapter.FilterAdapter;
 import com.yalantis.filter.listener.FilterListener;
 import com.yalantis.filter.widget.Filter;
 import com.yalantis.filter.widget.FilterItem;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import cz.kinst.jakub.view.SimpleStatefulLayout;
 
 public class HomeActivity extends AppCompatActivity implements FilterListener<Categories> {
-    private TextView mTextMessage;
+    @BindView(R.id.stateful_layout) SimpleStatefulLayout simpleStatefulLayout;
+    @BindView(R.id.swipeToRefresh_talents) SwipeRefreshLayout swipeToRefresh_talents;
+    @BindView(R.id.recyclerView_talents) RecyclerView recyclerView_talents;
+
+    private List<TalentsDO> talentsDOList;
+    private TalentsAdapter talentsAdapter;
+    protected Handler handler;
+    private SkeletonScreen skeletonScreen;
 
     private int[] mColors;
     private String[] mTitles;
-    private Filter<Categories> mFilter;
-
-    private FragmentManager fm = getSupportFragmentManager();
-    private Fragment homeFragment = HomeFragment.newInstance();
-    private Fragment activeFragment = homeFragment;
-
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    //mTextMessage.setText(R.string.title_home);
-                    fm.beginTransaction().hide(activeFragment).show(homeFragment).commit();
-                    activeFragment = homeFragment;
-                    return true;
-                case R.id.navigation_dashboard:
-                    mTextMessage.setText(R.string.title_dashboard);
-                    return true;
-                case R.id.navigation_notifications:
-                    mTextMessage.setText(R.string.title_notifications);
-                    return true;
-            }
-            return false;
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        BottomNavigationView navView = findViewById(R.id.nav_view);
-        mTextMessage = findViewById(R.id.message);
-        navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        ButterKnife.bind(this);
+
+        Objects.requireNonNull(this.getSupportActionBar()).setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setDisplayShowCustomEnabled(true);
+        getSupportActionBar().setCustomView(R.layout.custom_action_bar);
+        getSupportActionBar().getCustomView();
 
         mColors = getResources().getIntArray(R.array.colors);
         mTitles = getResources().getStringArray(R.array.categories);
 
-        mFilter = findViewById(R.id.filter);
+        Filter<Categories> mFilter = findViewById(R.id.filter);
         mFilter.setAdapter(new Adapter(getTags()));
         mFilter.setListener(this);
 
@@ -75,7 +75,33 @@ public class HomeActivity extends AppCompatActivity implements FilterListener<Ca
         mFilter.setNoSelectedItemText(getString(R.string.str_all_selected));
         mFilter.build();
 
-        fm.beginTransaction().add(R.id.frame_layout, homeFragment, "1").commit();
+        talentsDOList = new ArrayList<>();
+        handler = new Handler();
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView_talents.setLayoutManager(linearLayoutManager);
+        recyclerView_talents.setHasFixedSize(true);
+
+        skeletonScreen = Skeleton.bind(recyclerView_talents)
+                .adapter(talentsAdapter)
+                .color(R.color.shimmer_color)
+                .load(R.layout.talents_placeholder_layout)
+                .show();
+
+        skeletonScreen.show();
+
+        handler.postDelayed(this::getAllTalents, 500);
+
+        swipeToRefresh_talents.setOnRefreshListener(() -> {
+            skeletonScreen.show();
+
+            if(talentsDOList != null){
+                talentsDOList.clear();
+            }
+
+            handler.postDelayed(this::getAllTalents, 2000);
+            swipeToRefresh_talents.setRefreshing(false);
+        });
     }
 
     private List<Categories> getTags() {
@@ -101,6 +127,10 @@ public class HomeActivity extends AppCompatActivity implements FilterListener<Ca
     @Override
     public void onFiltersSelected(@NotNull ArrayList<Categories> arrayList) {
 
+        for(Categories categories : arrayList){
+            Log.d("debug", "categories: " + categories.getText());
+        }
+
     }
 
     @Override
@@ -109,7 +139,6 @@ public class HomeActivity extends AppCompatActivity implements FilterListener<Ca
     }
 
     class Adapter extends FilterAdapter<Categories> {
-
         Adapter(@NotNull List<? extends Categories> items) {
             super(items);
         }
@@ -129,6 +158,70 @@ public class HomeActivity extends AppCompatActivity implements FilterListener<Ca
             filterItem.deselect();
 
             return filterItem;
+        }
+    }
+
+    private void getAllTalents(){
+        AndroidNetworking
+                .get(EndPoints.GET_ALL_TALENTS_URL)
+                .setTag(Tags.HOME_FRAGMENT)
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        skeletonScreen.hide();
+                        getResponse(response);
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        skeletonScreen.hide();
+                        Log.e(Tags.HOME_FRAGMENT, anError.getErrorDetail());
+                    }
+                });
+    }
+
+    private void getResponse(JSONObject response){
+        try {
+            JSONArray array = response.getJSONArray("talents_list");
+
+            if(response.has("flag") && response.has("msg")){
+                Log.d("debug", response.getString("msg"));
+            }else{
+                for (int i = 0; i < array.length(); i++) {
+                    JSONObject object = array.getJSONObject(i);
+
+                    TalentsDO talentsDO = new TalentsDO(
+                            object.getString("talent_id"),
+                            object.getString("fullname"),
+                            object.getString("height"),
+                            object.getString("talent_fee"),
+                            object.getString("talent_fee_type"),
+                            object.getString("location"),
+                            Integer.parseInt(object.getString("age")),
+                            object.getString("email"),
+                            object.getString("contact_number"),
+                            object.getString("gender"),
+                            object.getString("talent_display_photo"),
+                            object.getString("category_ids"),
+                            object.getString("category_names")
+                    );
+
+                    talentsDOList.add(talentsDO);
+                }
+            }
+
+            if(talentsDOList.isEmpty()){
+                simpleStatefulLayout.showEmpty();
+            }else{
+                simpleStatefulLayout.showContent();
+            }
+
+            talentsAdapter = new TalentsAdapter(talentsDOList, this);
+            recyclerView_talents.setAdapter(talentsAdapter);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 }

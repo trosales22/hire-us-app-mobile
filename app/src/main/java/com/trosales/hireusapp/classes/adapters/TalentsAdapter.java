@@ -1,7 +1,9 @@
 package com.trosales.hireusapp.classes.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.trosales.hireusapp.R;
+import com.trosales.hireusapp.activities.TalentDetailsActivity;
 import com.trosales.hireusapp.classes.constants.FilesConstants;
 import com.trosales.hireusapp.classes.wrappers.TalentsDO;
 
@@ -41,11 +44,14 @@ public class TalentsAdapter extends RecyclerView.Adapter<TalentsAdapter.ViewHold
     public void onBindViewHolder(@NonNull TalentsAdapter.ViewHolder viewHolder, int i) {
         final TalentsDO talentsDO = talentsDOList.get(i);
 
+        viewHolder.cardView_talents.setOnClickListener(v -> {
+            v.getContext().startActivity(new Intent(v.getContext(), TalentDetailsActivity.class));
+        });
+
         viewHolder.lblTalentFullname.setText(talentsDO.getFullname());
-        viewHolder.lblTalentHeight.setText(talentsDO.getHeight());
-        viewHolder.lblTalentEmail.setText(talentsDO.getEmail());
-        viewHolder.lblTalentContactNumber.setText(talentsDO.getContactNumber());
+        viewHolder.lblTalentHeightAndAge.setText("Height: " + talentsDO.getHeight() + " ft. | Age: " + talentsDO.getTalentAge());
         viewHolder.lblTalentLocation.setText(talentsDO.getLocation());
+        viewHolder.lblTalentCategories.setText(talentsDO.getCategoryNames());
 
         Picasso
                 .with(context)
@@ -60,11 +66,10 @@ public class TalentsAdapter extends RecyclerView.Adapter<TalentsAdapter.ViewHold
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.cardView_talents) CardView cardView_talents;
         @BindView(R.id.imgTalentDisplayPhoto) ImageView imgTalentDisplayPhoto;
         @BindView(R.id.lblTalentFullname) TextView lblTalentFullname;
-        @BindView(R.id.lblTalentHeight) TextView lblTalentHeight;
-        @BindView(R.id.lblTalentEmail) TextView lblTalentEmail;
-        @BindView(R.id.lblTalentContactNumber) TextView lblTalentContactNumber;
+        @BindView(R.id.lblTalentHeightAndAge) TextView lblTalentHeightAndAge;
         @BindView(R.id.lblTalentLocation) TextView lblTalentLocation;
         @BindView(R.id.lblTalentCategories) TextView lblTalentCategories;
 
