@@ -28,7 +28,7 @@
                 android:layout_height = "wrap_content"
                 android:layout_marginStart = "10dp"
                 android:text = "HIRE US"
-                android:textSize = "15sp"
+                android:textSize = "20sp"
                 android:textColor = "#000"
                 android:textStyle = "bold" />
 
@@ -36,8 +36,8 @@
                 android:layout_width = "match_parent"
                 android:layout_height = "wrap_content"
                 android:layout_marginStart = "10dp"
-                android:text = "&quot;A booking application that will cater market in entertainment and events industry.&quot;"
-                android:textSize = "12sp"
+                android:text = "&quot;Your Long-Term RAKET Partner&quot;"
+                android:textSize = "15sp"
                 android:textColor="@color/black"
                 android:textStyle="italic"
                 android:layout_below="@id/appName"/>

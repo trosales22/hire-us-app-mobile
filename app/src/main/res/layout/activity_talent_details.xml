@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="@drawable/background_home"
     tools:context=".activities.TalentDetailsActivity">
 
     <android.support.constraint.ConstraintLayout
@@ -32,6 +32,7 @@
             android:layout_height="139dp"
             android:layout_marginTop="116dp"
             android:background="@color/very_dark_cyan"
+            android:alpha="0.5"
             app:layout_constraintEnd_toStartOf="@+id/guideline2"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/guideline"
@@ -135,6 +136,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:padding="5dp"
+            android:background="@color/strong_cyan"
             android:text="&quot;A professional web/mobile developer&quot;"
             android:textColor="@android:color/white"
             android:textSize="16sp"
@@ -147,20 +150,23 @@
         <View
             android:id="@+id/view2"
             android:layout_width="0dp"
-            android:layout_height="2dp"
+            android:layout_height="139dp"
             android:layout_marginTop="8dp"
             android:background="@color/very_dark_cyan"
+            android:alpha="0.5"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lblTalentDescription" />
+            app:layout_constraintTop_toBottomOf="@+id/lblTalentDescription"
+            app:layout_constraintEnd_toStartOf="@+id/guideline2"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintHorizontal_bias="0.0"/>
 
         <TextView
-            android:id="@+id/lblBirthdayCaption"
+            android:id="@+id/lblTalentAgeCaption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
-            android:text="Birthday:"
+            android:text="Age: "
             android:textColor="@android:color/white"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -168,15 +174,15 @@
             app:layout_constraintTop_toTopOf="@+id/view2" />
 
         <TextView
-            android:id="@+id/lblBirthday"
+            android:id="@+id/lblTalentAge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="February 22, 1999 (20yrs old)"
+            android:text="20yrs old"
             android:textColor="@android:color/white"
-            android:textSize="16sp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/lblBirthdayCaption"
-            app:layout_constraintStart_toEndOf="@+id/lblBirthdayCaption" />
+            android:textSize="18sp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/lblTalentAgeCaption"
+            app:layout_constraintStart_toEndOf="@+id/lblTalentAgeCaption" />
 
         <TextView
             android:id="@+id/lblTalentLocationCaption"
@@ -189,7 +195,7 @@
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/guideline"
-            app:layout_constraintTop_toBottomOf="@+id/lblBirthdayCaption" />
+            app:layout_constraintTop_toBottomOf="@+id/lblTalentAge" />
 
         <TextView
             android:id="@+id/lblTalentLocation"
@@ -198,17 +204,17 @@
             android:layout_marginStart="8dp"
             android:text="Manila, Philippines"
             android:textColor="@android:color/white"
-            android:textSize="16sp"
+            android:textSize="18sp"
             app:layout_constraintBaseline_toBaselineOf="@+id/lblTalentLocationCaption"
             app:layout_constraintStart_toEndOf="@+id/lblTalentLocationCaption" />
 
         <TextView
-            android:id="@+id/lblTalentContactCaption"
+            android:id="@+id/lblTalentExperienceCaption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
-            android:text="Contact:"
+            android:text="Experience:"
             android:textColor="@android:color/white"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -216,15 +222,15 @@
             app:layout_constraintTop_toBottomOf="@+id/lblTalentLocationCaption" />
 
         <TextView
-            android:id="@+id/lblTalentContact"
+            android:id="@+id/lblTalentExperience"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="09675281187\ntristanrosales0@gmail.com"
+            android:text="N/A"
             android:textColor="@android:color/white"
-            android:textSize="16sp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/lblTalentContactCaption"
-            app:layout_constraintStart_toEndOf="@+id/lblTalentContactCaption" />
+            android:textSize="18sp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/lblTalentExperienceCaption"
+            app:layout_constraintStart_toEndOf="@+id/lblTalentExperienceCaption" />
 
 
         <android.support.v7.widget.AppCompatButton
@@ -234,12 +240,14 @@
             android:layout_marginEnd="5dp"
             android:background="@drawable/rounded_buttons"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="30dp"
             android:text="Book Now"
+            android:textSize="18sp"
             android:textColor="@color/white"
             app:layout_constraintStart_toStartOf="@+id/guideline"
-            app:layout_constraintTop_toBottomOf="@+id/lblTalentContact"
-            android:textSize="15sp" />
+            app:layout_constraintEnd_toStartOf="@+id/guideline2"
+            app:layout_constraintTop_toBottomOf="@+id/lblTalentExperience"
+            app:layout_constraintHorizontal_bias="0.0"/>
 
 
     </android.support.constraint.ConstraintLayout>

@@ -68,7 +68,7 @@ public class HomeActivity extends AppCompatActivity implements FilterListener<Ca
         mTitles = getResources().getStringArray(R.array.categories);
 
         Filter<Categories> mFilter = findViewById(R.id.filter);
-        mFilter.setAdapter(new Adapter(getTags()));
+        mFilter.setAdapter(new Adapter(getCategoryTags()));
         mFilter.setListener(this);
 
         //the text to show when there's no selected items
@@ -99,12 +99,12 @@ public class HomeActivity extends AppCompatActivity implements FilterListener<Ca
                 talentsDOList.clear();
             }
 
-            handler.postDelayed(this::getAllTalents, 2000);
+            handler.postDelayed(this::getAllTalents, 500);
             swipeToRefresh_talents.setRefreshing(false);
         });
     }
 
-    private List<Categories> getTags() {
+    private List<Categories> getCategoryTags() {
         List<Categories> tags = new ArrayList<>();
 
         for (int i = 0; i < mTitles.length; ++i) {
@@ -126,11 +126,9 @@ public class HomeActivity extends AppCompatActivity implements FilterListener<Ca
 
     @Override
     public void onFiltersSelected(@NotNull ArrayList<Categories> arrayList) {
-
         for(Categories categories : arrayList){
             Log.d("debug", "categories: " + categories.getText());
         }
-
     }
 
     @Override
@@ -171,7 +169,7 @@ public class HomeActivity extends AppCompatActivity implements FilterListener<Ca
                     @Override
                     public void onResponse(JSONObject response) {
                         skeletonScreen.hide();
-                        getResponse(response);
+                        getTalentsResponse(response);
                     }
 
                     @Override
@@ -182,7 +180,7 @@ public class HomeActivity extends AppCompatActivity implements FilterListener<Ca
                 });
     }
 
-    private void getResponse(JSONObject response){
+    private void getTalentsResponse(JSONObject response){
         try {
             JSONArray array = response.getJSONArray("talents_list");
 

@@ -8,5 +8,5 @@ public class EndPoints {
     //private static final String BASE_URL = "https://[URL]/apis/";
 
     public static final String GET_ALL_TALENTS_URL = BASE_URL + "talents/get_all_talents";
-    public static final String GET_TALENT_CATEGORIES_URL = BASE_URL + "talents/get_talent_categories";
+    public static final String GET_ALL_CATEGORIES_URL = BASE_URL + "categories/get_all_categories";
 }

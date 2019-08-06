@@ -10,7 +10,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#E4E6E3">
+        android:background="@drawable/background_home">
 
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swipeToRefresh_talents"

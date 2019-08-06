@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:layout_width="match_parent"
+    android:layout_width="fill_parent"
     android:layout_height="wrap_content">
 
     <android.support.v7.widget.CardView
@@ -15,6 +15,7 @@
         android:foreground="?android:attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
+        android:alpha="0.7"
         card_view:cardCornerRadius="4dp">
 
         <RelativeLayout
@@ -33,7 +34,7 @@
 
             <TextView
                 android:id="@+id/lblTalentFullname"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@id/imgTalentDisplayPhoto"
                 android:layout_marginStart="5dp"
@@ -47,7 +48,7 @@
 
             <TextView
                 android:id="@+id/lblTalentCategories"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@id/imgTalentDisplayPhoto"
                 android:layout_below="@id/lblTalentFullname"

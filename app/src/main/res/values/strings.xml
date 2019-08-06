@@ -31,7 +31,6 @@
     <string name="str_all_selected">All Categories</string>
 
     <string-array name="categories">
-        <item>All Categories</item>
         <item>Models/Brand Ambassadors</item>
         <item>Movie/TV Talents</item>
         <item>Singer/Band</item>
