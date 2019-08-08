@@ -25,10 +25,11 @@
 
             <ImageView
                 android:id="@+id/imgTalentDisplayPhoto"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="90dp"
+                android:layout_height="120dp"
                 android:layout_marginEnd="10dp"
                 android:clickable="true"
+                android:src="@drawable/no_profile_pic"
                 android:focusable="true" />
 
             <TextView

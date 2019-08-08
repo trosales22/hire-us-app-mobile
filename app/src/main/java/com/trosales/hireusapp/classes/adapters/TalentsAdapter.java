@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.trosales.hireusapp.R;
 import com.trosales.hireusapp.activities.TalentDetailsActivity;
-import com.trosales.hireusapp.classes.constants.FilesConstants;
 import com.trosales.hireusapp.classes.wrappers.TalentsDO;
 
 import java.util.List;
@@ -55,7 +54,7 @@ public class TalentsAdapter extends RecyclerView.Adapter<TalentsAdapter.ViewHold
 
         Picasso
                 .with(context)
-                .load(FilesConstants.IMAGES_DIRECTORY.concat(talentsDO.getTalentDisplayPhoto()))
+                .load(talentsDO.getTalentDisplayPhoto())
                 .placeholder(R.drawable.no_profile_pic)
                 .into(viewHolder.imgTalentDisplayPhoto);
     }

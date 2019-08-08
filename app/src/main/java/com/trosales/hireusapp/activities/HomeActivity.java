@@ -201,7 +201,7 @@ public class HomeActivity extends AppCompatActivity implements FilterListener<Ca
                             object.getString("email"),
                             object.getString("contact_number"),
                             object.getString("gender"),
-                            object.getString("talent_display_photo"),
+                            EndPoints.UPLOADS_BASE_URL + "talents_or_models/" + object.getString("talent_display_photo"),
                             object.getString("category_ids"),
                             object.getString("category_names")
                     );
