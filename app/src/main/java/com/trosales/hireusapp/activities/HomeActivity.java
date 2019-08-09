@@ -162,7 +162,7 @@ public class HomeActivity extends AppCompatActivity implements FilterListener<Ca
     private void getAllTalents(){
         AndroidNetworking
                 .get(EndPoints.GET_ALL_TALENTS_URL)
-                .setTag(Tags.HOME_FRAGMENT)
+                .setTag(Tags.HOME_ACTIVITY)
                 .setPriority(Priority.MEDIUM)
                 .build()
                 .getAsJSONObject(new JSONObjectRequestListener() {
@@ -175,7 +175,7 @@ public class HomeActivity extends AppCompatActivity implements FilterListener<Ca
                     @Override
                     public void onError(ANError anError) {
                         skeletonScreen.hide();
-                        Log.e(Tags.HOME_FRAGMENT, anError.getErrorDetail());
+                        Log.e(Tags.HOME_ACTIVITY, anError.getErrorDetail());
                     }
                 });
     }
@@ -198,11 +198,8 @@ public class HomeActivity extends AppCompatActivity implements FilterListener<Ca
                             object.getString("talent_fee_type"),
                             object.getString("location"),
                             Integer.parseInt(object.getString("age")),
-                            object.getString("email"),
-                            object.getString("contact_number"),
                             object.getString("gender"),
                             EndPoints.UPLOADS_BASE_URL + "talents_or_models/" + object.getString("talent_display_photo"),
-                            object.getString("category_ids"),
                             object.getString("category_names")
                     );
 

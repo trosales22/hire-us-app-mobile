@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.trosales.hireusapp.R;
 import com.trosales.hireusapp.activities.TalentDetailsActivity;
+import com.trosales.hireusapp.classes.commons.SharedPrefManager;
 import com.trosales.hireusapp.classes.wrappers.TalentsDO;
 
 import java.util.List;
@@ -44,6 +45,7 @@ public class TalentsAdapter extends RecyclerView.Adapter<TalentsAdapter.ViewHold
         final TalentsDO talentsDO = talentsDOList.get(i);
 
         viewHolder.cardView_talents.setOnClickListener(v -> {
+            SharedPrefManager.getInstance(v.getContext()).saveTalentId(talentsDO.getTalent_id());
             v.getContext().startActivity(new Intent(v.getContext(), TalentDetailsActivity.class));
         });
 
