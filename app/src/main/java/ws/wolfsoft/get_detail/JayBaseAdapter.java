@@ -11,32 +11,29 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.trosales.hireusapp.R;
+import com.trosales.hireusapp.classes.beans.Reviews;
 
 import java.util.ArrayList;
 
 
 public class JayBaseAdapter extends BaseAdapter {
+    private Context context;
+    private ArrayList<Reviews> reviewsArrayList;
+    private Typeface fonts1,fonts2;
 
-    Context context;
-
-    ArrayList<Bean> bean;
-    Typeface fonts1,fonts2;
-
-    public JayBaseAdapter(Context context, ArrayList<Bean> bean) {
-
-
+    public JayBaseAdapter(Context context, ArrayList<Reviews> reviewsArrayList) {
         this.context = context;
-        this.bean = bean;
+        this.reviewsArrayList = reviewsArrayList;
     }
 
     @Override
     public int getCount() {
-        return bean.size();
+        return reviewsArrayList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return bean.get(position);
+        return reviewsArrayList.get(position);
     }
 
     @Override
@@ -53,7 +50,7 @@ public class JayBaseAdapter extends BaseAdapter {
         fonts2 = Typeface.createFromAsset(context.getAssets(),
                 "fonts/Lato-Regular.ttf");
 
-        ViewHolder viewHolder = null;
+        ViewHolder viewHolder;
 
         if (convertView == null){
             LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
@@ -61,36 +58,35 @@ public class JayBaseAdapter extends BaseAdapter {
 
             viewHolder = new ViewHolder();
 
-            viewHolder.image = convertView.findViewById(R.id.image);
-            viewHolder.title = convertView.findViewById(R.id.title);
-            viewHolder.discription = convertView.findViewById(R.id.description);
-            viewHolder.date = convertView.findViewById(R.id.date);
+            viewHolder.revieweeDisplayPicture = convertView.findViewById(R.id.image);
+            viewHolder.revieweeComment = convertView.findViewById(R.id.title);
+            viewHolder.revieweeRating = convertView.findViewById(R.id.description);
+            viewHolder.reviewee = convertView.findViewById(R.id.date);
 
-            viewHolder.title.setTypeface(fonts2);
-            viewHolder.discription.setTypeface(fonts1);
+            viewHolder.revieweeComment.setTypeface(fonts2);
+            viewHolder.revieweeRating.setTypeface(fonts1);
 
-            viewHolder.date.setTypeface(fonts2);
+            viewHolder.reviewee.setTypeface(fonts2);
 
             convertView.setTag(viewHolder);
         }else {
             viewHolder = (ViewHolder)convertView.getTag();
         }
 
-        Bean bean = (Bean)getItem(position);
-
-        viewHolder.image.setImageResource(bean.getImage());
-        viewHolder.title.setText(bean.getTitle());
-        viewHolder.discription.setText(bean.getDiscription());
-        viewHolder.date.setText(bean.getDate());
+        Reviews reviews = (Reviews) getItem(position);
+        viewHolder.revieweeDisplayPicture.setImageResource(reviews.getRevieweeDisplayPicture());
+        viewHolder.revieweeComment.setText(reviews.getRevieweeComment());
+        viewHolder.revieweeRating.setText(reviews.getRevieweeRating());
+        viewHolder.reviewee.setText(reviews.getReviewee());
 
         return convertView;
     }
 
     private class ViewHolder{
-        ImageView image;
-        TextView title;
-        TextView discription;
-        TextView date;
+        ImageView revieweeDisplayPicture;
+        TextView revieweeComment;
+        TextView revieweeRating;
+        TextView reviewee;
     }
 }
 

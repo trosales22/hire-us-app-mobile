@@ -8,78 +8,71 @@ import android.widget.LinearLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.trosales.hireusapp.R;
+import com.trosales.hireusapp.classes.beans.Reviews;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import ws.wolfsoft.get_detail.Bean;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import customfonts.MyTextView;
 import ws.wolfsoft.get_detail.ChildAnimationExample;
 import ws.wolfsoft.get_detail.ExpandableHeightListView;
 import ws.wolfsoft.get_detail.JayBaseAdapter;
 import ws.wolfsoft.get_detail.SliderLayout;
 
 public class TalentModelProfileActivity extends AppCompatActivity implements BaseSliderView.OnSliderClickListener{
-    SliderLayout mDemoSlider;
+    @BindView(R.id.lblTalentFullname) MyTextView lblTalentFullname;
+    @BindView(R.id.lblTalentCategory) MyTextView lblTalentCategory;
+    @BindView(R.id.lblTalentHourlyRate_Genre_VitalStatsCaption) MyTextView lblTalentHourlyRate_Genre_VitalStatsCaption;
+    @BindView(R.id.lblTalentHourlyRate_Genre_VitalStats) MyTextView lblTalentHourlyRate_Genre_VitalStats;
+    @BindView(R.id.lblTalentFollowers) MyTextView lblTalentFollowers;
+    @BindView(R.id.lblTalentAge) MyTextView lblTalentAge;
+    @BindView(R.id.lblTalentLocation) MyTextView lblTalentLocation;
+    @BindView(R.id.lblTalentDescription) MyTextView lblTalentDescription;
+    @BindView(R.id.lblExperiencesOrPreviousClients) MyTextView lblExperiencesOrPreviousClients;
+    @BindView(R.id.btnAddToBookingList) MyTextView btnAddToBookingList;
+    @BindView(R.id.btnInquireNow) MyTextView btnInquireNow;
+    @BindView(R.id.linearLayoutShowMore) LinearLayout linearLayoutShowMore;
+    @BindView(R.id.linearLayoutShowLess) LinearLayout linearLayoutShowLess;
+    @BindView(R.id.linearLayoutShowMoreDetails) LinearLayout linearLayoutShowMoreDetails;
+    @BindView(R.id.reviewsListView) ExpandableHeightListView reviewsListView;
+    @BindView(R.id.talentGallerySlider) SliderLayout talentGallerySlider;
 
-    LinearLayout linear1,showless;
-    LinearLayout linear2;
-
-    private ExpandableHeightListView listview;
-    private ArrayList<ws.wolfsoft.get_detail.Bean> Bean;
-    private JayBaseAdapter baseAdapter;
-
-    private int[] IMAGE = {R.drawable.p1, R.drawable.p2, R.drawable.p3};
-    private String[] TITLE = {"Best seller", "Dunt think twise for it", "Good product"};
+    private int[] REVIEWEE_DISPLAY_PIC = {R.drawable.p1, R.drawable.p2, R.drawable.p3};
+    private String[] COMMENT = {"The best!", "Highly recommended!", "Awesome. Worth the fee!"};
     private String[] RATING = {"4.5 rating", "5 rating", "4 rating"};
-    private String[] BY = {"by Kelly","by Emma","by Erik"};
+    private String[] REVIEWEE = {"by Josh Saratan","by Albert Boholano","by Tristan Rosales"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_talent_model_profile);
+        ButterKnife.bind(this);
 
-        //        ********LISTVIEW***********
+        ArrayList<Reviews> reviewsArrayList = new ArrayList<>();
 
-
-        listview = findViewById(R.id.listview);
-
-
-        Bean = new ArrayList<>();
-
-        for (int i= 0; i< TITLE.length; i++){
-
-            Bean bean = new Bean(IMAGE[i], TITLE[i], RATING[i], BY[i]);
-            Bean.add(bean);
-
+        for (int i= 0; i< COMMENT.length; i++){
+            Reviews reviews = new Reviews(REVIEWEE_DISPLAY_PIC[i], COMMENT[i], RATING[i], REVIEWEE[i]);
+            reviewsArrayList.add(reviews);
         }
 
-        baseAdapter = new JayBaseAdapter(TalentModelProfileActivity.this, Bean) {
+        JayBaseAdapter baseAdapter = new JayBaseAdapter(TalentModelProfileActivity.this, reviewsArrayList) {
         };
 
-        listview.setAdapter(baseAdapter);
+        reviewsListView.setAdapter(baseAdapter);
 
-        //                ***********viewmore**********
-
-        linear1 = findViewById(R.id.linear1);
-        showless = findViewById(R.id.showless);
-
-        linear2 = findViewById(R.id.linear2);
-
-        linear1.setOnClickListener(v -> {
-            linear2.setVisibility(View.VISIBLE);
-            linear1.setVisibility(View.GONE);
+        linearLayoutShowMore.setOnClickListener(v -> {
+            linearLayoutShowMoreDetails.setVisibility(View.VISIBLE);
+            linearLayoutShowMore.setVisibility(View.GONE);
         });
 
-        showless.setOnClickListener(v -> {
-            linear2.setVisibility(View.GONE);
-            linear1.setVisibility(View.VISIBLE);
-
-
+        linearLayoutShowLess.setOnClickListener(v -> {
+            linearLayoutShowMoreDetails.setVisibility(View.GONE);
+            linearLayoutShowLess.setVisibility(View.VISIBLE);
         });
 
 //         ********Slider*********
-
-        mDemoSlider = findViewById(R.id.slider);
 
         HashMap<String,Integer> file_maps = new HashMap<>();
         file_maps.put("1", R.drawable.iohone1);
@@ -88,7 +81,6 @@ public class TalentModelProfileActivity extends AppCompatActivity implements Bas
 
         for(String name : file_maps.keySet()){
             TextSliderView textSliderView = new TextSliderView(this);
-            // initialize a SliderLayout
             textSliderView
                     //  .description(name)
                     .image(file_maps.get(name))
@@ -99,13 +91,14 @@ public class TalentModelProfileActivity extends AppCompatActivity implements Bas
             textSliderView.bundle(new Bundle());
             textSliderView.getBundle().putString("extra", name);
 
-            mDemoSlider.addSlider(textSliderView);
+            talentGallerySlider.addSlider(textSliderView);
         }
-        mDemoSlider.setPresetTransformer(SliderLayout.Transformer.Default);
-        mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
-        mDemoSlider.setCustomAnimation(new ChildAnimationExample());
-        mDemoSlider.setDuration(4000);
-        mDemoSlider.addOnPageChangeListener(this);
+
+        talentGallerySlider.setPresetTransformer(SliderLayout.Transformer.Default);
+        talentGallerySlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+        talentGallerySlider.setCustomAnimation(new ChildAnimationExample());
+        talentGallerySlider.setDuration(3000);
+        talentGallerySlider.addOnPageChangeListener(this);
     }
 
     @Override

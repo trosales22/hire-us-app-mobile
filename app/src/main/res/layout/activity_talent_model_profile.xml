@@ -12,7 +12,6 @@
     tools:context=".activities.TalentModelProfileActivity">
 
     <ScrollView
-        android:layout_marginTop="55dp"
         android:layout_marginBottom="49dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -23,12 +22,12 @@
             android:orientation="vertical">
 
             <ws.wolfsoft.get_detail.SliderLayout
-                android:id="@+id/slider"
+                android:id="@+id/talentGallerySlider"
                 android:layout_width="match_parent"
                 custom:pager_animation_span="1100"
                 android:layout_height="300dp"
-                style="@style/AndroidImageSlider_Oval_Black"
-                android:background="#fff" />
+                android:background="#fff"
+                style="@style/AndroidImageSlider_Oval_Black"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -36,43 +35,27 @@
                 android:orientation="vertical"
                 android:background="#fff">
 
-                <!--*********Iphone price**********-->
-
                 <LinearLayout
                     android:layout_marginTop="16dp"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    >
+                    android:orientation="horizontal">
 
                     <customfonts.MyTextView
-                        android:visibility="visible"
-                        android:id="@+id/iphone6s"
+                        android:id="@+id/lblTalentFullname"
                         android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="iPhone 6S"
-                        android:textSize="21dp"
-                        android:textColor="@color/colorTex"
-                        />
-
-                    <customfonts.MyTextView
-                        android:id="@+id/price"
-                        android:layout_weight="5"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="750 $"
-                        android:textSize="21dp"
+                        android:text="Talent Name"
+                        android:textSize="21sp"
+                        android:visibility="visible"
                         android:textColor="@color/colorTex" />
+
                 </LinearLayout>
 
-
-                <!--*********Shipping**********-->
-
                 <LinearLayout
-
                     android:padding="16dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -80,36 +63,36 @@
                     android:gravity="center">
 
                     <customfonts.MyTextView
-                        android:id="@+id/free"
+                        android:id="@+id/lblTalentCategory"
                         android:layout_width="110dp"
                         android:layout_height="28dp"
                         android:background="@drawable/rect"
-                        android:text="Free Shipping"
+                        android:text="Category"
                         android:textColor="#fff"
                         android:gravity="center" />
 
                     <LinearLayout
-                        android:layout_marginLeft="16dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
                         android:orientation="horizontal">
 
                         <customfonts.MyTextView
-                            android:layout_weight="1"
-                            android:id="@+id/est"
+                            android:id="@+id/lblTalentHourlyRate_Genre_VitalStatsCaption"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Est. delivery"
-                            android:textSize="13dp"
+                            android:layout_weight="1"
+                            android:text="Hourly Rate"
+                            android:textSize="15sp"
                             android:textColor="@color/colorSub" />
 
                         <customfonts.MyTextView
-                            android:layout_weight="0.8"
-                            android:id="@+id/date"
+                            android:id="@+id/lblTalentHourlyRate_Genre_VitalStats"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Feb 17-20"
-                            android:textSize="13dp"
+                            android:layout_weight="0.8"
+                            android:text="&#8369;750.00"
+                            android:textSize="20sp"
                             android:textColor="@color/colorTex" />
                     </LinearLayout>
                 </LinearLayout>
@@ -120,35 +103,7 @@
                     android:background="@color/colordevider"
                     android:padding="16dp" />
 
-                <!--*********Iphone price**********-->
-
-                <LinearLayout
-
-                    android:layout_marginTop="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <customfonts.MyTextView
-                        android:id="@+id/condition1"
-                        android:layout_weight="1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Condition"
-                        android:textColor="@color/colorSub" />
-
-                    <customfonts.MyTextView
-                        android:id="@+id/condition2"
-                        android:layout_weight="0.5"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="New with box"
-                        android:textColor="@color/colorTex" />
-                </LinearLayout>
-
-                <!--*********Brand**********-->
+                <!-- Talent Followers -->
 
                 <LinearLayout
                     android:layout_marginTop="16dp"
@@ -159,23 +114,29 @@
                     android:orientation="horizontal">
 
                     <customfonts.MyTextView
-                        android:id="@+id/brand1"
+                        android:id="@+id/lblTalentFollowersCaption"
                         android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Brand"
+                        android:text="Followers"
                         android:textColor="@color/colorSub" />
 
                     <customfonts.MyTextView
-                        android:id="@+id/brand2"
+                        android:id="@+id/lblTalentFollowers"
                         android:layout_weight="0.5"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Apple"
+                        android:text="Facebook: 1000\nInstagram: 1000"
                         android:textColor="@color/colorTex" />
                 </LinearLayout>
 
-                *********size**********
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colordevider"
+                    android:padding="16dp" />
+
+                <!-- Talent Age -->
 
                 <LinearLayout
                     android:layout_marginTop="16dp"
@@ -186,24 +147,23 @@
                     android:orientation="horizontal">
 
                     <customfonts.MyTextView
-                        android:id="@+id/size1"
+                        android:id="@+id/lblTalentAgeCaption"
                         android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Dimensions"
+                        android:text="Age"
                         android:textColor="@color/colorSub" />
 
                     <customfonts.MyTextView
-                        android:id="@+id/size2"
+                        android:id="@+id/lblTalentAge"
                         android:layout_weight="0.5"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="138.3 * 67.1mm"
+                        android:text="26 years old"
                         android:textColor="@color/colorTex" />
                 </LinearLayout>
 
-
-                <!--*********weight**********-->
+                <!-- Talent Location -->
 
                 <LinearLayout
                     android:layout_marginTop="16dp"
@@ -214,26 +174,26 @@
                     android:orientation="horizontal">
 
                     <customfonts.MyTextView
-                        android:id="@+id/weight1"
+                        android:id="@+id/lblTalentLocationCaption"
                         android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Weight"
+                        android:text="Location"
                         android:textColor="@color/colorSub" />
 
                     <customfonts.MyTextView
-                        android:id="@+id/weight2"
+                        android:id="@+id/lblTalentLocation"
                         android:layout_weight="0.5"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="143 grams"
+                        android:text="City, Province"
                         android:textColor="@color/colorTex" />
                 </LinearLayout>
 
-                <!--*********show more**********-->
+                <!-- Show More -->
 
                 <LinearLayout
-                    android:id="@+id/linear1"
+                    android:id="@+id/linearLayoutShowMore"
                     android:gravity="center"
                     android:layout_marginTop="16dp"
                     android:layout_width="match_parent"
@@ -241,25 +201,32 @@
                     android:orientation="horizontal">
 
                     <customfonts.MyTextView
-                        android:id="@+id/show1"
+                        android:id="@+id/lblShowMoreCaption"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="SHOW MORE"
                         android:textColor="#4c71f5"
-                        android:textSize="11dp"
+                        android:textSize="11sp"
                         android:gravity="center"
-                        android:drawableRight="@drawable/arrow"
-                        android:drawablePadding="8dp" />
+                        android:drawableEnd="@drawable/arrow"
+                        android:drawablePadding="8dp"
+                        tools:ignore="SmallSp" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/linear2"
+                    android:id="@+id/linearLayoutShowMoreDetails"
                     android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <!--*********weight**********-->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/colordevider"
+                        android:padding="16dp" />
+
+                    <!-- Talent Description -->
 
                     <LinearLayout
                         android:layout_marginTop="16dp"
@@ -270,81 +237,23 @@
                         android:orientation="horizontal">
 
                         <customfonts.MyTextView
-                            android:id="@+id/display1"
+                            android:id="@+id/lblTalentDescriptionCaption"
                             android:layout_weight="1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Display"
+                            android:text="Description"
                             android:textColor="@color/colorSub" />
 
                         <customfonts.MyTextView
-                            android:id="@+id/display2"
+                            android:id="@+id/lblTalentDescription"
                             android:layout_weight="0.5"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="4.7 inch"
+                            android:text="&#34;A professional web/mobile developer.&#34;"
                             android:textColor="@color/colorTex" />
                     </LinearLayout>
 
-
-                    <!--*********camera**********-->
-
-                    <LinearLayout
-
-                        android:layout_marginTop="16dp"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <customfonts.MyTextView
-                            android:id="@+id/camera1"
-                            android:layout_weight="1"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="iSight Camera"
-                            android:textColor="@color/colorSub" />
-
-                        <customfonts.MyTextView
-                            android:id="@+id/camera2"
-                            android:layout_weight="0.5"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="12-megapixel with 1.22µ pixels"
-                            android:textColor="@color/colorTex" />
-                    </LinearLayout>
-
-
-                    <!--*********video**********-->
-
-                    <LinearLayout
-
-                        android:layout_marginTop="16dp"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <customfonts.MyTextView
-                            android:id="@+id/video1"
-                            android:layout_weight="1"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Video Recording"
-                            android:textColor="@color/colorSub" />
-
-                        <customfonts.MyTextView
-                            android:id="@+id/video2"
-                            android:layout_weight="0.5"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="4K video recording (3840x2160)"
-                            android:textColor="@color/colorTex" />
-                    </LinearLayout>
-
-                    <!--*********Sim**********-->
+                    <!-- Talent Height -->
 
                     <LinearLayout
                         android:layout_marginTop="16dp"
@@ -355,26 +264,53 @@
                         android:orientation="horizontal">
 
                         <customfonts.MyTextView
-                            android:id="@+id/sim1"
+                            android:id="@+id/lblTalentHeightCaption"
                             android:layout_weight="1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="SIM Card"
+                            android:text="Height"
                             android:textColor="@color/colorSub" />
 
                         <customfonts.MyTextView
-                            android:id="@+id/sim2"
+                            android:id="@+id/lblTalentHeight"
                             android:layout_weight="0.5"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Nano-SIM"
+                            android:text="5&#39;2&#34;"
                             android:textColor="@color/colorTex" />
                     </LinearLayout>
 
-                    <!--*********show less**********-->
+                    <!-- Experience / Previous Clients -->
 
                     <LinearLayout
-                        android:id="@+id/showless"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <customfonts.MyTextView
+                            android:id="@+id/lblExperiencesOrPreviousClientsCaption"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Previous Clients"
+                            android:textColor="@color/colorSub" />
+
+                        <customfonts.MyTextView
+                            android:id="@+id/lblExperiencesOrPreviousClients"
+                            android:layout_weight="0.5"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text=">Asiagate Networks, Inc. (1yr &amp; 2months)\n>Journeytech, Inc. (1week)\n"
+                            android:textColor="@color/colorTex" />
+                    </LinearLayout>
+
+                    <!-- Show Less -->
+
+                    <LinearLayout
+                        android:id="@+id/linearLayoutShowLess"
                         android:gravity="center"
                         android:layout_marginTop="16dp"
                         android:layout_width="match_parent"
@@ -382,15 +318,16 @@
                         android:orientation="horizontal">
 
                         <customfonts.MyTextView
-                            android:id="@+id/show2"
+                            android:id="@+id/lblShowLessCaption"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="SHOW LESS"
                             android:textColor="#4c71f5"
-                            android:textSize="11dp"
+                            android:textSize="11sp"
                             android:gravity="center"
-                            android:drawableRight="@drawable/arrow1"
-                            android:drawablePadding="8dp" />
+                            android:drawableEnd="@drawable/arrow1"
+                            android:drawablePadding="8dp"
+                            tools:ignore="SmallSp" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -400,133 +337,6 @@
                     android:layout_height="1dp"
                     android:background="@color/colordevider"
                     android:padding="16dp" />
-
-                <!--*********description**********-->
-
-                <LinearLayout
-                    android:layout_marginTop="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <customfonts.MyTextView
-                        android:id="@+id/disc1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Item description"
-                        android:textColor="@color/colorSub"
-                        android:drawableRight="@drawable/arrow2" />
-
-                </LinearLayout>
-
-                <View
-                    android:layout_marginTop="16dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/colordevider"
-                    android:padding="16dp" />
-
-                <!--*********Est. delivery**********-->
-
-                <LinearLayout
-                    android:layout_marginTop="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <customfonts.MyTextView
-                        android:layout_weight="1"
-                        android:id="@+id/estdelivery1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Est. delivery"
-                        android:textColor="@color/colorSub" />
-
-                    <customfonts.MyTextView
-                        android:id="@+id/estdelivery2"
-                        android:layout_weight="0.5"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Tue, Feb 17 - Fri, Feb 18"
-                        android:textColor="@color/colorTex"
-                        android:drawableRight="@drawable/arrow2" />
-
-                </LinearLayout>
-
-                <View
-                    android:layout_marginTop="16dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/colordevider"
-                    android:padding="16dp" />
-
-                <!--*********Returns**********-->
-
-                <LinearLayout
-                    android:layout_marginTop="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <customfonts.MyTextView
-                        android:layout_weight="1"
-                        android:id="@+id/return1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Returns"
-                        android:textColor="@color/colorSub" />
-
-                    <customfonts.MyTextView
-                        android:id="@+id/return2"
-                        android:layout_weight="0.5"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Not accepted"
-                        android:textColor="@color/colorTex" />
-
-                </LinearLayout>
-
-                <View
-                    android:layout_marginTop="16dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/colordevider"
-                    android:padding="16dp" />
-
-                <!--*********Guarantee**********-->
-
-                <LinearLayout
-                    android:layout_marginTop="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <customfonts.MyTextView
-                        android:layout_weight="1"
-                        android:id="@+id/guarantee1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Returns"
-                        android:textColor="@color/colorSub" />
-
-                    <customfonts.MyTextView
-                        android:id="@+id/guarantee2"
-                        android:layout_weight="0.5"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Money Back Guarantee"
-                        android:textColor="@color/colorTex"
-                        android:drawableRight="@drawable/arrow2" />
-
-                </LinearLayout>
 
                 <View
                     android:layout_marginTop="16dp"
@@ -546,11 +356,11 @@
                         android:layout_height="wrap_content"
                         android:text="REVIEWS"
                         android:padding="16dp"
-                        android:textSize="13dp"
+                        android:textSize="13sp"
                         android:textColor="@color/colorSub" />
 
                     <ws.wolfsoft.get_detail.ExpandableHeightListView
-                        android:id="@+id/listview"
+                        android:id="@+id/reviewsListView"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="#fff"/>
@@ -561,18 +371,32 @@
         </LinearLayout>
     </ScrollView>
 
-    <!--****buy****-->
+    <!-- Buttons -->
+
     <customfonts.MyTextView
-        android:id="@+id/buy"
+        android:id="@+id/btnAddToBookingList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#4c71f5"
         android:text="Add to Booking List"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:textColor="#fff"
         android:gravity="center"
         android:padding="16dp"
         android:layout_alignParentBottom="true" />
+
+    <customfonts.MyTextView
+        android:id="@+id/btnInquireNow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#4c71f5"
+        android:text="Inquire Now"
+        android:textSize="16sp"
+        android:textColor="#fff"
+        android:gravity="center"
+        android:padding="16dp"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone" />
 </RelativeLayout>
 
 
