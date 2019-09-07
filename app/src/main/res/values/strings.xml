@@ -31,12 +31,13 @@
     <string name="str_all_selected">All Categories</string>
 
     <string-array name="categories">
+        <item>Celebrity</item>
+        <item>Comedians</item>
+        <item>Dancer</item>
+        <item>Disk Jockey (DJ)</item>
+        <item>Emcee/Host</item>
         <item>Models/Brand Ambassadors</item>
         <item>Movie/TV Talents</item>
         <item>Singer/Band</item>
-        <item>Dancer</item>
-        <item>Emcee/Host</item>
-        <item>Comedians</item>
-        <item>Disk Jockey (DJ)</item>
     </string-array>
 </resources>

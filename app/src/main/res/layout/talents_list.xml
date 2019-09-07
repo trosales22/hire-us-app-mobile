@@ -30,7 +30,8 @@
                 android:layout_marginEnd="10dp"
                 android:clickable="true"
                 android:src="@drawable/no_profile_pic"
-                android:focusable="true" />
+                android:focusable="true"
+                card_view:ignore="ContentDescription" />
 
             <TextView
                 android:id="@+id/lblTalentFullname"
@@ -40,13 +41,15 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
-                android:textSize="18sp"
+                android:textSize="19sp"
                 android:textColor="@color/black"
+                android:textStyle="bold"
                 android:gravity="start"
-                android:text="Talent Fullname" />
+                android:text="Talent Fullname"
+                card_view:ignore="HardcodedText" />
 
             <TextView
-                android:id="@+id/lblTalentHeightAndAge"
+                android:id="@+id/lblTalentGenderAndAge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@id/imgTalentDisplayPhoto"
@@ -60,15 +63,15 @@
                 android:textSize="18sp"
                 android:textColor="@color/black"
                 android:gravity="start"
-                android:text="Talent Height &amp; Age"
-                card_view:ignore="RtlSymmetry" />
+                android:text="Talent Gender &amp; Age"
+                card_view:ignore="HardcodedText,RtlSymmetry" />
 
             <TextView
                 android:id="@+id/lblTalentLocation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@id/imgTalentDisplayPhoto"
-                android:layout_below="@id/lblTalentHeightAndAge"
+                android:layout_below="@id/lblTalentGenderAndAge"
                 android:drawableStart="@drawable/ic_my_location_black"
                 android:drawablePadding="5dp"
                 android:paddingStart="5dp"
@@ -79,21 +82,39 @@
                 android:textColor="@color/black"
                 android:gravity="start"
                 android:text="Talent Location"
-                card_view:ignore="RtlSymmetry" />
+                card_view:ignore="HardcodedText,RtlSymmetry" />
+
+            <TextView
+                android:id="@+id/lblTalentHourlyRate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/imgTalentDisplayPhoto"
+                android:layout_below="@id/lblTalentLocation"
+                android:paddingStart="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:gravity="start"
+                android:text="Talent Hourly Rate"
+                card_view:ignore="HardcodedText,RtlSymmetry" />
 
             <TextView
                 android:id="@+id/lblTalentCategories"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@id/imgTalentDisplayPhoto"
-                android:layout_below="@id/lblTalentLocation"
+                android:layout_below="@id/lblTalentHourlyRate"
                 android:layout_marginStart="5dp"
                 android:background="@drawable/textview_border_style_color_primary"
                 android:textStyle="bold"
                 android:textSize="15sp"
                 android:padding="5dp"
                 android:textColor="@color/colorPrimaryDarker"
-                android:text="Categories" />
+                android:text="Categories"
+                card_view:ignore="HardcodedText" />
 
         </RelativeLayout>
 

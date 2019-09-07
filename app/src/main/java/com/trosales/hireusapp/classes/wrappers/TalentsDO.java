@@ -1,23 +1,24 @@
 package com.trosales.hireusapp.classes.wrappers;
 
+import com.trosales.hireusapp.classes.beans.Location;
+
 import org.jetbrains.annotations.NotNull;
 
 public class TalentsDO {
-    private String talent_id,fullname,height,talentFee,talentFeeType,location,gender,talentDisplayPhoto,categoryNames;
-
+    private String talent_id,fullname,height,hourlyRate,gender,talentDisplayPhoto,categoryNames;
     private int talentAge;
+    private Location location;
 
-    public TalentsDO(String talent_id, String fullname, String height, String talentFee, String talentFeeType, String location, Integer talentAge, String gender, String talentDisplayPhoto, String categoryNames) {
+    public TalentsDO(String talent_id, String fullname, String height, String hourlyRate, String gender, String talentDisplayPhoto, String categoryNames, int talentAge, Location location) {
         this.talent_id = talent_id;
         this.fullname = fullname;
         this.height = height;
-        this.talentFee = talentFee;
-        this.talentFeeType = talentFeeType;
-        this.location = location;
-        this.talentAge = talentAge;
+        this.hourlyRate = hourlyRate;
         this.gender = gender;
         this.talentDisplayPhoto = talentDisplayPhoto;
         this.categoryNames = categoryNames;
+        this.talentAge = talentAge;
+        this.location = location;
     }
 
     public String getTalent_id() {
@@ -32,20 +33,8 @@ public class TalentsDO {
         return height;
     }
 
-    public String getTalentFee() {
-        return talentFee;
-    }
-
-    public String getTalentFeeType() {
-        return talentFeeType;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public int getTalentAge() {
-        return talentAge;
+    public String getHourlyRate() {
+        return hourlyRate;
     }
 
     public String getGender() {
@@ -60,6 +49,14 @@ public class TalentsDO {
         return categoryNames;
     }
 
+    public int getTalentAge() {
+        return talentAge;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
     @NotNull
     @Override
     public String toString() {
@@ -67,12 +64,12 @@ public class TalentsDO {
                 "talent_id='" + talent_id + '\'' +
                 ", fullname='" + fullname + '\'' +
                 ", height='" + height + '\'' +
-                ", talentFee='" + talentFee + '\'' +
-                ", talentFeeType='" + talentFeeType + '\'' +
-                ", location='" + location + '\'' +
+                ", hourlyRate='" + hourlyRate + '\'' +
                 ", gender='" + gender + '\'' +
                 ", talentDisplayPhoto='" + talentDisplayPhoto + '\'' +
                 ", categoryNames='" + categoryNames + '\'' +
+                ", talentAge=" + talentAge +
+                ", location=" + location +
                 '}';
     }
 }

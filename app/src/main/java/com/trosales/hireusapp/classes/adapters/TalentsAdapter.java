@@ -1,10 +1,12 @@
 package com.trosales.hireusapp.classes.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +15,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.trosales.hireusapp.R;
-import com.trosales.hireusapp.activities.TalentDetailsActivity;
+import com.trosales.hireusapp.activities.TalentModelProfileActivity;
 import com.trosales.hireusapp.classes.commons.SharedPrefManager;
 import com.trosales.hireusapp.classes.wrappers.TalentsDO;
 
@@ -40,18 +42,20 @@ public class TalentsAdapter extends RecyclerView.Adapter<TalentsAdapter.ViewHold
         return new ViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull TalentsAdapter.ViewHolder viewHolder, int i) {
         final TalentsDO talentsDO = talentsDOList.get(i);
 
         viewHolder.cardView_talents.setOnClickListener(v -> {
             SharedPrefManager.getInstance(v.getContext()).saveTalentId(talentsDO.getTalent_id());
-            v.getContext().startActivity(new Intent(v.getContext(), TalentDetailsActivity.class));
+            v.getContext().startActivity(new Intent(v.getContext(), TalentModelProfileActivity.class));
         });
 
         viewHolder.lblTalentFullname.setText(talentsDO.getFullname());
-        viewHolder.lblTalentHeightAndAge.setText("Height: " + talentsDO.getHeight() + " ft. | Age: " + talentsDO.getTalentAge());
-        viewHolder.lblTalentLocation.setText(talentsDO.getLocation());
+        viewHolder.lblTalentGenderAndAge.setText(talentsDO.getGender() + " | " + talentsDO.getTalentAge() + " years old");
+        viewHolder.lblTalentLocation.setText(talentsDO.getLocation().getCityMuni() + ", " + talentsDO.getLocation().getProvince());
+        viewHolder.lblTalentHourlyRate.setText(Html.fromHtml("&#8369;" + talentsDO.getHourlyRate() + " per hour"));
         viewHolder.lblTalentCategories.setText(talentsDO.getCategoryNames());
 
         Picasso
@@ -70,8 +74,9 @@ public class TalentsAdapter extends RecyclerView.Adapter<TalentsAdapter.ViewHold
         @BindView(R.id.cardView_talents) CardView cardView_talents;
         @BindView(R.id.imgTalentDisplayPhoto) ImageView imgTalentDisplayPhoto;
         @BindView(R.id.lblTalentFullname) TextView lblTalentFullname;
-        @BindView(R.id.lblTalentHeightAndAge) TextView lblTalentHeightAndAge;
+        @BindView(R.id.lblTalentGenderAndAge) TextView lblTalentGenderAndAge;
         @BindView(R.id.lblTalentLocation) TextView lblTalentLocation;
+        @BindView(R.id.lblTalentHourlyRate) TextView lblTalentHourlyRate;
         @BindView(R.id.lblTalentCategories) TextView lblTalentCategories;
 
         public ViewHolder(@NonNull View itemView) {

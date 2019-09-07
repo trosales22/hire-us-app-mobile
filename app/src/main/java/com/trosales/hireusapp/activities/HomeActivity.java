@@ -19,6 +19,7 @@ import com.ethanhua.skeleton.SkeletonScreen;
 import com.trosales.hireusapp.R;
 import com.trosales.hireusapp.classes.adapters.TalentsAdapter;
 import com.trosales.hireusapp.classes.beans.Categories;
+import com.trosales.hireusapp.classes.beans.Location;
 import com.trosales.hireusapp.classes.constants.EndPoints;
 import com.trosales.hireusapp.classes.constants.Tags;
 import com.trosales.hireusapp.classes.wrappers.TalentsDO;
@@ -194,13 +195,18 @@ public class HomeActivity extends AppCompatActivity implements FilterListener<Ca
                             object.getString("talent_id"),
                             object.getString("fullname"),
                             object.getString("height"),
-                            object.getString("talent_fee"),
-                            object.getString("talent_fee_type"),
-                            object.getString("location"),
-                            Integer.parseInt(object.getString("age")),
+                            object.getString("hourly_rate"),
                             object.getString("gender"),
                             EndPoints.UPLOADS_BASE_URL + "talents_or_models/" + object.getString("talent_display_photo"),
-                            object.getString("category_names")
+                            object.getString("category_names"),
+                            Integer.parseInt(object.getString("age")),
+                            new Location(
+                                    object.getString("province"),
+                                    object.getString("city_muni"),
+                                    object.getString("barangay"),
+                                    object.getString("bldg_village"),
+                                    object.getString("zip_code")
+                            )
                     );
 
                     talentsDOList.add(talentsDO);

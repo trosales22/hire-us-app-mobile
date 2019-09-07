@@ -51,7 +51,8 @@
                         android:text="Talent Name"
                         android:textSize="21sp"
                         android:visibility="visible"
-                        android:textColor="@color/colorTex" />
+                        android:textColor="@color/colorTex"
+                        tools:ignore="HardcodedText,InefficientWeight" />
 
                 </LinearLayout>
 
@@ -64,37 +65,114 @@
 
                     <customfonts.MyTextView
                         android:id="@+id/lblTalentCategory"
-                        android:layout_width="110dp"
-                        android:layout_height="28dp"
+                        android:layout_width="180dp"
+                        android:layout_height="wrap_content"
                         android:background="@drawable/rect"
                         android:text="Category"
-                        android:textColor="#fff"
-                        android:gravity="center" />
+                        android:textColor="#FFFF"
+                        android:padding="5dp"
+                        android:gravity="center"
+                        tools:ignore="HardcodedText" />
 
                     <LinearLayout
+                        android:id="@+id/linearLayoutHourlyRate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
+                        android:layout_marginStart="10dp"
                         android:orientation="horizontal">
 
                         <customfonts.MyTextView
-                            android:id="@+id/lblTalentHourlyRate_Genre_VitalStatsCaption"
+                            android:id="@+id/lblTalentHourlyRateCaption"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Hourly Rate"
                             android:textSize="15sp"
-                            android:textColor="@color/colorSub" />
+                            android:textColor="@color/colorSub"
+                            tools:ignore="HardcodedText" />
 
                         <customfonts.MyTextView
-                            android:id="@+id/lblTalentHourlyRate_Genre_VitalStats"
+                            android:id="@+id/lblTalentHourlyRate"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.8"
                             android:text="&#8369;750.00"
                             android:textSize="20sp"
-                            android:textColor="@color/colorTex" />
+                            android:textColor="@color/colorTex"
+                            tools:ignore="HardcodedText" />
                     </LinearLayout>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colordevider"
+                    android:padding="16dp" />
+
+                <!-- Talent Vital Stats -->
+
+                <LinearLayout
+                    android:id="@+id/linearLayoutVitalStats"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <customfonts.MyTextView
+                        android:id="@+id/lblTalentVitalStatsCaption"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Vital Statistics"
+                        android:textColor="@color/colorSub"
+                        tools:ignore="HardcodedText" />
+
+                    <customfonts.MyTextView
+                        android:id="@+id/lblTalentVitalStats"
+                        android:layout_weight="0.5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Vital Statistics"
+                        android:textColor="@color/colorTex"
+                        tools:ignore="HardcodedText" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colordevider"
+                    android:padding="16dp" />
+
+                <!-- Talent Genre -->
+
+                <LinearLayout
+                    android:id="@+id/linearLayoutTalentGenre"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <customfonts.MyTextView
+                        android:id="@+id/lblTalentGenreCaption"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Genre"
+                        android:textColor="@color/colorSub"
+                        tools:ignore="HardcodedText" />
+
+                    <customfonts.MyTextView
+                        android:id="@+id/lblTalentGenre"
+                        android:layout_weight="0.5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Genre"
+                        android:textColor="@color/colorTex"
+                        tools:ignore="HardcodedText" />
                 </LinearLayout>
 
                 <View
@@ -119,7 +197,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Followers"
-                        android:textColor="@color/colorSub" />
+                        android:textColor="@color/colorSub"
+                        tools:ignore="HardcodedText" />
 
                     <customfonts.MyTextView
                         android:id="@+id/lblTalentFollowers"
@@ -127,7 +206,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Facebook: 1000\nInstagram: 1000"
-                        android:textColor="@color/colorTex" />
+                        android:textColor="@color/colorTex"
+                        tools:ignore="HardcodedText" />
                 </LinearLayout>
 
                 <View
@@ -136,36 +216,10 @@
                     android:background="@color/colordevider"
                     android:padding="16dp" />
 
-                <!-- Talent Age -->
-
-                <LinearLayout
-                    android:layout_marginTop="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <customfonts.MyTextView
-                        android:id="@+id/lblTalentAgeCaption"
-                        android:layout_weight="1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Age"
-                        android:textColor="@color/colorSub" />
-
-                    <customfonts.MyTextView
-                        android:id="@+id/lblTalentAge"
-                        android:layout_weight="0.5"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="26 years old"
-                        android:textColor="@color/colorTex" />
-                </LinearLayout>
-
                 <!-- Talent Location -->
 
                 <LinearLayout
+                    android:id="@+id/linearLayoutLocation"
                     android:layout_marginTop="16dp"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
@@ -179,7 +233,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Location"
-                        android:textColor="@color/colorSub" />
+                        android:textColor="@color/colorSub"
+                        tools:ignore="HardcodedText" />
 
                     <customfonts.MyTextView
                         android:id="@+id/lblTalentLocation"
@@ -187,7 +242,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="City, Province"
-                        android:textColor="@color/colorTex" />
+                        android:textColor="@color/colorTex"
+                        tools:ignore="HardcodedText" />
                 </LinearLayout>
 
                 <!-- Show More -->
@@ -210,7 +266,7 @@
                         android:gravity="center"
                         android:drawableEnd="@drawable/arrow"
                         android:drawablePadding="8dp"
-                        tools:ignore="SmallSp" />
+                        tools:ignore="HardcodedText,SmallSp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -229,6 +285,7 @@
                     <!-- Talent Description -->
 
                     <LinearLayout
+                        android:id="@+id/linearLayoutTalentDescription"
                         android:layout_marginTop="16dp"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
@@ -242,7 +299,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Description"
-                            android:textColor="@color/colorSub" />
+                            android:textColor="@color/colorSub"
+                            tools:ignore="HardcodedText" />
 
                         <customfonts.MyTextView
                             android:id="@+id/lblTalentDescription"
@@ -250,12 +308,14 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="&#34;A professional web/mobile developer.&#34;"
-                            android:textColor="@color/colorTex" />
+                            android:textColor="@color/colorTex"
+                            tools:ignore="HardcodedText" />
                     </LinearLayout>
 
                     <!-- Talent Height -->
 
                     <LinearLayout
+                        android:id="@+id/linearLayoutTalentHeight"
                         android:layout_marginTop="16dp"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
@@ -269,7 +329,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Height"
-                            android:textColor="@color/colorSub" />
+                            android:textColor="@color/colorSub"
+                            tools:ignore="HardcodedText" />
 
                         <customfonts.MyTextView
                             android:id="@+id/lblTalentHeight"
@@ -277,12 +338,14 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="5&#39;2&#34;"
-                            android:textColor="@color/colorTex" />
+                            android:textColor="@color/colorTex"
+                            tools:ignore="HardcodedText" />
                     </LinearLayout>
 
                     <!-- Experience / Previous Clients -->
 
                     <LinearLayout
+                        android:id="@+id/linearLayoutExperienceOrPreviousClients"
                         android:layout_marginTop="16dp"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
@@ -296,7 +359,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Previous Clients"
-                            android:textColor="@color/colorSub" />
+                            android:textColor="@color/colorSub"
+                            tools:ignore="HardcodedText" />
 
                         <customfonts.MyTextView
                             android:id="@+id/lblExperiencesOrPreviousClients"
@@ -304,7 +368,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text=">Asiagate Networks, Inc. (1yr &amp; 2months)\n>Journeytech, Inc. (1week)\n"
-                            android:textColor="@color/colorTex" />
+                            android:textColor="@color/colorTex"
+                            tools:ignore="HardcodedText" />
                     </LinearLayout>
 
                     <!-- Show Less -->
@@ -327,7 +392,7 @@
                             android:gravity="center"
                             android:drawableEnd="@drawable/arrow1"
                             android:drawablePadding="8dp"
-                            tools:ignore="SmallSp" />
+                            tools:ignore="HardcodedText,SmallSp" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -357,7 +422,8 @@
                         android:text="REVIEWS"
                         android:padding="16dp"
                         android:textSize="13sp"
-                        android:textColor="@color/colorSub" />
+                        android:textColor="@color/colorSub"
+                        tools:ignore="HardcodedText" />
 
                     <ws.wolfsoft.get_detail.ExpandableHeightListView
                         android:id="@+id/reviewsListView"
@@ -383,7 +449,8 @@
         android:textColor="#fff"
         android:gravity="center"
         android:padding="16dp"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignParentBottom="true"
+        tools:ignore="HardcodedText" />
 
     <customfonts.MyTextView
         android:id="@+id/btnInquireNow"
@@ -396,7 +463,8 @@
         android:gravity="center"
         android:padding="16dp"
         android:layout_alignParentBottom="true"
-        android:visibility="gone" />
+        android:visibility="gone"
+        tools:ignore="HardcodedText" />
 </RelativeLayout>
 
 
