@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,9 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.trosales.hireusapp.R;
 import com.trosales.hireusapp.activities.TalentModelProfileActivity;
+import com.trosales.hireusapp.classes.beans.CategoryDetector;
 import com.trosales.hireusapp.classes.commons.SharedPrefManager;
+import com.trosales.hireusapp.classes.constants.CategoriesConstants;
 import com.trosales.hireusapp.classes.wrappers.TalentsDO;
 
 import java.util.List;
@@ -55,6 +58,22 @@ public class TalentsAdapter extends RecyclerView.Adapter<TalentsAdapter.ViewHold
         viewHolder.lblTalentFullname.setText(talentsDO.getFullname());
         viewHolder.lblTalentGenderAndAge.setText(talentsDO.getGender() + " | " + talentsDO.getTalentAge() + " years old");
         viewHolder.lblTalentLocation.setText(talentsDO.getLocation().getCityMuni() + ", " + talentsDO.getLocation().getProvince());
+
+        CategoryDetector categoryDetector = new CategoryDetector(
+                talentsDO.getCategoryNames().contains(CategoriesConstants.CELEBRITY),
+                talentsDO.getCategoryNames().contains(CategoriesConstants.COMEDIANS),
+                talentsDO.getCategoryNames().contains(CategoriesConstants.DANCER),
+                talentsDO.getCategoryNames().contains(CategoriesConstants.DISK_JOCKEY),
+                talentsDO.getCategoryNames().contains(CategoriesConstants.EMCEE_HOST),
+                talentsDO.getCategoryNames().contains(CategoriesConstants.MODELS_BA),
+                talentsDO.getCategoryNames().contains(CategoriesConstants.MOVIE_TV_TALENTS),
+                talentsDO.getCategoryNames().contains(CategoriesConstants.SINGER_BAND)
+        );
+
+        Log.d("debug", "categories_detector: " + categoryDetector.toString());
+
+        detectCategory(categoryDetector, viewHolder);
+
         viewHolder.lblTalentHourlyRate.setText(Html.fromHtml("&#8369;" + talentsDO.getHourlyRate() + " per hour"));
         viewHolder.lblTalentCategories.setText(talentsDO.getCategoryNames());
 
@@ -82,6 +101,14 @@ public class TalentsAdapter extends RecyclerView.Adapter<TalentsAdapter.ViewHold
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+        }
+    }
+
+    private void detectCategory(CategoryDetector categoryDetector, TalentsAdapter.ViewHolder viewHolder){
+        if(categoryDetector.isCelebrity()){
+            viewHolder.lblTalentHourlyRate.setVisibility(View.GONE);
+        }else{
+            viewHolder.lblTalentHourlyRate.setVisibility(View.VISIBLE);
         }
     }
 }

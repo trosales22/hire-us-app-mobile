@@ -18,8 +18,10 @@ import com.trosales.hireusapp.R;
 import com.trosales.hireusapp.classes.beans.CategoryDetector;
 import com.trosales.hireusapp.classes.beans.Reviews;
 import com.trosales.hireusapp.classes.commons.SharedPrefManager;
+import com.trosales.hireusapp.classes.constants.CategoriesConstants;
 import com.trosales.hireusapp.classes.constants.EndPoints;
 import com.trosales.hireusapp.classes.constants.Tags;
+import com.trosales.hireusapp.classes.constants.Variables;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -173,14 +175,14 @@ public class TalentModelProfileActivity extends AppCompatActivity implements Bas
                                 lblTalentCategory.setText(categories);
 
                                 CategoryDetector categoryDetector = new CategoryDetector(
-                                        categories.contains("Celebrity"),
-                                        categories.contains("Comedians"),
-                                        categories.contains("Dancer"),
-                                        categories.contains("Disk Jockey (DJ)"),
-                                        categories.contains("Emcee/Host"),
-                                        categories.contains("Models/Brand Ambassadors"),
-                                        categories.contains("Movie/TV Talents"),
-                                        categories.contains("Singer/Band")
+                                        categories.contains(CategoriesConstants.CELEBRITY),
+                                        categories.contains(CategoriesConstants.COMEDIANS),
+                                        categories.contains(CategoriesConstants.DANCER),
+                                        categories.contains(CategoriesConstants.DISK_JOCKEY),
+                                        categories.contains(CategoriesConstants.EMCEE_HOST),
+                                        categories.contains(CategoriesConstants.MODELS_BA),
+                                        categories.contains(CategoriesConstants.MOVIE_TV_TALENTS),
+                                        categories.contains(CategoriesConstants.SINGER_BAND)
                                 );
 
                                 Log.d("debug", "categories_detector: " + categoryDetector.toString());
@@ -232,21 +234,19 @@ public class TalentModelProfileActivity extends AppCompatActivity implements Bas
         if(categoryDetector.isModelOrBrandAmbassador() || categoryDetector.isMovieOrTvTalent()){
             linearLayoutTalentGenre.setVisibility(View.GONE);
             linearLayoutTalentDescription.setVisibility(View.GONE);
-            lblExperiencesOrPreviousClientsCaption.setText("Previous Clients");
+            lblExperiencesOrPreviousClientsCaption.setText(Variables.PREVIOUS_CLIENTS);
         }else if(categoryDetector.isSingerOrBand()){
             linearLayoutVitalStats.setVisibility(View.GONE);
             linearLayoutTalentDescription.setVisibility(View.GONE);
             linearLayoutTalentHeight.setVisibility(View.GONE);
-            lblExperiencesOrPreviousClientsCaption.setText("Previous Clients");
+            lblExperiencesOrPreviousClientsCaption.setText(Variables.PREVIOUS_CLIENTS);
         }else if(categoryDetector.isComedian() || categoryDetector.isEmceeOrHost()){
             linearLayoutVitalStats.setVisibility(View.GONE);
             linearLayoutTalentDescription.setVisibility(View.GONE);
             linearLayoutTalentGenre.setVisibility(View.GONE);
             linearLayoutTalentHeight.setVisibility(View.GONE);
-            lblExperiencesOrPreviousClientsCaption.setText("Previous Clients");
+            lblExperiencesOrPreviousClientsCaption.setText(Variables.PREVIOUS_CLIENTS);
         }else if(categoryDetector.isCelebrity()){
-            linearLayoutShowMore.setVisibility(View.GONE);
-            linearLayoutShowLess.setVisibility(View.GONE);
             linearLayoutTalentDescription.setVisibility(View.VISIBLE);
             linearLayoutHourlyRate.setVisibility(View.GONE);
             linearLayoutVitalStats.setVisibility(View.GONE);
