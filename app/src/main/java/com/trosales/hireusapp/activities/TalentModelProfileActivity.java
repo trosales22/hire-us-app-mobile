@@ -106,16 +106,15 @@ public class TalentModelProfileActivity extends AppCompatActivity implements Bas
 //         ********Slider*********
 
         HashMap<String,Integer> file_maps = new HashMap<>();
-        file_maps.put("1", R.drawable.iohone1);
-        file_maps.put("2",R.drawable.iphone2);
-        file_maps.put("3",R.drawable.iphone3);
+        file_maps.put("1", R.drawable.girl);
 
         for(String name : file_maps.keySet()){
             TextSliderView textSliderView = new TextSliderView(this);
             textSliderView
                     //  .description(name)
                     .image(file_maps.get(name))
-                    .setScaleType(BaseSliderView.ScaleType.CenterInside)
+//                    .setScaleType(BaseSliderView.ScaleType.CenterInside)
+                    .setScaleType(BaseSliderView.ScaleType.Fit)
                     .setOnSliderClickListener(this);
 
 
@@ -254,6 +253,10 @@ public class TalentModelProfileActivity extends AppCompatActivity implements Bas
             linearLayoutTalentHeight.setVisibility(View.GONE);
             linearLayoutTalentGenre.setVisibility(View.GONE);
             linearLayoutExperienceOrPreviousClients.setVisibility(View.GONE);
+            btnAddToBookingList.setVisibility(View.GONE);
+            btnInquireNow.setVisibility(View.VISIBLE);
+        }else if(categoryDetector.isDancer() || categoryDetector.isDiskJockey()){
+            linearLayoutHourlyRate.setVisibility(View.GONE);
             btnAddToBookingList.setVisibility(View.GONE);
             btnInquireNow.setVisibility(View.VISIBLE);
         }

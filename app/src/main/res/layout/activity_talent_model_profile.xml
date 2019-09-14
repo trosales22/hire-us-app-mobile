@@ -24,10 +24,10 @@
             <ws.wolfsoft.get_detail.SliderLayout
                 android:id="@+id/talentGallerySlider"
                 android:layout_width="match_parent"
-                custom:pager_animation_span="1100"
                 android:layout_height="300dp"
+                custom:pager_animation_span="1100"
                 android:background="#fff"
-                style="@style/AndroidImageSlider_Oval_Black"/>
+                style="@style/AndroidImageSlider_Oval_Black" />
 
             <LinearLayout
                 android:layout_width="match_parent"

@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.FilteringActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/background_home">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="Location"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    tools:ignore="HardcodedText" />
+
+                <LinearLayout
+                    android:id="@+id/linearLayoutLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <org.angmarch.views.NiceSpinner
+                        android:id="@+id/cmbProvince"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginBottom="10dp"
+                        android:hint="Choose Province"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/black"
+                        android:textSize="18sp"
+                        tools:ignore="HardcodedText" />
+
+                    <org.angmarch.views.NiceSpinner
+                        android:id="@+id/cmbCity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginBottom="10dp"
+                        android:hint="Choose City"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/black"
+                        android:textSize="18sp"
+                        tools:ignore="HardcodedText" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="Age"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    tools:ignore="HardcodedText" />
+
+                <LinearLayout
+                    android:id="@+id/linearLayoutAge"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <org.angmarch.views.NiceSpinner
+                        android:id="@+id/cmbAgeFrom"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_weight="1"
+                        android:hint="From"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/black"
+                        android:textSize="18sp"
+                        tools:ignore="HardcodedText" />
+
+                    <org.angmarch.views.NiceSpinner
+                        android:id="@+id/cmbAgeTo"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_weight="1"
+                        android:hint="To"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/black"
+                        android:textSize="18sp"
+                        tools:ignore="HardcodedText" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="Height"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    tools:ignore="HardcodedText" />
+
+                <LinearLayout
+                    android:id="@+id/linearLayoutHeight"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <org.angmarch.views.NiceSpinner
+                        android:id="@+id/cmbHeightFrom"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_weight="1"
+                        android:hint="From"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/black"
+                        android:textSize="18sp"
+                        tools:ignore="HardcodedText" />
+
+                    <org.angmarch.views.NiceSpinner
+                        android:id="@+id/cmbHeightTo"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_weight="1"
+                        android:hint="To"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/black"
+                        android:textSize="18sp"
+                        tools:ignore="HardcodedText" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="Rate Per Hour"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    tools:ignore="HardcodedText" />
+
+                <LinearLayout
+                    android:id="@+id/linearLayoutRatePerHour"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <org.angmarch.views.NiceSpinner
+                        android:id="@+id/cmbRatePerHourFrom"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_weight="1"
+                        android:hint="From"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/black"
+                        android:textSize="18sp"
+                        tools:ignore="HardcodedText" />
+
+                    <org.angmarch.views.NiceSpinner
+                        android:id="@+id/cmbRatePerHourTo"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_weight="1"
+                        android:hint="To"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/black"
+                        android:textSize="18sp"
+                        tools:ignore="HardcodedText" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btnFilterNow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:padding="15dp"
+            android:text="Filter Now!"
+            android:textColor="@color/white"
+            android:layout_alignParentBottom="true"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            tools:ignore="HardcodedText" />
+
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>

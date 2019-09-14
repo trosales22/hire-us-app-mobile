@@ -1,48 +1,72 @@
 <?xml version = "1.0" encoding = "utf-8"?>
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:android = "http://schemas.android.com/apk/res/android"
+    xmlns:app = "http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width = "match_parent"
-    android:layout_height = "?android:attr/actionBarSize"
+    android:layout_height = "wrap_content"
     android:gravity = "center_vertical"
-    android:padding = "5dp"
+    android:padding = "10dp"
     android:weightSum = "1">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize"
-        android:layout_weight="0.6">
+        android:layout_width = "0dp"
+        android:layout_height = "match_parent"
+        android:layout_weight = "0.6">
 
         <ImageView
-            android:layout_width = "?android:attr/actionBarSize"
-            android:layout_height = "?android:attr/actionBarSize"
-            android:src = "@drawable/hire_us_logo"
-            android:padding = "5dp"/>
+            android:layout_width="?android:attr/actionBarSize"
+            android:layout_height="match_parent"
+            android:src="@drawable/hire_us_logo"
+            android:layout_marginEnd="5dp"/>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id = "@+id/appName"
-                android:layout_width = "match_parent"
-                android:layout_height = "wrap_content"
-                android:layout_marginStart = "10dp"
-                android:text = "HIRE US"
-                android:textSize = "20sp"
-                android:textColor = "#000"
-                android:textStyle = "bold" />
-
-            <TextView
-                android:layout_width = "match_parent"
-                android:layout_height = "wrap_content"
-                android:layout_marginStart = "10dp"
-                android:text = "&quot;Your Long-Term RAKET Partner&quot;"
-                android:textSize = "15sp"
-                android:textColor="@color/black"
-                android:textStyle="italic"
-                android:layout_below="@id/appName"/>
-
-        </RelativeLayout>
+        <TextView
+            android:id = "@+id/lblAppName"
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text = "Hire Us App"
+            android:textSize = "22sp"
+            android:textColor = "#000"
+            android:textStyle = "bold"
+            app:fontFamily = "@font/allan_bold"
+            tools:ignore="HardcodedText" />
 
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width = "40dp"
+        android:layout_height = "match_parent"
+        android:layout_weight = "0.4"
+        android:gravity = "end">
+
+        <ImageView
+            android:id="@+id/btnGoToBookingList"
+            android:layout_width="?android:attr/actionBarSize"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_playlist_add_check_black"
+            android:clickable="true"
+            android:focusable="true" />
+
+        <ImageView
+            android:id="@+id/btnSettings"
+            android:layout_width="?android:attr/actionBarSize"
+            android:layout_height="match_parent"
+            android:layout_marginStart="5dp"
+            android:src="@drawable/ic_settings_black"
+            android:clickable="true"
+            android:focusable="true" />
+
+        <ImageView
+            android:id="@+id/btnFilterOption"
+            android:layout_width="?android:attr/actionBarSize"
+            android:layout_height="match_parent"
+            android:layout_marginStart="5dp"
+            android:src="@drawable/ic_filter_list_black"
+            android:clickable="true"
+            android:focusable="true" />
+
+    </LinearLayout>
+
 </LinearLayout>

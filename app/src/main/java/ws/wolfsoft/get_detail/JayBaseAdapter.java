@@ -54,7 +54,7 @@ public class JayBaseAdapter extends BaseAdapter {
 
         if (convertView == null){
             LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-            convertView = layoutInflater.inflate(R.layout.list,null);
+            convertView = layoutInflater.inflate(R.layout.reviews_list,null);
 
             viewHolder = new ViewHolder();
 

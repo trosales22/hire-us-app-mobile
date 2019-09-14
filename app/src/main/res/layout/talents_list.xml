@@ -19,6 +19,7 @@
         card_view:cardCornerRadius="4dp">
 
         <RelativeLayout
+            android:id="@+id/relativeLayoutTalentDetails"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp">
@@ -116,7 +117,33 @@
                 android:text="Categories"
                 card_view:ignore="HardcodedText" />
 
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btnMoreDetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/lblTalentCategories"
+                android:layout_marginTop="10dp"
+                android:background="@color/orange"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:text="More Details"
+                card_view:ignore="HardcodedText" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btnUnavailableDates"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btnMoreDetails"
+                android:layout_marginTop="10dp"
+                android:background="@color/basic_red"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:text="Unavailable Dates"
+                card_view:ignore="HardcodedText" />
+
         </RelativeLayout>
+
+
 
     </android.support.v7.widget.CardView>
 

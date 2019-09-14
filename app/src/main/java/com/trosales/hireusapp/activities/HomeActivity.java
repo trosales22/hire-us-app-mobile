@@ -1,5 +1,6 @@
 package com.trosales.hireusapp.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
@@ -9,11 +10,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.borax12.materialdaterangepicker.date.DatePickerDialog;
 import com.ethanhua.skeleton.Skeleton;
 import com.ethanhua.skeleton.SkeletonScreen;
 import com.trosales.hireusapp.R;
@@ -34,6 +39,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
@@ -41,7 +47,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cz.kinst.jakub.view.SimpleStatefulLayout;
 
-public class HomeActivity extends AppCompatActivity implements FilterListener<Categories> {
+public class HomeActivity extends AppCompatActivity implements FilterListener<Categories>, DatePickerDialog.OnDateSetListener {
+    @BindView(R.id.btnChoosePreferredDate) Button btnChoosePreferredDate;
     @BindView(R.id.stateful_layout) SimpleStatefulLayout simpleStatefulLayout;
     @BindView(R.id.swipeToRefresh_talents) SwipeRefreshLayout swipeToRefresh_talents;
     @BindView(R.id.recyclerView_talents) RecyclerView recyclerView_talents;
@@ -54,6 +61,8 @@ public class HomeActivity extends AppCompatActivity implements FilterListener<Ca
     private int[] mColors;
     private String[] mTitles;
 
+    private boolean mAutoHighlight = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +72,23 @@ public class HomeActivity extends AppCompatActivity implements FilterListener<Ca
         Objects.requireNonNull(this.getSupportActionBar()).setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setCustomView(R.layout.custom_action_bar);
+        getSupportActionBar().setElevation(0);
         getSupportActionBar().getCustomView();
+
+        View customActionBarView = getSupportActionBar().getCustomView();
+        setCustomActionBarListener(customActionBarView);
+
+        btnChoosePreferredDate.setOnClickListener(v -> {
+            Calendar now = Calendar.getInstance();
+            DatePickerDialog dpd = DatePickerDialog.newInstance(
+                    HomeActivity.this,
+                    now.get(Calendar.YEAR),
+                    now.get(Calendar.MONTH),
+                    now.get(Calendar.DAY_OF_MONTH)
+            );
+            dpd.setAutoHighlight(mAutoHighlight);
+            dpd.show(getFragmentManager(), "Datepickerdialog");
+        });
 
         mColors = getResources().getIntArray(R.array.colors);
         mTitles = getResources().getStringArray(R.array.categories);
@@ -105,6 +130,27 @@ public class HomeActivity extends AppCompatActivity implements FilterListener<Ca
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        DatePickerDialog dpd = (DatePickerDialog) getFragmentManager().findFragmentByTag("Datepickerdialog");
+        if(dpd != null) dpd.setOnDateSetListener(this);
+    }
+
+    private void setCustomActionBarListener(View customActionBarView){
+        customActionBarView.findViewById(R.id.btnFilterOption).setOnClickListener(v -> {
+            startActivity(new Intent(this, FilteringActivity.class));
+        });
+
+        customActionBarView.findViewById(R.id.btnGoToBookingList).setOnClickListener(v -> {
+            startActivity(new Intent(this, BookingListActivity.class));
+        });
+
+        customActionBarView.findViewById(R.id.btnSettings).setOnClickListener(v -> {
+            startActivity(new Intent(this, SettingsActivity.class));
+        });
+    }
+
     private List<Categories> getCategoryTags() {
         List<Categories> tags = new ArrayList<>();
 
@@ -135,6 +181,18 @@ public class HomeActivity extends AppCompatActivity implements FilterListener<Ca
     @Override
     public void onNothingSelected() {
 
+    }
+
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth, int yearEnd, int monthOfYearEnd, int dayOfMonthEnd) {
+        String dateFrom = (++monthOfYear) + "/" + dayOfMonth + "/" + year;
+        String dateTo = (++monthOfYearEnd) + "/" + dayOfMonthEnd + "/" + yearEnd;
+
+        StringBuilder sbSelectedDates = new StringBuilder();
+        sbSelectedDates.append(dateFrom).append(" - ").append(dateTo);
+
+        btnChoosePreferredDate.setText(sbSelectedDates.toString());
+        Toast.makeText(this, "Your preferred date: " + sbSelectedDates.toString() + "!", Toast.LENGTH_SHORT).show();
     }
 
     class Adapter extends FilterAdapter<Categories> {
