@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/galaxy_bg"
     android:orientation="vertical">
 
@@ -27,66 +29,22 @@
             android:background="@color/colordevider"
             android:padding="16dp" />
 
-        <RelativeLayout
+        <cz.kinst.jakub.view.SimpleStatefulLayout
+            android:id="@+id/stateful_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            app:emptyLayout="@layout/state_empty"
+            app:offlineLayout="@layout/state_offline"
+            app:progressLayout="@layout/state_progress">
 
-            <TextView
-                android:id="@+id/lblMonthYear"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView_unavailableDates"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:textStyle="bold"
-                android:textSize="23sp"
-                android:textColor="@color/white"
-                android:text="September 2019"
-                tools:ignore="HardcodedText" />
+                android:layout_height="match_parent"
+                android:scrollbars="vertical" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/colordevider"
-                android:layout_below="@id/lblMonthYear"
-                android:padding="16dp" />
-
-            <TextView
-                android:id="@+id/lblDaysCaption"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/lblMonthYear"
-                android:padding="10dp"
-                android:text="Day(s):"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="@color/white"
-                tools:ignore="HardcodedText" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/colordevider"
-                android:layout_below="@id/lblDaysCaption"
-                android:padding="16dp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/colordevider"
-                android:padding="16dp" />
-
-            <TextView
-                android:id="@+id/lblUnavailableDays"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/lblDaysCaption"
-                android:padding="10dp"
-                android:text="> 23 (Monday)\n> 24 (Tuesday)"
-                android:textSize="20sp"
-                android:textColor="@color/white"
-                tools:ignore="HardcodedText" />
-
-        </RelativeLayout>
+        </cz.kinst.jakub.view.SimpleStatefulLayout>
 
     </LinearLayout>
 
-</android.support.design.widget.CoordinatorLayout>
+</ScrollView>

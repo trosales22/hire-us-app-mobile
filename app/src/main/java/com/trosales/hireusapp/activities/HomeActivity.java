@@ -86,6 +86,7 @@ public class HomeActivity extends AppCompatActivity implements FilterListener<Ca
                     now.get(Calendar.MONTH),
                     now.get(Calendar.DAY_OF_MONTH)
             );
+
             dpd.setAutoHighlight(mAutoHighlight);
             dpd.show(getFragmentManager(), "Datepickerdialog");
         });
