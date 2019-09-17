@@ -1,6 +1,7 @@
 package com.trosales.hireusapp.activities;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
@@ -129,6 +130,10 @@ public class TalentModelProfileActivity extends AppCompatActivity implements Bas
         talentGallerySlider.setCustomAnimation(new ChildAnimationExample());
         talentGallerySlider.setDuration(3000);
         talentGallerySlider.addOnPageChangeListener(this);
+
+        btnAddToBookingList.setOnClickListener(v -> {
+            startActivity(new Intent(this, SetBookingDateAndTimeActivity.class));
+        });
     }
 
     @Override

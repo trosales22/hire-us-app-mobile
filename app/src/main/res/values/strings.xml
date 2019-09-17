@@ -29,6 +29,8 @@
     <string name="title_notifications">Notifications</string>
     <string name="title_activity_settings">Settings</string>
     <string name="title_activity_booking_list">Booking List</string>
+    <string name="title_activity_booking_date_and_time">Booking Details</string>
+    <string name="title_activity_checkout">Checkout</string>
 
     <string name="str_all_selected">All Categories</string>
 

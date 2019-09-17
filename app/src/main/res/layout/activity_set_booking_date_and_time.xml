@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.SetBookingDateAndTimeActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/background_home">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center_vertical">
+
+                <Button
+                    android:id="@+id/btnChoosePreferredDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Choose Preferred Date"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:drawableStart="@drawable/ic_date_range_white"
+                    android:drawablePadding="10dp"
+                    android:textSize="15dp"
+                    android:padding="15dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@color/dark_transparent"
+                    tools:ignore="HardcodedText,SpUsage" />
+
+                <Button
+                    android:id="@+id/btnChoosePreferredTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Choose Preferred Time"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:drawableStart="@drawable/ic_access_time_white"
+                    android:drawablePadding="10dp"
+                    android:textSize="15dp"
+                    android:padding="15dp"
+                    android:background="@color/dark_transparent"
+                    tools:ignore="HardcodedText,SpUsage" />
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btnProceedToCheckout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:padding="15dp"
+            android:text="Proceed To Checkout"
+            android:textColor="@color/white"
+            android:layout_alignParentBottom="true"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            tools:ignore="HardcodedText" />
+
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>
