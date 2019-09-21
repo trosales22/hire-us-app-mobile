@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:float="http://schemas.android.com/apk/res-auto"
     android:fitsSystemWindows="true"
     android:background="@drawable/background_image_gradient">
 
@@ -27,23 +27,50 @@
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <EditText android:id="@+id/frmLoginAccount_txtEmail"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white">
+
+            <EditText
+                android:id="@+id/frmLoginAccount_txtEmailOrUsername"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
-                android:hint="Email Address" />
+                android:inputType="text"
+                android:maxLength="25"
+                android:drawablePadding="5dp"
+                android:drawableStart="@drawable/ic_account_box_white"
+                android:hint="Email or Username"
+                tools:ignore="HardcodedText,TextFields" />
+
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <EditText android:id="@+id/frmLoginAccount_txtPassword"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white">
+
+            <EditText
+                android:id="@+id/frmLoginAccount_txtPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
-                android:hint="Password"/>
+                android:hint="Password"
+                android:drawablePadding="5dp"
+                android:drawableStart="@drawable/ic_lock_white"
+                android:maxLength="16"
+                tools:ignore="HardcodedText" />
+
         </android.support.design.widget.TextInputLayout>
+
+        <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/chkShowPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Show Password"
+            android:textColor="@color/white"
+            android:layout_marginBottom="5dp"
+            tools:ignore="HardcodedText" />
 
         <com.github.nikartm.support.StripedProcessButton
             android:id="@+id/btnLoginUser"

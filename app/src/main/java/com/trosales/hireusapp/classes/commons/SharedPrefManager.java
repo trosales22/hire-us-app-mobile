@@ -13,9 +13,10 @@ public class SharedPrefManager {
     private static final String SHARED_PREF_NAME = "mySharedPref";
     private static final String KEY_USER = "keyUser";
     private static final String KEY_USER_ID = "keyUserId";
+    private static final String KEY_USER_ROLE = "keyUserRole";
     private static final String KEY_TALENT_ID = "keyTalentId";
 
-    public SharedPrefManager(Context context) {
+    private SharedPrefManager(Context context) {
         mContext = context;
     }
 
@@ -27,14 +28,12 @@ public class SharedPrefManager {
         return mInstance;
     }
 
-    public boolean loginUser(String emailOrUsername){
+    public void loginUser(String emailOrUsername){
         SharedPreferences sharedPreferences = mContext.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         editor.putString(KEY_USER, emailOrUsername);
         editor.apply();
-
-        return true;
     }
 
     public boolean isLoggedIn(){
@@ -42,12 +41,11 @@ public class SharedPrefManager {
         return sharedPreferences.getString(KEY_USER, null) != null;
     }
 
-    public boolean logoutUser(){
+    public void logoutUser(){
         SharedPreferences sharedPreferences = mContext.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.apply();
-        return true;
     }
 
     public void saveUserIdSession(String userId){
@@ -66,6 +64,14 @@ public class SharedPrefManager {
         editor.apply();
     }
 
+    public void saveUserRole(String userRole){
+        SharedPreferences sharedPreferences = mContext.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putString(KEY_USER_ROLE, userRole);
+        editor.apply();
+    }
+
     public String getEmailOrUsername(){
         SharedPreferences sharedPreferences = mContext.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getString(KEY_USER,null);
@@ -79,5 +85,10 @@ public class SharedPrefManager {
     public String getTalentId(){
         SharedPreferences sharedPreferences = mContext.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getString(KEY_TALENT_ID,null);
+    }
+
+    public String getUserRole(){
+        SharedPreferences sharedPreferences = mContext.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(KEY_USER_ROLE,null);
     }
 }

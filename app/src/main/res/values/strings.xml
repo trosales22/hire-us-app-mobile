@@ -45,4 +45,5 @@
         <item>Singer/Band</item>
     </string-array>
     <string name="title_activity_filtering">FilteringActivity</string>
+    <string name="title_activity_main">Home | Hire Us</string>
 </resources>

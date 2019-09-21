@@ -19,10 +19,16 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
+            android:name=".activities.MainActivity"
+            android:label="@string/title_activity_main"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".activities.CheckoutActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_checkout"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.SetBookingDateAndTimeActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -47,11 +53,6 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activities.HomeActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="@string/title_activity_home"
-            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.SplashScreenActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
