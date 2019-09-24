@@ -14,4 +14,5 @@ public class EndPoints {
     public static final String GET_ALL_CATEGORIES_URL = API_BASE_URL + "categories/get_all_categories";
     public static final String GET_SELECTED_TALENT_DETAILS_URL = API_BASE_URL + "talents/get_talent_details";
     public static final String GET_UNAVAILABLE_DATES_URL = API_BASE_URL + "talents/get_talent_unavailable_dates";
+    public static final String GET_BOOKING_LIST_BY_CLIENT_ID_URL = API_BASE_URL + "client/get_booking_list_by_client_id";
 }
