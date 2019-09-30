@@ -10,16 +10,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/background_home">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_gravity="center_vertical">
+                android:layout_height="match_parent">
 
                 <Button
                     android:id="@+id/btnChoosePreferredDate"
@@ -32,27 +30,35 @@
                     android:drawablePadding="10dp"
                     android:textSize="15dp"
                     android:padding="15dp"
-                    android:layout_marginBottom="20dp"
-                    android:background="@color/dark_transparent"
+                    android:layout_marginBottom="10dp"
+                    android:background="@color/colorPrimaryDarker"
                     tools:ignore="HardcodedText,SpUsage" />
 
-                <Button
-                    android:id="@+id/btnChoosePreferredTime"
-                    android:layout_width="match_parent"
+                <ListView
+                    android:id="@+id/scheduleListView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="300dp"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_below="@id/btnChoosePreferredDate"
+                    android:choiceMode="multipleChoice"
+                    android:layout_marginBottom="10dp"/>
+
+                <TextView
+                    android:id="@+id/lblSelectedSchedule"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Choose Preferred Time"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:drawableStart="@drawable/ic_access_time_white"
-                    android:drawablePadding="10dp"
-                    android:textSize="15dp"
-                    android:padding="15dp"
-                    android:background="@color/dark_transparent"
-                    tools:ignore="HardcodedText,SpUsage" />
+                    android:layout_below="@id/scheduleListView"
+                    android:textSize="18sp"
+                    android:padding="10dp"
+                    android:textColor="@color/black"
+                    android:text="Selected schedule: N/A"
+                    tools:ignore="HardcodedText" />
 
-            </LinearLayout>
+            </RelativeLayout>
 
-        </FrameLayout>
+
+
+        </LinearLayout>
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btnProceedToCheckout"
