@@ -11,34 +11,34 @@ import android.text.Html;
 import android.util.SparseBooleanArray;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.borax12.materialdaterangepicker.date.DatePickerDialog;
-import com.borax12.materialdaterangepicker.time.RadialPickerLayout;
-import com.borax12.materialdaterangepicker.time.TimePickerDialog;
+import com.androidbuts.multispinnerfilter.KeyPairBoolData;
+import com.androidbuts.multispinnerfilter.MultiSpinnerSearch;
 import com.trosales.hireusapp.R;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class SetBookingDateAndTimeActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
-    @BindView(R.id.btnChoosePreferredDate) Button btnChoosePreferredDate;
+public class SetBookingDateAndTimeActivity extends AppCompatActivity{
+    @BindView(R.id.btnChoosePreferredDate) MultiSpinnerSearch btnChoosePreferredDate;
     @BindView(R.id.scheduleListView) ListView scheduleListView;
     @BindView(R.id.lblSelectedSchedule) TextView lblSelectedSchedule;
     @BindView(R.id.btnProceedToCheckout) AppCompatButton btnProceedToCheckout;
 
-    private boolean mAutoHighlight = true;
     private ArrayList<String> availableScheduleItems = new ArrayList<>();
     private SparseBooleanArray sparseBooleanArray = new SparseBooleanArray();
-    private String selectedDate = "";
 
     @RequiresApi(api = Build.VERSION_CODES.P)
     @SuppressLint("SetTextI18n")
@@ -50,17 +50,23 @@ public class SetBookingDateAndTimeActivity extends AppCompatActivity implements 
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-        btnChoosePreferredDate.setOnClickListener(v -> {
-            Calendar now = Calendar.getInstance();
-            DatePickerDialog dpd = DatePickerDialog.newInstance(
-                    SetBookingDateAndTimeActivity.this,
-                    now.get(Calendar.YEAR),
-                    now.get(Calendar.MONTH),
-                    now.get(Calendar.DAY_OF_MONTH)
-            );
+        List<String> datesList = getDatesUpToSpecificMonths(3);
+        final List<KeyPairBoolData> keyPairBoolDataList = new ArrayList<>();
 
-            dpd.setAutoHighlight(mAutoHighlight);
-            dpd.show(getFragmentManager(), "Datepickerdialog");
+        for (int i = 0; i < datesList.size(); i++) {
+            KeyPairBoolData h = new KeyPairBoolData();
+            h.setId(i + 1);
+            h.setName(datesList.get(i));
+            h.setSelected(false);
+            keyPairBoolDataList.add(h);
+        }
+
+        btnChoosePreferredDate.setItems(keyPairBoolDataList, -1, items -> {
+            for (int i = 0; i < items.size(); i++) {
+                if (items.get(i).isSelected()) {
+                    Toast.makeText(SetBookingDateAndTimeActivity.this, i + " : " + items.get(i).getName() + " : " + items.get(i).isSelected(), Toast.LENGTH_LONG).show();
+                }
+            }
         });
 
         setAfternoonSchedule();
@@ -140,6 +146,26 @@ public class SetBookingDateAndTimeActivity extends AppCompatActivity implements 
         });
     }
 
+    private List<String> getDatesUpToSpecificMonths(int months){
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+        Calendar c = Calendar.getInstance();
+        List<String> availableDatesList = new ArrayList<>();
+
+        try {
+            c.setTime(sdf.parse(sdf.format(new Date())));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        int maxDay = c.getActualMaximum(Calendar.DAY_OF_MONTH) * months;
+        for(int co=0; co<=maxDay; co++){
+            c.add(Calendar.DATE, 1);
+            availableDatesList.add(sdf.format(c.getTime()));
+        }
+
+        return availableDatesList;
+    }
+
     private static String removeLastCharacter(String str) {
         String result = null;
         if ((str != null) && (str.length() > 0)) {
@@ -156,31 +182,6 @@ public class SetBookingDateAndTimeActivity extends AppCompatActivity implements 
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth, int yearEnd, int monthOfYearEnd, int dayOfMonthEnd) {
-        String dateFrom = (++monthOfYear) + "/" + dayOfMonth + "/" + year;
-        String dateTo = (++monthOfYearEnd) + "/" + dayOfMonthEnd + "/" + yearEnd;
-
-        StringBuilder sbSelectedDates = new StringBuilder();
-        sbSelectedDates.append(dateFrom).append(" - ").append(dateTo);
-
-        selectedDate = sbSelectedDates.toString();
-
-        btnChoosePreferredDate.setText(selectedDate);
-        Toast.makeText(this, "Selected date: " + selectedDate + "!", Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int hourOfDayEnd, int minuteEnd) {
-        String hourString = hourOfDay < 10 ? "0"+hourOfDay : ""+hourOfDay;
-        String minuteString = minute < 10 ? "0"+minute : ""+minute;
-        String hourStringEnd = hourOfDayEnd < 10 ? "0"+hourOfDayEnd : ""+hourOfDayEnd;
-        String minuteStringEnd = minuteEnd < 10 ? "0"+minuteEnd : ""+minuteEnd;
-        String time = "You picked the following time: From - "+hourString+"h"+minuteString+" To - "+hourStringEnd+"h"+minuteStringEnd;
-
-        Toast.makeText(this, time, Toast.LENGTH_LONG).show();
     }
 
     private void setMorningSchedule(){

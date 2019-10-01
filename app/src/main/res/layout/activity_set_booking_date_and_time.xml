@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.SetBookingDateAndTimeActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".activities.SetBookingDateAndTimeActivity"
+    app:theme="@style/AppTheme.Dark">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -19,20 +21,30 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <Button
+                <!--<Button-->
+                    <!--android:id="@+id/btnChoosePreferredDate"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="Choose Preferred Date"-->
+                    <!--android:textColor="@color/white"-->
+                    <!--android:textStyle="bold"-->
+                    <!--android:drawableStart="@drawable/ic_date_range_white"-->
+                    <!--android:drawablePadding="10dp"-->
+                    <!--android:textSize="15dp"-->
+                    <!--android:padding="15dp"-->
+                    <!--android:layout_marginBottom="10dp"-->
+                    <!--android:background="@color/colorPrimaryDarker"-->
+                    <!--tools:ignore="HardcodedText,SpUsage" />-->
+
+                <com.androidbuts.multispinnerfilter.MultiSpinnerSearch
                     android:id="@+id/btnChoosePreferredDate"
-                    android:layout_width="match_parent"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="Choose Preferred Date"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:drawableStart="@drawable/ic_date_range_white"
-                    android:drawablePadding="10dp"
-                    android:textSize="15dp"
-                    android:padding="15dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_margin="20dp"
+                    app:hintText="Choose Preferred Dates"
                     android:background="@color/colorPrimaryDarker"
-                    tools:ignore="HardcodedText,SpUsage" />
+                    android:textColor="@color/colorPrimaryDark"
+                    android:padding="15dp" />
 
                 <ListView
                     android:id="@+id/scheduleListView"
