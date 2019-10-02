@@ -13,10 +13,6 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.androidbuts.multispinnerfilter.KeyPairBoolData;
-import com.androidbuts.multispinnerfilter.MultiSpinnerSearch;
 import com.trosales.hireusapp.R;
 
 import java.text.DecimalFormat;
@@ -32,13 +28,16 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class SetBookingDateAndTimeActivity extends AppCompatActivity{
-    @BindView(R.id.btnChoosePreferredDate) MultiSpinnerSearch btnChoosePreferredDate;
-    @BindView(R.id.scheduleListView) ListView scheduleListView;
+    @BindView(R.id.listDateSchedule) ListView listDateSchedule;
+    @BindView(R.id.listTimeSchedule) ListView listTimeSchedule;
     @BindView(R.id.lblSelectedSchedule) TextView lblSelectedSchedule;
+    @BindView(R.id.btnComputeTotal) AppCompatButton btnComputeTotal;
     @BindView(R.id.btnProceedToCheckout) AppCompatButton btnProceedToCheckout;
 
-    private ArrayList<String> availableScheduleItems = new ArrayList<>();
-    private SparseBooleanArray sparseBooleanArray = new SparseBooleanArray();
+    private List<String> availableDateScheduleItems, availableTimeScheduleItems;
+    private SparseBooleanArray availableDateSparseBooleanArray, availableTimeSparseBooleanArray;
+    private StringBuilder sbSelectedDateSched,sbSelectedTimeSched;
+    private int dateScheduleCount = 0, timeScheduleCount = 0;
 
     @RequiresApi(api = Build.VERSION_CODES.P)
     @SuppressLint("SetTextI18n")
@@ -50,81 +49,51 @@ public class SetBookingDateAndTimeActivity extends AppCompatActivity{
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-        List<String> datesList = getDatesUpToSpecificMonths(3);
-        final List<KeyPairBoolData> keyPairBoolDataList = new ArrayList<>();
+        availableDateScheduleItems = new ArrayList<>();
+        availableTimeScheduleItems = new ArrayList<>();
 
-        for (int i = 0; i < datesList.size(); i++) {
-            KeyPairBoolData h = new KeyPairBoolData();
-            h.setId(i + 1);
-            h.setName(datesList.get(i));
-            h.setSelected(false);
-            keyPairBoolDataList.add(h);
-        }
+        availableDateSparseBooleanArray = new SparseBooleanArray();
+        availableTimeSparseBooleanArray = new SparseBooleanArray();
 
-        btnChoosePreferredDate.setItems(keyPairBoolDataList, -1, items -> {
-            for (int i = 0; i < items.size(); i++) {
-                if (items.get(i).isSelected()) {
-                    Toast.makeText(SetBookingDateAndTimeActivity.this, i + " : " + items.get(i).getName() + " : " + items.get(i).isSelected(), Toast.LENGTH_LONG).show();
-                }
-            }
-        });
+        sbSelectedDateSched = new StringBuilder();
+        sbSelectedTimeSched = new StringBuilder();
 
-        setAfternoonSchedule();
-        setMorningSchedule();
+        setDateSchedule();
+        setTimeSchedule();
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>
-                (
-                        this,
-                        R.layout.custom_checkable_textview,
-                        android.R.id.text1, availableScheduleItems
-                );
-
-        scheduleListView.setAdapter(adapter);
-
-        scheduleListView.setOnItemClickListener((parent, view, position, id) -> {
-            sparseBooleanArray = scheduleListView.getCheckedItemPositions();
-            StringBuilder sbSelectedSchedule = new StringBuilder();
-
-            int i = 0;
-            int scheduleCount = 0;
-
-            while (i < sparseBooleanArray.size()) {
-                if (sparseBooleanArray.valueAt(i)) {
-                    sbSelectedSchedule
-                            .append(scheduleListView.getItemAtPosition(sparseBooleanArray.keyAt(i)))
-                            .append(",");
-                }else{
-                    sparseBooleanArray.removeAt(i);
-                }
-
-                scheduleCount = sparseBooleanArray.size();
-
-                i++;
-            }
-
+        btnComputeTotal.setOnClickListener(v -> {
             DecimalFormat formatter = new DecimalFormat("#,###.00");
             double ratePerHour = Double.parseDouble("1000");
-            double totalAmountDouble = Double.parseDouble(String.valueOf((1000 * (scheduleCount))));
-            String selectedTime;
+            double totalAmountDouble = Double.parseDouble(String.valueOf((1000 * (timeScheduleCount) * (dateScheduleCount) )));
+            String selectedDate,selectedTime;
             String totalHours;
             String totalAmountString;
 
-            if(scheduleCount < 1){
+            if(dateScheduleCount < 1){
+                selectedDate = "N/A";
+            }else{
+                selectedDate = removeLastCharacter(sbSelectedDateSched.toString());
+            }
+
+            if(timeScheduleCount < 1){
                 totalHours = "N/A";
                 selectedTime = "N/A";
                 totalAmountString = "N/A";
-            }else if(scheduleCount == 1){
-                totalHours = scheduleCount + " hr";
-                selectedTime = removeLastCharacter(sbSelectedSchedule.toString());
+            }else if(timeScheduleCount == 1){
+                totalHours = timeScheduleCount + " hr";
+                selectedTime = removeLastCharacter(sbSelectedTimeSched.toString());
                 totalAmountString = Html.fromHtml("&#8369;") + formatter.format(totalAmountDouble);
             }else{
-                totalHours = scheduleCount + " hrs";
-                selectedTime = removeLastCharacter(sbSelectedSchedule.toString());
+                totalHours = timeScheduleCount + " hrs";
+                selectedTime = removeLastCharacter(sbSelectedTimeSched.toString());
                 totalAmountString = Html.fromHtml("&#8369;") + formatter.format(totalAmountDouble);
             }
 
             StringBuilder sbOutput = new StringBuilder();
             sbOutput
+                    .append(Html.fromHtml("<b>Selected date: </b>"))
+                    .append(selectedDate)
+                    .append("\n")
                     .append(Html.fromHtml("<b>Selected time: </b>"))
                     .append(selectedTime)
                     .append("\n")
@@ -188,7 +157,7 @@ public class SetBookingDateAndTimeActivity extends AppCompatActivity{
         int initialValue = 1;
         String meridian = " AM";
 
-        availableScheduleItems.add("12-1 AM");
+        availableTimeScheduleItems.add("12-1 AM");
 
         for(int i = 1; i <= 11; i++){
             initialValue++;
@@ -197,7 +166,7 @@ public class SetBookingDateAndTimeActivity extends AppCompatActivity{
                 meridian = " PM";
             }
 
-            availableScheduleItems.add(i + "-" + initialValue + meridian);
+            availableTimeScheduleItems.add(i + "-" + initialValue + meridian);
         }
     }
 
@@ -205,7 +174,7 @@ public class SetBookingDateAndTimeActivity extends AppCompatActivity{
         int initialValue = 1;
         String meridian = " AM";
 
-        availableScheduleItems.add("12-1 PM");
+        availableTimeScheduleItems.add("12-1 PM");
 
         for(int i = 1; i <= 11; i++){
             initialValue++;
@@ -214,7 +183,76 @@ public class SetBookingDateAndTimeActivity extends AppCompatActivity{
                 meridian = " AM";
             }
 
-            availableScheduleItems.add(i + "-" + initialValue + meridian);
+            availableTimeScheduleItems.add(i + "-" + initialValue + meridian);
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.P)
+    private void setTimeSchedule(){
+        setMorningSchedule();
+        setAfternoonSchedule();
+
+        ArrayAdapter<String> timeScheduleAdapter = new ArrayAdapter<>
+                (
+                        this,
+                        R.layout.custom_checkable_textview,
+                        android.R.id.text1, availableTimeScheduleItems
+                );
+
+        listTimeSchedule.setAdapter(timeScheduleAdapter);
+
+        listTimeSchedule.setOnItemClickListener((parent, view, position, id) -> {
+            availableTimeSparseBooleanArray = listTimeSchedule.getCheckedItemPositions();
+            sbSelectedTimeSched = new StringBuilder();
+
+            int i = 0;
+
+            while (i < availableTimeSparseBooleanArray.size()) {
+                if (availableTimeSparseBooleanArray.valueAt(i)) {
+                    sbSelectedTimeSched
+                            .append(listTimeSchedule.getItemAtPosition(availableTimeSparseBooleanArray.keyAt(i)))
+                            .append(",");
+                }else{
+                    availableTimeSparseBooleanArray.removeAt(i);
+                }
+
+                timeScheduleCount = availableTimeSparseBooleanArray.size();
+                i++;
+            }
+        });
+    }
+
+    @RequiresApi(Build.VERSION_CODES.P)
+    private void setDateSchedule(){
+        availableDateScheduleItems = getDatesUpToSpecificMonths(3);
+
+        ArrayAdapter<String> dateScheduleAdapter = new ArrayAdapter<>
+                (
+                        this,
+                        R.layout.custom_checkable_textview,
+                        android.R.id.text1, availableDateScheduleItems
+                );
+
+        listDateSchedule.setAdapter(dateScheduleAdapter);
+
+        listDateSchedule.setOnItemClickListener((parent, view, position, id) -> {
+            availableDateSparseBooleanArray = listDateSchedule.getCheckedItemPositions();
+            sbSelectedDateSched = new StringBuilder();
+
+            int i = 0;
+
+            while (i < availableDateSparseBooleanArray.size()) {
+                if (availableDateSparseBooleanArray.valueAt(i)) {
+                    sbSelectedDateSched
+                            .append(listDateSchedule.getItemAtPosition(availableDateSparseBooleanArray.keyAt(i)))
+                            .append(",");
+                }else{
+                    availableDateSparseBooleanArray.removeAt(i);
+                }
+
+                dateScheduleCount = availableDateSparseBooleanArray.size();
+                i++;
+            }
+        });
     }
 }

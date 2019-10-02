@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".activities.SetBookingDateAndTimeActivity"
-    app:theme="@style/AppTheme.Dark">
+    tools:context=".activities.SetBookingDateAndTimeActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -21,45 +19,66 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <!--<Button-->
-                    <!--android:id="@+id/btnChoosePreferredDate"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="Choose Preferred Date"-->
-                    <!--android:textColor="@color/white"-->
-                    <!--android:textStyle="bold"-->
-                    <!--android:drawableStart="@drawable/ic_date_range_white"-->
-                    <!--android:drawablePadding="10dp"-->
-                    <!--android:textSize="15dp"-->
-                    <!--android:padding="15dp"-->
-                    <!--android:layout_marginBottom="10dp"-->
-                    <!--android:background="@color/colorPrimaryDarker"-->
-                    <!--tools:ignore="HardcodedText,SpUsage" />-->
-
-                <com.androidbuts.multispinnerfilter.MultiSpinnerSearch
-                    android:id="@+id/btnChoosePreferredDate"
-                    android:layout_width="fill_parent"
+                <com.riyagayasen.easyaccordion.AccordionView
+                    android:id="@+id/accordionPreferredDate"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="20dp"
-                    app:hintText="Choose Preferred Dates"
-                    android:background="@color/colorPrimaryDarker"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:padding="15dp" />
+                    android:layout_alignParentStart="true"
+                    android:visibility="visible"
+                    app:isAnimated="true"
+                    app:heading="Preferred Date"
+                    app:isExpanded="true"
+                    app:isPartitioned="true">
 
-                <ListView
-                    android:id="@+id/scheduleListView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="300dp"
-                    android:textColor="@color/colorPrimary"
-                    android:layout_below="@id/btnChoosePreferredDate"
-                    android:choiceMode="multipleChoice"
-                    android:layout_marginBottom="10dp"/>
+                    <ListView
+                        android:id="@+id/listDateSchedule"
+                        android:layout_width="wrap_content"
+                        android:layout_height="200dp"
+                        android:textColor="@color/colorPrimary"
+                        android:choiceMode="multipleChoice"
+                        android:layout_marginBottom="10dp"/>
+
+                </com.riyagayasen.easyaccordion.AccordionView>
+
+                <com.riyagayasen.easyaccordion.AccordionView
+                    android:id="@+id/accordionPreferredTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/accordionPreferredDate"
+                    android:visibility="visible"
+                    app:isAnimated="true"
+                    app:heading="Preferred Time"
+                    app:isExpanded="false"
+                    app:isPartitioned="true">
+
+                    <ListView
+                        android:id="@+id/listTimeSchedule"
+                        android:layout_width="wrap_content"
+                        android:layout_height="200dp"
+                        android:textColor="@color/colorPrimary"
+                        android:choiceMode="multipleChoice"
+                        android:layout_marginBottom="10dp"/>
+
+                </com.riyagayasen.easyaccordion.AccordionView>
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/btnComputeTotal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/accordionPreferredTime"
+                    android:layout_margin="5dp"
+                    android:textStyle="bold"
+                    android:text="Compute Total"
+                    android:textColor="@color/white"
+                    android:background="@color/colorPrimary"
+                    android:padding="8dp"
+                    tools:ignore="HardcodedText" />
 
                 <TextView
                     android:id="@+id/lblSelectedSchedule"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/scheduleListView"
+                    android:layout_below="@id/btnComputeTotal"
                     android:textSize="18sp"
                     android:padding="10dp"
                     android:textColor="@color/black"
@@ -67,8 +86,6 @@
                     tools:ignore="HardcodedText" />
 
             </RelativeLayout>
-
-
 
         </LinearLayout>
 
