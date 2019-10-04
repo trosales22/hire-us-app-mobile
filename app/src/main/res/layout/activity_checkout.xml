@@ -8,27 +8,13 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
-        <com.braintreepayments.cardform.view.CardForm
-            android:id="@+id/card_form"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/white"
-            android:padding="10dp" />
-
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/btnPayNow"
-            android:layout_width="match_parent"
+        <include
+            android:id="@+id/includeCheckoutDetails"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:padding="15dp"
-            android:text="Pay Now"
-            android:textColor="@color/white"
-            android:layout_alignParentBottom="true"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            tools:ignore="HardcodedText" />
+            layout="@layout/checkout_details" />
 
     </RelativeLayout>
 

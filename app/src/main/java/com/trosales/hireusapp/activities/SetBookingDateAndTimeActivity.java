@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.trosales.hireusapp.R;
+import com.trosales.hireusapp.classes.commons.SharedPrefManager;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -38,6 +39,10 @@ public class SetBookingDateAndTimeActivity extends AppCompatActivity{
     private SparseBooleanArray availableDateSparseBooleanArray, availableTimeSparseBooleanArray;
     private StringBuilder sbSelectedDateSched,sbSelectedTimeSched;
     private int dateScheduleCount = 0, timeScheduleCount = 0;
+    private double totalAmountDouble;
+    private String selectedDate,selectedTime, totalHours;
+    private Bundle bundle;
+    private DecimalFormat formatter = new DecimalFormat("#,###.00");
 
     @RequiresApi(api = Build.VERSION_CODES.P)
     @SuppressLint("SetTextI18n")
@@ -48,6 +53,7 @@ public class SetBookingDateAndTimeActivity extends AppCompatActivity{
         ButterKnife.bind(this);
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        bundle = getIntent().getExtras();
 
         availableDateScheduleItems = new ArrayList<>();
         availableTimeScheduleItems = new ArrayList<>();
@@ -62,11 +68,8 @@ public class SetBookingDateAndTimeActivity extends AppCompatActivity{
         setTimeSchedule();
 
         btnComputeTotal.setOnClickListener(v -> {
-            DecimalFormat formatter = new DecimalFormat("#,###.00");
-            double ratePerHour = Double.parseDouble("1000");
-            double totalAmountDouble = Double.parseDouble(String.valueOf((1000 * (timeScheduleCount) * (dateScheduleCount) )));
-            String selectedDate,selectedTime;
-            String totalHours;
+            double ratePerHour = Double.parseDouble(Objects.requireNonNull(bundle.getString("talent_rate_per_hour")).replace(",", ""));
+            totalAmountDouble = Double.parseDouble(String.valueOf((ratePerHour * (timeScheduleCount) * (dateScheduleCount) )));
             String totalAmountString;
 
             if(dateScheduleCount < 1){
@@ -80,11 +83,11 @@ public class SetBookingDateAndTimeActivity extends AppCompatActivity{
                 selectedTime = "N/A";
                 totalAmountString = "N/A";
             }else if(timeScheduleCount == 1){
-                totalHours = timeScheduleCount + " hr";
+                totalHours = (timeScheduleCount * dateScheduleCount) + " hr";
                 selectedTime = removeLastCharacter(sbSelectedTimeSched.toString());
                 totalAmountString = Html.fromHtml("&#8369;") + formatter.format(totalAmountDouble);
             }else{
-                totalHours = timeScheduleCount + " hrs";
+                totalHours = (timeScheduleCount * dateScheduleCount) + " hrs";
                 selectedTime = removeLastCharacter(sbSelectedTimeSched.toString());
                 totalAmountString = Html.fromHtml("&#8369;") + formatter.format(totalAmountDouble);
             }
@@ -111,7 +114,18 @@ public class SetBookingDateAndTimeActivity extends AppCompatActivity{
         });
 
         btnProceedToCheckout.setOnClickListener(v -> {
-            startActivity(new Intent(this, CheckoutActivity.class));
+            Intent intent = new Intent(this, CheckoutActivity.class);
+            bundle.putString("temp_booking_date", selectedDate);
+            bundle.putString("temp_booking_time", selectedTime);
+            bundle.putString("temp_talent_id", SharedPrefManager.getInstance(getApplicationContext()).getTalentId());
+            bundle.putString("talent_fullname", bundle.getString("talent_fullname"));
+            bundle.putString("talent_profile_pic", bundle.getString("talent_profile_pic"));
+            bundle.putString("talent_category", bundle.getString("talent_category"));
+            bundle.putString("talent_rate_per_hour", bundle.getString("talent_rate_per_hour"));
+            bundle.putString("total_hours", totalHours);
+            bundle.putString("total_amount", formatter.format(totalAmountDouble));
+            intent.putExtras(bundle);
+            startActivity(intent);
         });
     }
 

@@ -72,6 +72,8 @@ public class TalentModelProfileActivity extends AppCompatActivity implements Bas
     private String[] RATING = {"4.5 rating", "5 rating", "4 rating"};
     private String[] REVIEWEE = {"by Josh Saratan","by Albert Boholano","by Tristan Rosales"};
 
+    private String talentFullname, talentProfilePic, talentRatePerHour, talentCategory;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,7 +134,14 @@ public class TalentModelProfileActivity extends AppCompatActivity implements Bas
         talentGallerySlider.addOnPageChangeListener(this);
 
         btnAddToBookingList.setOnClickListener(v -> {
-            startActivity(new Intent(this, SetBookingDateAndTimeActivity.class));
+            Intent intent = new Intent(this, SetBookingDateAndTimeActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("talent_fullname", talentFullname);
+            bundle.putString("talent_profile_pic", talentProfilePic);
+            bundle.putString("talent_rate_per_hour", talentRatePerHour);
+            bundle.putString("talent_category", talentCategory);
+            intent.putExtras(bundle);
+            startActivity(intent);
         });
     }
 
@@ -159,12 +168,13 @@ public class TalentModelProfileActivity extends AppCompatActivity implements Bas
                             if(response.has("flag") && response.has("msg")){
                                 Log.d("debug", response.getString("msg"));
                             }else{
-                                StringBuilder sbTalentDisplayPhoto = new StringBuilder();
+                                talentFullname = response.getString("fullname");
+                                talentProfilePic = response.getString("talent_display_photo");
+                                talentRatePerHour = response.getString("hourly_rate");
+                                talentCategory = response.getString("category_names");
 
-                                sbTalentDisplayPhoto
-                                        .append(EndPoints.UPLOADS_BASE_URL)
-                                        .append("talents_or_models/")
-                                        .append(response.getString("talent_display_photo"));
+                                StringBuilder sbTalentDisplayPhoto = new StringBuilder();
+                                sbTalentDisplayPhoto.append(response.getString("talent_display_photo"));
 
                                 StringBuilder sbFullnameAndAge = new StringBuilder();
                                 sbFullnameAndAge

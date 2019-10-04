@@ -142,8 +142,6 @@ public class BookingListActivity extends AppCompatActivity {
 
                     StringBuilder sbTalentDisplayPhoto = new StringBuilder();
                     sbTalentDisplayPhoto
-                            .append(EndPoints.UPLOADS_BASE_URL)
-                            .append("talents_or_models/")
                             .append(object.getJSONObject("talent_id").getString("talent_display_photo"));
 
                     TalentsDO talentsDO = new TalentsDO(
