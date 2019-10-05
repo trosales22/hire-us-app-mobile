@@ -7,7 +7,15 @@
     <dist:module dist:instant="true" />
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
 
     <application
         android:allowBackup="true"
@@ -18,6 +26,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+
+        <service
+            android:name="com.paypal.android.sdk.payments.PayPalService"
+            android:exported="false" />
+
+        <activity android:name="com.paypal.android.sdk.payments.PaymentActivity" />
+        <activity android:name="com.paypal.android.sdk.payments.LoginActivity" />
+        <activity android:name="com.paypal.android.sdk.payments.PaymentMethodActivity" />
+        <activity android:name="com.paypal.android.sdk.payments.PaymentConfirmActivity" />
+        <activity android:name="com.paypal.android.sdk.payments.PayPalFuturePaymentActivity" />
+        <activity android:name="com.paypal.android.sdk.payments.FuturePaymentConsentActivity" />
+        <activity android:name="com.paypal.android.sdk.payments.FuturePaymentInfoActivity" />
+        
+        <activity android:name="io.card.payment.DataEntryActivity" />
+        
         <activity
             android:name=".activities.MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"

@@ -68,6 +68,7 @@ dependencies {
     implementation 'com.github.arcadefire:nice-spinner:1.4.3'
     implementation 'com.github.Binary-Finery:EZDialog:1.0.4'
     implementation 'com.riyagayasen.android:easyaccordion:1.0.3'
+    implementation 'com.paypal.sdk:paypal-android-sdk:2.16.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

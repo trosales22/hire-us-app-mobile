@@ -335,7 +335,7 @@ public class MainActivity extends AppCompatActivity
                             object.getString("height"),
                             object.getString("hourly_rate"),
                             object.getString("gender"),
-                            EndPoints.UPLOADS_BASE_URL + "talents_or_models/" + object.getString("talent_display_photo"),
+                            EndPoints.UPLOADS_URL + "talents_or_models/" + object.getString("talent_display_photo"),
                             object.getString("category_names"),
                             Integer.parseInt(object.getString("age")),
                             new Location(
