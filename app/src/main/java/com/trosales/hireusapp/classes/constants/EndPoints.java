@@ -20,4 +20,6 @@ public class EndPoints {
     public static final String ADD_TO_TEMP_BOOKING_LIST_URL = API_URL + "client/add_to_temp_booking_list";
     public static final String ADD_TO_CLIENT_BOOKING_LIST_URL = API_URL + "client/add_to_client_booking_list";
     public static final String GET_ALREADY_RESERVED_SCHED_URL = API_URL + "client/get_already_reserved_schedule";
+    public static final String GET_ALL_PROVINCES_URL = API_URL + "client/get_all_provinces";
+    public static final String GET_ALL_CITY_MUNI_URL = API_URL + "client/get_city_muni_by_province_code";
 }

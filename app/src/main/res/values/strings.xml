@@ -6,6 +6,7 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+    <string name="action_filtering_option">Filtering Option</string>
 
     <string name="login_email_input_hint">Email or Username</string>
     <string name="password_input_hint">Password</string>

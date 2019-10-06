@@ -45,6 +45,7 @@
                         android:textColor="@color/black"
                         android:textColorHint="@color/black"
                         android:textSize="18sp"
+                        android:textAlignment="textStart"
                         tools:ignore="HardcodedText" />
 
                     <org.angmarch.views.NiceSpinner
@@ -106,7 +107,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:text="Height"
+                    android:text="Height (in centimeter)"
                     android:textColor="@color/white"
                     android:textSize="18sp"
                     tools:ignore="HardcodedText" />
@@ -117,28 +118,30 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <org.angmarch.views.NiceSpinner
-                        android:id="@+id/cmbHeightFrom"
+                    <me.abhinay.input.CurrencyEditText
+                        android:id="@+id/txtHeightFrom"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
                         android:layout_weight="1"
                         android:hint="From"
-                        android:textColor="@color/black"
-                        android:textColorHint="@color/black"
+                        android:inputType="number"
                         android:textSize="18sp"
+                        android:background="@color/white"
+                        android:padding="12dp"
                         tools:ignore="HardcodedText" />
 
-                    <org.angmarch.views.NiceSpinner
-                        android:id="@+id/cmbHeightTo"
+                    <me.abhinay.input.CurrencyEditText
+                        android:id="@+id/txtHeightTo"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
                         android:layout_weight="1"
                         android:hint="To"
-                        android:textColor="@color/black"
-                        android:textColorHint="@color/black"
+                        android:inputType="number"
                         android:textSize="18sp"
+                        android:background="@color/white"
+                        android:padding="12dp"
                         tools:ignore="HardcodedText" />
 
                 </LinearLayout>
@@ -158,29 +161,60 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <org.angmarch.views.NiceSpinner
-                        android:id="@+id/cmbRatePerHourFrom"
+                    <me.abhinay.input.CurrencyEditText
+                        android:id="@+id/txtRatePerHourFrom"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
                         android:layout_weight="1"
                         android:hint="From"
-                        android:textColor="@color/black"
-                        android:textColorHint="@color/black"
+                        android:inputType="number"
                         android:textSize="18sp"
+                        android:background="@color/white"
+                        android:padding="12dp"
                         tools:ignore="HardcodedText" />
 
-                    <org.angmarch.views.NiceSpinner
-                        android:id="@+id/cmbRatePerHourTo"
+                    <me.abhinay.input.CurrencyEditText
+                        android:id="@+id/txtRatePerHourTo"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
                         android:layout_weight="1"
                         android:hint="To"
+                        android:inputType="number"
+                        android:textSize="18sp"
+                        android:background="@color/white"
+                        android:padding="12dp"
+                        tools:ignore="HardcodedText" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="Gender"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    tools:ignore="HardcodedText" />
+
+                <LinearLayout
+                    android:id="@+id/linearLayoutGender"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <org.angmarch.views.NiceSpinner
+                        android:id="@+id/cmbGender"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginBottom="10dp"
+                        android:hint="Choose Gender"
                         android:textColor="@color/black"
                         android:textColorHint="@color/black"
                         android:textSize="18sp"
-                        tools:ignore="HardcodedText" />
+                        tools:ignore="HardcodedText,InefficientWeight" />
 
                 </LinearLayout>
 
