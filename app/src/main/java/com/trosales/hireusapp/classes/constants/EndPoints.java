@@ -19,4 +19,5 @@ public class EndPoints {
     public static final String GET_BOOKING_LIST_BY_CLIENT_ID_URL = API_URL + "client/get_booking_list_by_client_id";
     public static final String ADD_TO_TEMP_BOOKING_LIST_URL = API_URL + "client/add_to_temp_booking_list";
     public static final String ADD_TO_CLIENT_BOOKING_LIST_URL = API_URL + "client/add_to_client_booking_list";
+    public static final String GET_ALREADY_RESERVED_SCHED_URL = API_URL + "client/get_already_reserved_schedule";
 }

@@ -127,7 +127,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/lblBookingOtherDetails"
                 android:layout_marginTop="10dp"
-                android:background="@color/orange"
+                android:background="@color/colorPrimary"
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 android:text="More Details"

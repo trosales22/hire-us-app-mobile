@@ -1,6 +1,7 @@
 package com.trosales.hireusapp.activities;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -8,13 +9,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.text.Html;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.trosales.hireusapp.R;
 import com.trosales.hireusapp.classes.commons.SharedPrefManager;
+import com.trosales.hireusapp.classes.constants.EndPoints;
+import com.trosales.hireusapp.classes.constants.Tags;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -37,10 +50,10 @@ public class SetBookingDateAndTimeActivity extends AppCompatActivity{
 
     private List<String> availableDateScheduleItems, availableTimeScheduleItems;
     private SparseBooleanArray availableDateSparseBooleanArray, availableTimeSparseBooleanArray;
-    private StringBuilder sbSelectedDateSched,sbSelectedTimeSched;
+    private StringBuilder sbSelectedDateSched, sbSelectedTimeSched, sbReservedDate, sbReservedTime;
     private int dateScheduleCount = 0, timeScheduleCount = 0;
     private double totalAmountDouble;
-    private String selectedDate,selectedTime, totalHours;
+    private String selectedDate, selectedTime, totalHours;
     private Bundle bundle;
     private DecimalFormat formatter = new DecimalFormat("#,###.00");
 
@@ -63,9 +76,10 @@ public class SetBookingDateAndTimeActivity extends AppCompatActivity{
 
         sbSelectedDateSched = new StringBuilder();
         sbSelectedTimeSched = new StringBuilder();
+        sbReservedDate = new StringBuilder();
+        sbReservedTime = new StringBuilder();
 
-        setDateSchedule();
-        setTimeSchedule();
+        getAlreadyReservedScheduleOfTalent();
 
         btnComputeTotal.setOnClickListener(v -> {
             double ratePerHour = Double.parseDouble(Objects.requireNonNull(bundle.getString("talent_rate_per_hour")).replace(",", ""));
@@ -129,7 +143,7 @@ public class SetBookingDateAndTimeActivity extends AppCompatActivity{
         });
     }
 
-    private List<String> getDatesUpToSpecificMonths(int months){
+    private List<String> getDatesUpToSpecificMonths(int months, String reservedDate){
         @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
         Calendar c = Calendar.getInstance();
         List<String> availableDatesList = new ArrayList<>();
@@ -143,7 +157,10 @@ public class SetBookingDateAndTimeActivity extends AppCompatActivity{
         int maxDay = c.getActualMaximum(Calendar.DAY_OF_MONTH) * months;
         for(int co=0; co<=maxDay; co++){
             c.add(Calendar.DATE, 1);
-            availableDatesList.add(sdf.format(c.getTime()));
+
+            if(!reservedDate.contains(sdf.format(c.getTime()))) {
+                availableDatesList.add(sdf.format(c.getTime()));
+            }
         }
 
         return availableDatesList;
@@ -167,11 +184,13 @@ public class SetBookingDateAndTimeActivity extends AppCompatActivity{
         return super.onOptionsItemSelected(item);
     }
 
-    private void setMorningSchedule(){
+    private void setMorningSchedule(String reservedTime){
         int initialValue = 1;
         String meridian = " AM";
 
-        availableTimeScheduleItems.add("12-1 AM");
+        if(!reservedTime.contains("12-1 AM")) {
+            availableTimeScheduleItems.add("12-1 AM");
+        }
 
         for(int i = 1; i <= 11; i++){
             initialValue++;
@@ -180,15 +199,20 @@ public class SetBookingDateAndTimeActivity extends AppCompatActivity{
                 meridian = " PM";
             }
 
-            availableTimeScheduleItems.add(i + "-" + initialValue + meridian);
+            if(!reservedTime.contains(i + "-" + initialValue + meridian)){
+                availableTimeScheduleItems.add(i + "-" + initialValue + meridian);
+            }
         }
+
     }
 
-    private void setAfternoonSchedule(){
+    private void setAfternoonSchedule(String reservedTime){
         int initialValue = 1;
         String meridian = " AM";
 
-        availableTimeScheduleItems.add("12-1 PM");
+        if(!reservedTime.contains("12-1 PM")) {
+            availableTimeScheduleItems.add("12-1 PM");
+        }
 
         for(int i = 1; i <= 11; i++){
             initialValue++;
@@ -197,14 +221,67 @@ public class SetBookingDateAndTimeActivity extends AppCompatActivity{
                 meridian = " AM";
             }
 
-            availableTimeScheduleItems.add(i + "-" + initialValue + meridian);
+            if(!reservedTime.contains(i + "-" + initialValue + meridian)) {
+                availableTimeScheduleItems.add(i + "-" + initialValue + meridian);
+            }
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.P)
-    private void setTimeSchedule(){
-        setMorningSchedule();
-        setAfternoonSchedule();
+    private void getAlreadyReservedScheduleOfTalent(){
+        StringBuilder sbParams = new StringBuilder();
+        sbParams.append("?talent_id={talent_id}");
+
+        AndroidNetworking
+                .get(EndPoints.GET_ALREADY_RESERVED_SCHED_URL.concat(sbParams.toString()))
+                .addPathParameter("talent_id", SharedPrefManager.getInstance(getApplicationContext()).getTalentId())
+                .setTag(Tags.SET_BOOKING_DATE_AND_TIME_ACTIVITY)
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        getAlreadyReservedScheduleOfTalentResponse(response);
+                    }
+
+                    @SuppressLint("LongLogTag")
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(Tags.SET_BOOKING_DATE_AND_TIME_ACTIVITY, anError.getErrorDetail());
+                    }
+                });
+    }
+
+    @TargetApi(Build.VERSION_CODES.P)
+    private void getAlreadyReservedScheduleOfTalentResponse(JSONObject response){
+        try {
+            JSONArray array = response.getJSONArray("already_reserved_sched_list");
+
+            if (response.has("flag") && response.has("msg")) {
+                Log.d("debug", response.getString("msg"));
+            } else {
+                for (int i = 0; i < array.length(); i++) {
+                    JSONObject object = array.getJSONObject(i);
+
+                    sbReservedDate.append(object.getString("preferred_date"));
+                    sbReservedDate.append(",");
+                    sbReservedTime.append(object.getString("preferred_time"));
+                    sbReservedTime.append(",");
+                }
+
+                Log.d("debug", "preferred_date: " + sbReservedDate.toString());
+                Log.d("debug", "preferred_time: " + sbReservedTime.toString());
+                setDateSchedule(removeLastCharacter(sbReservedDate.toString()));
+                setTimeSchedule(removeLastCharacter(sbReservedTime.toString()));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.P)
+    private void setTimeSchedule(String reservedTime){
+        setMorningSchedule(reservedTime);
+        setAfternoonSchedule(reservedTime);
 
         ArrayAdapter<String> timeScheduleAdapter = new ArrayAdapter<>
                 (
@@ -236,9 +313,9 @@ public class SetBookingDateAndTimeActivity extends AppCompatActivity{
         });
     }
 
-    @RequiresApi(Build.VERSION_CODES.P)
-    private void setDateSchedule(){
-        availableDateScheduleItems = getDatesUpToSpecificMonths(3);
+    @TargetApi(Build.VERSION_CODES.P)
+    private void setDateSchedule(String reservedDate){
+        availableDateScheduleItems = getDatesUpToSpecificMonths(3, reservedDate);
 
         ArrayAdapter<String> dateScheduleAdapter = new ArrayAdapter<>
                 (
