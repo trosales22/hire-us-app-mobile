@@ -21,7 +21,7 @@ import com.trosales.hireusapp.classes.beans.Location;
 import com.trosales.hireusapp.classes.commons.SharedPrefManager;
 import com.trosales.hireusapp.classes.constants.EndPoints;
 import com.trosales.hireusapp.classes.constants.Tags;
-import com.trosales.hireusapp.classes.wrappers.BookingsDO;
+import com.trosales.hireusapp.classes.wrappers.ClientBookingsDO;
 import com.trosales.hireusapp.classes.wrappers.TalentsDO;
 
 import org.json.JSONArray;
@@ -44,7 +44,7 @@ public class BookingListActivity extends AppCompatActivity {
     @BindView(R.id.recyclerView_bookingList)
     RecyclerView recyclerView_bookingList;
 
-    private List<BookingsDO> bookingsDOList;
+    private List<ClientBookingsDO> clientBookingsDOList;
     private BookingsAdapter bookingsAdapter;
     protected Handler handler;
     private SkeletonScreen skeletonScreen;
@@ -57,7 +57,7 @@ public class BookingListActivity extends AppCompatActivity {
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-        bookingsDOList = new ArrayList<>();
+        clientBookingsDOList = new ArrayList<>();
         handler = new Handler();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -78,8 +78,8 @@ public class BookingListActivity extends AppCompatActivity {
             simpleStatefulLayout.showContent();
             skeletonScreen.show();
 
-            if (bookingsDOList != null) {
-                bookingsDOList.clear();
+            if (clientBookingsDOList != null) {
+                clientBookingsDOList.clear();
             }
 
             handler.postDelayed(this::showAllBookings, 500);
@@ -156,29 +156,27 @@ public class BookingListActivity extends AppCompatActivity {
                             location
                     );
 
-                    BookingsDO bookingsDO = new BookingsDO(
+                    ClientBookingsDO clientBookingsDO = new ClientBookingsDO(
                             Integer.parseInt(object.getString("booking_id")),
-                            object.getString("status"),
-                            object.getString("preferred_date_from"),
-                            object.getString("preferred_date_to"),
-                            object.getString("preferred_time_from"),
-                            object.getString("preferred_time_to"),
+                            object.getString("preferred_date"),
+                            object.getString("preferred_time"),
+                            object.getString("payment_option"),
                             object.getString("total_amount"),
                             object.getString("date_paid"),
                             talentsDO
                     );
 
-                    bookingsDOList.add(bookingsDO);
+                    clientBookingsDOList.add(clientBookingsDO);
                 }
             }
 
-            if (bookingsDOList.isEmpty()) {
+            if (clientBookingsDOList.isEmpty()) {
                 simpleStatefulLayout.showEmpty();
             } else {
                 simpleStatefulLayout.showContent();
             }
 
-            bookingsAdapter = new BookingsAdapter(bookingsDOList, this);
+            bookingsAdapter = new BookingsAdapter(clientBookingsDOList, this);
             recyclerView_bookingList.setAdapter(bookingsAdapter);
         } catch (JSONException e) {
             e.printStackTrace();

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.AppCompatButton;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -16,24 +15,20 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.trosales.hireusapp.R;
 import com.trosales.hireusapp.activities.TalentModelProfileActivity;
-import com.trosales.hireusapp.classes.commons.DateTimeHelper;
 import com.trosales.hireusapp.classes.commons.SharedPrefManager;
-import com.trosales.hireusapp.classes.wrappers.BookingsDO;
+import com.trosales.hireusapp.classes.wrappers.ClientBookingsDO;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class BookingsAdapter extends RecyclerView.Adapter<BookingsAdapter.ViewHolder>{
-    private List<BookingsDO> bookingsDOList;
+    private List<ClientBookingsDO> clientBookingsDOList;
     private Context context;
 
-    public BookingsAdapter(List<BookingsDO> bookingsDOList, Context context) {
-        this.bookingsDOList = bookingsDOList;
+    public BookingsAdapter(List<ClientBookingsDO> clientBookingsDOList, Context context) {
+        this.clientBookingsDOList = clientBookingsDOList;
         this.context = context;
     }
 
@@ -48,85 +43,69 @@ public class BookingsAdapter extends RecyclerView.Adapter<BookingsAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull BookingsAdapter.ViewHolder viewHolder, int i) {
-        final BookingsDO bookingsDO = bookingsDOList.get(i);
+        final ClientBookingsDO clientBookingsDO = clientBookingsDOList.get(i);
         //insert logic here
         Picasso
                 .with(context)
-                .load(bookingsDO.getTalentDetails().getTalentDisplayPhoto())
+                .load(clientBookingsDO.getTalentDetails().getTalentDisplayPhoto())
                 .placeholder(R.drawable.no_profile_pic)
                 .into(viewHolder.imgTalentDisplayPhoto);
 
-        viewHolder.lblTalentFullname.setText(bookingsDO.getTalentDetails().getFullname());
-        viewHolder.lblTalentCategories.setText(bookingsDO.getTalentDetails().getCategoryNames());
-        viewHolder.lblTalentRatePerHour.setText(Html.fromHtml("&#8369;" + bookingsDO.getTalentDetails().getHourlyRate() + " per hour"));
-        String preferredBookingTimeFrom = DateTimeHelper.convert24HrsTimeTo12hrs(bookingsDO.getPreferredBookingTimeFrom());
-        String preferredBookingTimeTo = DateTimeHelper.convert24HrsTimeTo12hrs(bookingsDO.getPreferredBookingTimeTo());
-        int totalHours = Integer.parseInt(
-                            DateTimeHelper.getTotalHours(
-                                bookingsDO.getPreferredBookingDateFrom(),
-                                bookingsDO.getPreferredBookingDateTo(),
-                                preferredBookingTimeFrom,
-                                preferredBookingTimeTo
-                            )
-                        );
+        viewHolder.lblTalentFullname.setText(clientBookingsDO.getTalentDetails().getFullname());
+        viewHolder.lblTalentCategories.setText(clientBookingsDO.getTalentDetails().getCategoryNames());
+        viewHolder.lblTalentRatePerHour.setText(Html.fromHtml("&#8369;" + clientBookingsDO.getTalentDetails().getHourlyRate() + " per hour"));
+        viewHolder.lblBookingPreferredDate.setText(clientBookingsDO.getPreferredBookingDate());
+        viewHolder.lblBookingPreferredTime.setText(clientBookingsDO.getPreferredBookingTime());
 
-        BigDecimal hourlyRate = new BigDecimal(bookingsDO.getTalentDetails().getHourlyRate().replaceAll(",", ""));
-        BigDecimal totalAmount = hourlyRate.multiply(new BigDecimal(totalHours));
+        StringBuilder sbBookingOtherDetails = new StringBuilder();
+        sbBookingOtherDetails
+                .append("Payment Option: ")
+                .append(getPaymentOption(clientBookingsDO.getBookingPaymentOption()))
+                .append("\nDate Paid: ")
+                .append(clientBookingsDO.getBookingDatePaid())
+                .append("\nTotal Amount: ")
+                .append(Html.fromHtml("&#8369;"))
+                .append(clientBookingsDO.getBookingTotalAmount());
 
-        StringBuilder sbPreferredDateTime = new StringBuilder();
-        sbPreferredDateTime
-                .append("Start: ")
-                .append(bookingsDO.getPreferredBookingDateFrom())
-                .append(" ")
-                .append(preferredBookingTimeFrom)
-                .append("\nEnd: ")
-                .append(bookingsDO.getPreferredBookingDateTo())
-                .append(" ")
-                .append(preferredBookingTimeTo)
-                .append("\nTotal: ")
-                .append(totalHours)
-                .append(" hrs");
-
-        viewHolder.lblBookingPreferredDateTime.setText(sbPreferredDateTime.toString());
-
-        StringBuilder sbTotalAmount = new StringBuilder();
-        sbTotalAmount
-                .append(Html.fromHtml("Total Amount: &#8369"))
-                .append(String.format(Locale.ENGLISH, "%,.2f", totalAmount.setScale(2, RoundingMode.DOWN)))
-                .append(" (")
-                .append(Html.fromHtml("<b>" + bookingsDO.getBookingStatus() + "</b>"))
-                .append(")");
-
-        viewHolder.lblBookingTotalAmount.setText(sbTotalAmount.toString());
-
-        if(bookingsDO.getBookingStatus().equals("PAID")){
-            viewHolder.lblBookingDatePaid.setVisibility(View.VISIBLE);
-            viewHolder.lblBookingDatePaid.setText(bookingsDO.getBookingDatePaid());
-        }else{
-            viewHolder.lblBookingDatePaid.setVisibility(View.GONE);
-        }
-
+        viewHolder.lblBookingOtherDetails.setText( sbBookingOtherDetails.toString());
         viewHolder.btnMoreDetails.setOnClickListener(v -> {
-            SharedPrefManager.getInstance(v.getContext()).saveTalentId(bookingsDO.getTalentDetails().getTalent_id());
+            SharedPrefManager.getInstance(v.getContext()).saveTalentId(clientBookingsDO.getTalentDetails().getTalent_id());
             v.getContext().startActivity(new Intent(v.getContext(), TalentModelProfileActivity.class));
         });
     }
 
+    private String getPaymentOption(String paymentOption){
+        String returnValue = null;
+        switch (paymentOption){
+            case "DEBIT_CREDIT_CARD":
+                returnValue = "Debit/Credit Card";
+                break;
+            case "BANK_TRANSFER":
+                returnValue = "Bank Transfer";
+                break;
+            case "BANK_DEPOSIT":
+                returnValue = "Bank Deposit";
+                break;
+
+        }
+        return returnValue;
+    }
+
     @Override
     public int getItemCount() {
-        return bookingsDOList.size();
+        return clientBookingsDOList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.cardView_bookings) CardView cardView_bookings;
         @BindView(R.id.imgTalentDisplayPhoto) ImageView imgTalentDisplayPhoto;
         @BindView(R.id.lblTalentFullname) TextView lblTalentFullname;
-        @BindView(R.id.lblTalentCategories) TextView lblTalentCategories;
         @BindView(R.id.lblTalentRatePerHour) TextView lblTalentRatePerHour;
-        @BindView(R.id.lblBookingPreferredDateTime) TextView lblBookingPreferredDateTime;
-        @BindView(R.id.lblBookingTotalAmount) TextView lblBookingTotalAmount;
-        @BindView(R.id.lblBookingDatePaid) TextView lblBookingDatePaid;
+        @BindView(R.id.lblTalentCategories) TextView lblTalentCategories;
+        @BindView(R.id.lblBookingPreferredDate)TextView lblBookingPreferredDate;
+        @BindView(R.id.lblBookingPreferredTime) TextView lblBookingPreferredTime;
+        @BindView(R.id.lblBookingOtherDetails) TextView lblBookingOtherDetails;
         @BindView(R.id.btnMoreDetails) AppCompatButton btnMoreDetails;
+
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

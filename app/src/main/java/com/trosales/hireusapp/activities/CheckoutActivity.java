@@ -15,6 +15,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.paypal.android.sdk.payments.PayPalAuthorization;
 import com.paypal.android.sdk.payments.PayPalConfiguration;
 import com.paypal.android.sdk.payments.PayPalFuturePaymentActivity;
@@ -24,10 +28,15 @@ import com.paypal.android.sdk.payments.PaymentActivity;
 import com.paypal.android.sdk.payments.PaymentConfirmation;
 import com.squareup.picasso.Picasso;
 import com.trosales.hireusapp.R;
+import com.trosales.hireusapp.classes.commons.SharedPrefManager;
+import com.trosales.hireusapp.classes.constants.EndPoints;
+import com.trosales.hireusapp.classes.constants.Tags;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -44,8 +53,7 @@ public class CheckoutActivity extends AppCompatActivity {
     @BindView(R.id.btnCancelBooking) AppCompatButton btnCancelBooking;
     @BindView(R.id.btnPayUsingDebitOrCreditCard) AppCompatButton btnPayUsingDebitOrCreditCard;
 
-    private String selectedDate, selectedTime, selectedTalentId;
-
+    private String selectedDate, selectedTime, selectedTalentId, selectedPaymentOption;
     private Bundle bundle;
 
     private static final String PAYPAL_KEY = "AZ9DrSKHmGSwUNTXAe5kTJCw3yDXWhUwMjUDevXJaP3-4khsDuNb3dS-x1E0tEhg0C2jHBFMQ8gb5rKs";
@@ -53,7 +61,7 @@ public class CheckoutActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_FUTURE_PAYMENT = 2;
     private static final String CONFIG_ENVIRONMENT = PayPalConfiguration.ENVIRONMENT_SANDBOX;
     private static PayPalConfiguration payPalConfiguration;
-    PayPalPayment payPalPayment;
+    private PayPalPayment payPalPayment;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -85,9 +93,9 @@ public class CheckoutActivity extends AppCompatActivity {
 
         StringBuilder sbBookingOtherDetails = new StringBuilder();
         sbBookingOtherDetails
-                .append("Total hours: ")
+                .append("Total Hours: ")
                 .append(bundle.getString("total_hours"))
-                .append("\nTotal amount: ")
+                .append("\nTotal Amount: ")
                 .append(Html.fromHtml("&#8369;"))
                 .append(bundle.getString("total_amount"));
 
@@ -98,7 +106,9 @@ public class CheckoutActivity extends AppCompatActivity {
         });
 
         btnPayUsingDebitOrCreditCard.setOnClickListener(v -> {
-            payUsingDebitOrCreditCard();
+            //payUsingDebitOrCreditCard();
+            selectedPaymentOption = "DEBIT_CREDIT_CARD";
+            addToClientBookingList(getClientBookingParams());
         });
     }
 
@@ -178,6 +188,122 @@ public class CheckoutActivity extends AppCompatActivity {
             }else if(resultCode == PayPalFuturePaymentActivity.RESULT_EXTRAS_INVALID){
                 Toast.makeText(this, "Probably the attempt to previously start the PayPalService had an invalid PayPalConfiguration. Please see the docs.", Toast.LENGTH_LONG).show();
             }
+        }
+    }
+
+    private HashMap<String, String> getClientBookingParams(){
+        HashMap<String, String> params = new HashMap<>();
+        params.put("talent_id", selectedTalentId);
+        params.put("client_id", SharedPrefManager.getInstance(this).getUserId());
+        params.put("preferred_date", selectedDate);
+        params.put("preferred_time", selectedTime);
+        params.put("total_amount", bundle.getString("total_amount"));
+        params.put("payment_option", selectedPaymentOption);
+
+        return params;
+    }
+
+    private void addToTempBookingList(HashMap<String, String> params){
+        AndroidNetworking.post(EndPoints.ADD_TO_TEMP_BOOKING_LIST_URL)
+                .addBodyParameter("temp_talent_id", params.get("temp_talent_id"))
+                .addBodyParameter("temp_client_id", params.get("temp_client_id"))
+                .addBodyParameter("temp_booking_date", params.get("temp_booking_date"))
+                .addBodyParameter("temp_booking_time", params.get("temp_booking_time"))
+                .addBodyParameter("temp_total_amount", params.get("temp_total_amount"))
+                .addBodyParameter("temp_status", params.get("temp_status"))
+                .addBodyParameter("temp_payment_option", params.get("temp_payment_option"))
+                .setTag(Tags.CHECKOUT_ACTIVITY)
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        getAddToTempBookingListResponse(response);
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        String errorResponse = "\n\nCode: " +
+                                anError.getErrorCode() +
+                                "\nDetail: " +
+                                anError.getErrorDetail() +
+                                "\nBody: " +
+                                anError.getErrorBody() +
+                                "\nResponse: " +
+                                anError.getResponse() +
+                                "\nMessage: " +
+                                anError.getMessage();
+
+                        Log.e(Tags.CHECKOUT_ACTIVITY, errorResponse);
+                    }
+                });
+    }
+
+    private void getAddToTempBookingListResponse(JSONObject response){
+        try {
+            String status = response.getString("status");
+            String msg = response.has("msg") ? response.getString("msg") : "";
+
+            if(status.equals("OK")){
+                finish();
+                startActivity(new Intent(this, MainActivity.class));
+            }else{
+                //error message
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void addToClientBookingList(HashMap<String, String> params){
+        AndroidNetworking.post(EndPoints.ADD_TO_CLIENT_BOOKING_LIST_URL)
+                .addBodyParameter("talent_id", params.get("talent_id"))
+                .addBodyParameter("client_id", params.get("client_id"))
+                .addBodyParameter("preferred_date", params.get("preferred_date"))
+                .addBodyParameter("preferred_time", params.get("preferred_time"))
+                .addBodyParameter("total_amount", params.get("total_amount"))
+                .addBodyParameter("payment_option", params.get("payment_option"))
+                .setTag(Tags.CHECKOUT_ACTIVITY)
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        getClientBookingResponse(response);
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        String errorResponse = "\n\nCode: " +
+                                anError.getErrorCode() +
+                                "\nDetail: " +
+                                anError.getErrorDetail() +
+                                "\nBody: " +
+                                anError.getErrorBody() +
+                                "\nResponse: " +
+                                anError.getResponse() +
+                                "\nMessage: " +
+                                anError.getMessage();
+
+                        Log.e(Tags.CHECKOUT_ACTIVITY, errorResponse);
+                    }
+                });
+    }
+
+    private void getClientBookingResponse(JSONObject response){
+        try {
+            String status = response.getString("status");
+            String msg = response.has("msg") ? response.getString("msg") : "";
+
+            if(status.equals("OK")){
+                finish();
+                Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+                startActivity(new Intent(this, MainActivity.class));
+            }else{
+                Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 }

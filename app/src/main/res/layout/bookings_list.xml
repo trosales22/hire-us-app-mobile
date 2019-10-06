@@ -9,7 +9,7 @@
     <android.support.v7.widget.CardView
         android:id="@+id/cardView_bookings"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_margin="5dp"
         android:background="?android:attr/selectableItemBackground"
         android:foreground="?android:attr/selectableItemBackground"
@@ -79,10 +79,8 @@
                 android:text="Categories"
                 card_view:ignore="HardcodedText" />
 
-
-
             <TextView
-                android:id="@+id/lblBookingPreferredDateTime"
+                android:id="@+id/lblBookingPreferredTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/imgTalentDisplayPhoto"
@@ -92,27 +90,14 @@
                 android:textSize="18sp"
                 android:textColor="@color/black"
                 android:gravity="start"
-                android:text="Preferred Date Time"
+                android:text="Preferred Date"
                 card_view:ignore="HardcodedText,RtlSymmetry" />
 
             <TextView
-                android:id="@+id/lblBookingTotalAmount"
+                android:id="@+id/lblBookingPreferredDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/lblBookingPreferredDateTime"
-                android:paddingStart="5dp"
-                android:layout_marginTop="5dp"
-                android:textSize="18sp"
-                android:textColor="@color/black"
-                android:gravity="start"
-                android:text="Booking Total Amount"
-                card_view:ignore="HardcodedText,RtlSymmetry" />
-
-            <TextView
-                android:id="@+id/lblBookingDatePaid"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/lblBookingTotalAmount"
+                android:layout_below="@id/lblBookingPreferredTime"
                 android:paddingStart="5dp"
                 android:drawableStart="@drawable/ic_date_range_black"
                 android:layout_marginTop="5dp"
@@ -120,14 +105,27 @@
                 android:textSize="18sp"
                 android:textColor="@color/black"
                 android:gravity="start"
-                android:text="Booking Date Paid"
+                android:text="Preferred Time"
+                card_view:ignore="HardcodedText,RtlSymmetry" />
+
+            <TextView
+                android:id="@+id/lblBookingOtherDetails"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lblBookingPreferredDate"
+                android:paddingStart="5dp"
+                android:layout_marginTop="5dp"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:gravity="start"
+                android:text="Booking Other Details"
                 card_view:ignore="HardcodedText,RtlSymmetry" />
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/btnMoreDetails"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/lblBookingDatePaid"
+                android:layout_below="@+id/lblBookingOtherDetails"
                 android:layout_marginTop="10dp"
                 android:background="@color/orange"
                 android:textColor="@color/white"
@@ -136,8 +134,6 @@
                 card_view:ignore="HardcodedText" />
 
         </RelativeLayout>
-
-
 
     </android.support.v7.widget.CardView>
 
