@@ -54,7 +54,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -145,6 +147,8 @@ public class MainActivity extends AppCompatActivity
 
         skeletonScreen.show();
 
+        //bundle = getIntent().getExtras();
+
         handler.postDelayed(this::getAllTalents, 500);
 
         swipeToRefresh_talents.setOnRefreshListener(() -> {
@@ -158,11 +162,19 @@ public class MainActivity extends AppCompatActivity
             swipeToRefresh_talents.setRefreshing(false);
         });
 
-        AndroidNetworkingShortcuts.prefetchPersonalInfo(
-                EndPoints.GET_PERSONAL_INFO_URL.concat("?username_email={username_email}"),
-                SharedPrefManager.getInstance(MainActivity.this).getEmailOrUsername(),
-                Tags.MAIN_ACTIVITY,
-                Priority.LOW);
+        if(SharedPrefManager.getInstance(this).getUserRole().equals("TALENT_MODEL")){
+            AndroidNetworkingShortcuts.prefetchPersonalInfo(
+                    EndPoints.GET_TALENT_PERSONAL_INFO_URL.concat("?username_email={username_email}"),
+                    SharedPrefManager.getInstance(MainActivity.this).getEmailOrUsername(),
+                    Tags.MAIN_ACTIVITY,
+                    Priority.LOW);
+        }else {
+            AndroidNetworkingShortcuts.prefetchPersonalInfo(
+                    EndPoints.GET_PERSONAL_INFO_URL.concat("?username_email={username_email}"),
+                    SharedPrefManager.getInstance(MainActivity.this).getEmailOrUsername(),
+                    Tags.MAIN_ACTIVITY,
+                    Priority.LOW);
+        }
 
         showInfoOfLoggedInUser(navigationView);
     }
@@ -218,6 +230,8 @@ public class MainActivity extends AppCompatActivity
             startActivity(new Intent(this, MainActivity.class));
         } else if (id == R.id.nav_booking_list) {
             startActivity(new Intent(this, BookingListActivity.class));
+        } else if (id == R.id.nav_clients_booked) {
+            startActivity(new Intent(this, ClientsActivity.class));
         } else if (id == R.id.nav_check_availability) {
             //go to talent schedule page
         } else if (id == R.id.nav_logout) {
@@ -300,9 +314,87 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    private StringBuilder getParams(HashMap<String, String> filteringOption){
+        StringBuilder sbParams = new StringBuilder();
+
+        if(!filteringOption.isEmpty()){
+            sbParams.append("?");
+
+            Log.d("debug", "filteringOption: " + filteringOption.toString());
+
+            if(filteringOption.get("height_from") != null){
+                if(!Objects.requireNonNull(filteringOption.get("height_from")).isEmpty()){
+                    sbParams.append("&height_from={height_from}");
+                }
+            }
+
+            if(filteringOption.get("height_to") != null) {
+                if (!Objects.requireNonNull(filteringOption.get("height_to")).isEmpty()) {
+                    sbParams.append("&height_to={height_to}");
+                }
+            }
+
+            if(filteringOption.get("age_from") != null) {
+                if (!Objects.requireNonNull(filteringOption.get("age_from")).isEmpty()) {
+                    sbParams.append("&age_from={age_from}");
+                }
+            }
+
+            if(filteringOption.get("age_to") != null) {
+                if (!Objects.requireNonNull(filteringOption.get("age_to")).isEmpty()) {
+                    sbParams.append("&age_to={age_to}");
+                }
+            }
+
+            if(filteringOption.get("rate_per_hour_from") != null) {
+                if (!Objects.requireNonNull(filteringOption.get("rate_per_hour_from")).isEmpty()) {
+                    sbParams.append("&rate_per_hour_from={rate_per_hour_from}");
+                }
+            }
+
+            if(filteringOption.get("rate_per_hour_to") != null) {
+                if (!Objects.requireNonNull(filteringOption.get("rate_per_hour_to")).isEmpty()) {
+                    sbParams.append("&rate_per_hour_to={rate_per_hour_to}");
+                }
+            }
+
+            if(filteringOption.get("province_code") != null) {
+                if (filteringOption.get("province_code") != null) {
+                    sbParams.append("&province_code={province_code}");
+                }
+            }
+
+            if(filteringOption.get("city_muni_code") != null) {
+                if (filteringOption.get("city_muni_code") != null) {
+                    sbParams.append("&city_muni_code={city_muni_code}");
+                }
+            }
+
+            if(filteringOption.get("gender") != null) {
+                if (!Objects.requireNonNull(filteringOption.get("gender")).isEmpty()) {
+                    sbParams.append("&gender={gender}");
+                }
+            }
+        }
+
+        return sbParams;
+    }
+
     private void getAllTalents(){
+        HashMap<String, String> filteringOption = SharedPrefManager.getInstance(this).getFilteringOption();
+        Log.d("debug", EndPoints.GET_ALL_TALENTS_URL.concat(getParams(filteringOption).toString()));
+
         AndroidNetworking
-                .get(EndPoints.GET_ALL_TALENTS_URL)
+                .get(EndPoints.GET_ALL_TALENTS_URL.concat(getParams(filteringOption).toString()))
+                .addPathParameter("height_from", filteringOption.get("height_from"))
+                .addPathParameter("height_to", filteringOption.get("height_to"))
+                .addPathParameter("age_from", filteringOption.get("age_from"))
+                .addPathParameter("age_to", filteringOption.get("age_to"))
+                .addPathParameter("rate_per_hour_from", filteringOption.get("rate_per_hour_from"))
+                .addPathParameter("rate_per_hour_to", filteringOption.get("rate_per_hour_to"))
+                .addPathParameter("province_code", filteringOption.get("province_code"))
+                .addPathParameter("city_muni_code", filteringOption.get("city_muni_code"))
+                .addPathParameter("gender", filteringOption.get("gender"))
                 .setTag(Tags.MAIN_ACTIVITY)
                 .setPriority(Priority.MEDIUM)
                 .build()
@@ -397,7 +489,13 @@ public class MainActivity extends AppCompatActivity
         StringBuilder sbParams = new StringBuilder();
         sbParams.append("?username_email={username_email}");
 
-        AndroidNetworking.get(EndPoints.GET_PERSONAL_INFO_URL.concat(sbParams.toString()))
+        String finalUrl = EndPoints.GET_PERSONAL_INFO_URL;
+
+        if(SharedPrefManager.getInstance(this).getUserRole().equals("TALENT_MODEL")){
+            finalUrl = EndPoints.GET_TALENT_PERSONAL_INFO_URL;
+        }
+
+        AndroidNetworking.get(finalUrl.concat(sbParams.toString()))
                 .addPathParameter("username_email", SharedPrefManager.getInstance(MainActivity.this).getEmailOrUsername())
                 .setTag(Tags.MAIN_ACTIVITY)
                 .setPriority(Priority.LOW)
@@ -420,8 +518,13 @@ public class MainActivity extends AppCompatActivity
     @SuppressLint("SetTextI18n")
     private void getPersonalInfoResponse(JSONObject response, NavigationView navigationView){
         try{
-            SharedPrefManager.getInstance(this).saveUserIdSession(response.getString("user_id"));
-            checkUserRole(navigationView, response.getString("role_code"));
+            if(SharedPrefManager.getInstance(this).getUserRole().equals("TALENT_MODEL")){
+                SharedPrefManager.getInstance(this).saveUserIdSession(response.getString("talent_id"));
+                checkUserRole(navigationView, response.getString("role_name"));
+            }else{
+                SharedPrefManager.getInstance(this).saveUserIdSession(response.getString("user_id"));
+                checkUserRole(navigationView, response.getString("role_code"));
+            }
 
             lblLoggedInFullname.setText(response.getString("firstname") + " " + response.getString("lastname"));
             lblLoggedInRole.setText(response.getString("role_name"));
@@ -438,6 +541,7 @@ public class MainActivity extends AppCompatActivity
                 navigationViewMenu.findItem(R.id.nav_booking_list).setVisible(true);
                 break;
             default:
+                navigationViewMenu.findItem(R.id.nav_clients_booked).setVisible(true);
                 navigationViewMenu.findItem(R.id.nav_check_availability).setVisible(true);
                 break;
         }

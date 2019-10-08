@@ -11,7 +11,9 @@ public class EndPoints {
     public static final String UPLOADS_URL = BASE_URL + "uploads/";
 
     public static final String LOGIN_USER_URL = API_URL + "mobile/user_login";
+    public static final String LOGIN_TALENT_URL = API_URL + "mobile/talent_login";
     public static final String GET_PERSONAL_INFO_URL = API_URL + "mobile/get_personal_info";
+    public static final String GET_TALENT_PERSONAL_INFO_URL = API_URL + "mobile/get_talent_personal_info";
     public static final String GET_ALL_TALENTS_URL = API_URL + "talents/get_all_talents";
     public static final String GET_ALL_CATEGORIES_URL = API_URL + "categories/get_all_categories";
     public static final String GET_SELECTED_TALENT_DETAILS_URL = API_URL + "talents/get_talent_details";
@@ -22,4 +24,5 @@ public class EndPoints {
     public static final String GET_ALREADY_RESERVED_SCHED_URL = API_URL + "client/get_already_reserved_schedule";
     public static final String GET_ALL_PROVINCES_URL = API_URL + "client/get_all_provinces";
     public static final String GET_ALL_CITY_MUNI_URL = API_URL + "client/get_city_muni_by_province_code";
+    public static final String GET_ALL_CLIENT_BOOKED_URL = API_URL + "talents/get_all_client_booked";
 }

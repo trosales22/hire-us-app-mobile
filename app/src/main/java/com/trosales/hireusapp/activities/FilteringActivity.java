@@ -1,5 +1,6 @@
 package com.trosales.hireusapp.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
@@ -13,6 +14,7 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.trosales.hireusapp.R;
 import com.trosales.hireusapp.classes.beans.CityMuni;
 import com.trosales.hireusapp.classes.beans.Provinces;
+import com.trosales.hireusapp.classes.commons.SharedPrefManager;
 import com.trosales.hireusapp.classes.constants.EndPoints;
 import com.trosales.hireusapp.classes.constants.Tags;
 
@@ -23,6 +25,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -46,6 +49,8 @@ public class FilteringActivity extends AppCompatActivity {
     private List<Provinces> provincesList;
     private List<CityMuni> cityMuniList;
 
+    String selectedProvCode,selectedCityMuni;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,17 +67,35 @@ public class FilteringActivity extends AppCompatActivity {
         getAllProvinces();
 
         cmbProvince.setOnSpinnerItemSelectedListener((parent, view, position, id) -> {
-            String selectedProvCode = provincesList.get(position).getProvinceCode();
+            selectedProvCode = provincesList.get(position).getProvinceCode();
             getAllCityMuni(selectedProvCode);
+        });
+
+        cmbCity.setOnSpinnerItemSelectedListener((parent, view, position, id) -> {
+            selectedCityMuni = cityMuniList.get(position).getCityMuniCode();
         });
 
         setupAgeDropdown();
 
-        List<String> genderList = new LinkedList<>(Arrays.asList("Male", "Female"));
+        List<String> genderList = new LinkedList<>(Arrays.asList("All" ,"Male", "Female"));
         cmbGender.attachDataSource(genderList);
 
         btnFilterNow.setOnClickListener(v -> {
-            //add logic here
+            Intent intent = new Intent(this, MainActivity.class);
+
+            HashMap<String, String> filteringOption = new HashMap<>();
+            filteringOption.put("province_code", selectedProvCode);
+            filteringOption.put("city_muni_code", selectedCityMuni);
+            filteringOption.put("age_from", cmbAgeFrom.getText().toString().equals("From") ? "" : cmbAgeFrom.getText().toString());
+            filteringOption.put("age_to", cmbAgeTo.getText().toString().equals("To") ? "" : cmbAgeTo.getText().toString());
+            filteringOption.put("height_from", txtHeightFrom.getText() == null ? "" : txtHeightFrom.getText().toString());
+            filteringOption.put("height_to", txtHeightTo.getText() == null ? "" : txtHeightTo.getText().toString());
+            filteringOption.put("rate_per_hour_from", txtRatePerHourFrom.getText() == null ? "" : txtRatePerHourFrom.getText().toString());
+            filteringOption.put("rate_per_hour_to", txtRatePerHourTo.getText() == null ? "" : txtRatePerHourTo.getText().toString());
+            filteringOption.put("gender", cmbGender.getText().toString().equals("All") ? "" : cmbGender.getText().toString());
+
+            SharedPrefManager.getInstance(this).setFilteringOption(filteringOption);
+            startActivity(intent);
         });
     }
 

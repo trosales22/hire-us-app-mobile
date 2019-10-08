@@ -34,9 +34,12 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.frmLoginAccount_txtEmailOrUsername) EditText frmLoginAccount_txtEmailOrUsername;
     @BindView(R.id.frmLoginAccount_txtPassword)EditText frmLoginAccount_txtPassword;
     @BindView(R.id.chkShowPassword) AppCompatCheckBox chkShowPassword;
+    @BindView(R.id.chkLoginAsTalentOrModel) AppCompatCheckBox chkLoginAsTalentOrModel;
     @BindView(R.id.btnLoginUser) StripedProcessButton btnLoginUser;
     @BindView(R.id.btnGoToForgotPasswordPage)TextView btnGoToForgotPasswordPage;
     @BindView(R.id.btnGoToSignUpPage) TextView btnGoToSignUpPage;
+
+    private boolean loginAsTalent = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +61,14 @@ public class LoginActivity extends AppCompatActivity {
             } else {
                 chkShowPassword.setText(Messages.SHOW_PASSWORD_MSG);
                 frmLoginAccount_txtPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+            }
+        });
+
+        chkLoginAsTalentOrModel.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                loginAsTalent = true;
+            } else {
+                loginAsTalent = false;
             }
         });
 
@@ -117,7 +128,15 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void loginUser(final String emailOrUsername, final String password) {
-        AndroidNetworking.post(EndPoints.LOGIN_USER_URL)
+        String finalLoginUrl;
+
+        if(loginAsTalent){
+            finalLoginUrl = EndPoints.LOGIN_TALENT_URL;
+        }else{
+            finalLoginUrl = EndPoints.LOGIN_USER_URL;
+        }
+
+        AndroidNetworking.post(finalLoginUrl)
                 .addBodyParameter("username_or_email", emailOrUsername)
                 .addBodyParameter("password", password)
                 .setTag(Tags.LOGIN_ACTIVITY)
@@ -154,6 +173,11 @@ public class LoginActivity extends AppCompatActivity {
 
             if(status.equals("OK")){
                 SharedPrefManager.getInstance(getApplicationContext()).loginUser(emailOrUsername);
+
+                if(loginAsTalent){
+                    SharedPrefManager.getInstance(getApplicationContext()).saveUserRole("TALENT_MODEL");
+                }
+
                 finish();
                 startActivity(new Intent(this, MainActivity.class));
             }else{

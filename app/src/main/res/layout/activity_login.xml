@@ -36,7 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
-                android:maxLength="25"
+                android:maxLength="30"
                 android:drawablePadding="5dp"
                 android:drawableStart="@drawable/ic_account_box_white"
                 android:hint="Email or Username"
@@ -68,6 +68,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Show Password"
+            android:textColor="@color/white"
+            tools:ignore="HardcodedText" />
+
+        <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/chkLoginAsTalentOrModel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Login as Talent/Model"
             android:textColor="@color/white"
             android:layout_marginBottom="5dp"
             tools:ignore="HardcodedText" />

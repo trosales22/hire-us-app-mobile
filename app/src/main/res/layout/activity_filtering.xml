@@ -24,7 +24,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:text="Location"
+                    android:text="Location Availability"
                     android:textColor="@color/white"
                     android:textSize="18sp"
                     tools:ignore="HardcodedText" />
@@ -107,7 +107,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:text="Height (in centimeter)"
+                    android:text="Height (in inches)"
                     android:textColor="@color/white"
                     android:textSize="18sp"
                     tools:ignore="HardcodedText" />
