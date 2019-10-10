@@ -15,13 +15,13 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/background_home">
+            android:background="@color/gainsboro">
 
             <android.support.v4.widget.SwipeRefreshLayout
                 android:id="@+id/swipeToRefresh_talents"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="110dp">
+                android:layout_marginTop="@dimen/container_margin">
 
                 <cz.kinst.jakub.view.SimpleStatefulLayout
                     android:id="@+id/stateful_layout"
@@ -41,34 +41,58 @@
 
             </android.support.v4.widget.SwipeRefreshLayout>
 
-            <LinearLayout
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:orientation="vertical">
-
-                <Button
-                    android:id="@+id/btnChoosePreferredDate"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Choose Preferred Date"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:drawableStart="@drawable/ic_date_range_white"
-                    android:drawablePadding="10dp"
-                    android:textSize="15dp"
-                    android:padding="15dp"
-                    android:background="@color/dark_transparent"
-                    tools:ignore="HardcodedText,SpUsage" />
-
-                <com.yalantis.filter.widget.Filter
-                    android:id="@+id/filter"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            </LinearLayout>
-
         </FrameLayout>
 
     </RelativeLayout>
+
+    <com.michaldrabik.tapbarmenulib.TapBarMenu
+        android:id="@+id/tapBarMenu"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="24dp"
+        app:tbm_backgroundColor="@color/colorPrimary">
+
+        <ImageView
+            android:id="@+id/btnChoosePreferredDateAndTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:src="@drawable/date_time" />
+
+        <ImageView
+            android:id="@+id/btnSearchTalent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:src="@drawable/search_talent" />
+
+        <Space
+            android:layout_width="56dp"
+            android:layout_height="match_parent" />
+
+        <ImageView
+            android:id="@+id/btnFilterCategory"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:src="@drawable/filter_category" />
+
+        <ImageView
+            android:id="@+id/btnFilteringOption"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:src="@drawable/filter" />
+
+    </com.michaldrabik.tapbarmenulib.TapBarMenu>
 
 </android.support.design.widget.CoordinatorLayout>

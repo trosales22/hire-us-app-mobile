@@ -6,12 +6,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.support.design.widget.NavigationView;
@@ -21,7 +20,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,23 +28,21 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
-import com.borax12.materialdaterangepicker.date.DatePickerDialog;
 import com.ethanhua.skeleton.Skeleton;
 import com.ethanhua.skeleton.SkeletonScreen;
+import com.michaldrabik.tapbarmenulib.TapBarMenu;
 import com.trosales.hireusapp.R;
 import com.trosales.hireusapp.classes.adapters.TalentsAdapter;
 import com.trosales.hireusapp.classes.beans.Categories;
 import com.trosales.hireusapp.classes.beans.Location;
 import com.trosales.hireusapp.classes.commons.AndroidNetworkingShortcuts;
+import com.trosales.hireusapp.classes.commons.AutoFitGridLayoutManager;
 import com.trosales.hireusapp.classes.commons.SharedPrefManager;
 import com.trosales.hireusapp.classes.constants.EndPoints;
 import com.trosales.hireusapp.classes.constants.Messages;
 import com.trosales.hireusapp.classes.constants.Tags;
 import com.trosales.hireusapp.classes.wrappers.TalentsDO;
-import com.yalantis.filter.adapter.FilterAdapter;
-import com.yalantis.filter.listener.FilterListener;
-import com.yalantis.filter.widget.Filter;
-import com.yalantis.filter.widget.FilterItem;
+import com.yarolegovich.lovelydialog.LovelyChoiceDialog;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -53,7 +50,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -65,12 +61,13 @@ import spencerstudios.com.ezdialoglib.EZDialog;
 import spencerstudios.com.ezdialoglib.Font;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, FilterListener<Categories>, DatePickerDialog.OnDateSetListener {
+        implements NavigationView.OnNavigationItemSelectedListener{
     private TextView lblLoggedInFullname,lblLoggedInRole;
-    @BindView(R.id.btnChoosePreferredDate) Button btnChoosePreferredDate;
     @BindView(R.id.stateful_layout) SimpleStatefulLayout simpleStatefulLayout;
     @BindView(R.id.swipeToRefresh_talents) SwipeRefreshLayout swipeToRefresh_talents;
     @BindView(R.id.recyclerView_talents) RecyclerView recyclerView_talents;
+    @BindView(R.id.tapBarMenu) TapBarMenu tapBarMenu;
+    @BindView(R.id.btnFilterCategory) ImageView btnFilterCategory;
 
     private List<TalentsDO> talentsDOList;
     private TalentsAdapter talentsAdapter;
@@ -79,8 +76,6 @@ public class MainActivity extends AppCompatActivity
 
     private int[] mColors;
     private String[] mTitles;
-
-    private boolean mAutoHighlight = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +90,23 @@ public class MainActivity extends AppCompatActivity
             startActivity(new Intent(this, LoginActivity.class));
         }
 
+        tapBarMenu.setOnClickListener(v -> tapBarMenu.toggle());
+
+        btnFilterCategory.setOnClickListener(v -> {
+            String[] items = getResources().getStringArray(R.array.categories);
+            new LovelyChoiceDialog(this, R.style.TintTheme)
+                    .setTopColorRes(R.color.colorPrimary)
+                    .setTitle("Choose Categories")
+                    .setIcon(R.drawable.ic_account_circle_white)
+                    .setItemsMultiChoice(items, (positions, items1) ->
+                            Toast.makeText(
+                                    MainActivity.this,
+                                    TextUtils.join("\n", items1),
+                                    Toast.LENGTH_SHORT).show())
+                    .setConfirmButtonText("Done")
+                    .show();
+        });
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
 
@@ -108,36 +120,14 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-        btnChoosePreferredDate.setOnClickListener(v -> {
-            Calendar now = Calendar.getInstance();
-            DatePickerDialog dpd = DatePickerDialog.newInstance(
-                    MainActivity.this,
-                    now.get(Calendar.YEAR),
-                    now.get(Calendar.MONTH),
-                    now.get(Calendar.DAY_OF_MONTH)
-            );
-
-            dpd.setAutoHighlight(mAutoHighlight);
-            dpd.show(getFragmentManager(), "Datepickerdialog");
-        });
-
         mColors = getResources().getIntArray(R.array.colors);
         mTitles = getResources().getStringArray(R.array.categories);
-
-        Filter<Categories> mFilter = findViewById(R.id.filter);
-        mFilter.setAdapter(new Adapter(getCategoryTags()));
-        mFilter.setListener(this);
-
-        //the text to show when there's no selected items
-        mFilter.setNoSelectedItemText(getString(R.string.str_all_selected));
-        mFilter.build();
 
         talentsDOList = new ArrayList<>();
         handler = new Handler();
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        recyclerView_talents.setLayoutManager(linearLayoutManager);
-        recyclerView_talents.setHasFixedSize(true);
+        AutoFitGridLayoutManager autoFitGridLayoutManager = new AutoFitGridLayoutManager(this, 500);
+        recyclerView_talents.setLayoutManager(autoFitGridLayoutManager);
 
         skeletonScreen = Skeleton.bind(recyclerView_talents)
                 .adapter(talentsAdapter)
@@ -182,8 +172,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onResume() {
         super.onResume();
-        DatePickerDialog dpd = (DatePickerDialog) getFragmentManager().findFragmentByTag("Datepickerdialog");
-        if(dpd != null) dpd.setOnDateSetListener(this);
     }
 
     @Override
@@ -255,63 +243,6 @@ public class MainActivity extends AppCompatActivity
         }
 
         return tags;
-    }
-
-    @Override
-    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth, int yearEnd, int monthOfYearEnd, int dayOfMonthEnd) {
-        String dateFrom = (++monthOfYear) + "/" + dayOfMonth + "/" + year;
-        String dateTo = (++monthOfYearEnd) + "/" + dayOfMonthEnd + "/" + yearEnd;
-
-        StringBuilder sbSelectedDates = new StringBuilder();
-        sbSelectedDates.append(dateFrom).append(" - ").append(dateTo);
-
-        btnChoosePreferredDate.setText(sbSelectedDates.toString());
-        Toast.makeText(this, "Your preferred date: " + sbSelectedDates.toString() + "!", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onFilterDeselected(Categories categories) {
-
-    }
-
-    @Override
-    public void onFilterSelected(Categories categories) {
-
-    }
-
-    @Override
-    public void onFiltersSelected(@NotNull ArrayList<Categories> arrayList) {
-        for(Categories categories : arrayList){
-            Log.d("debug", "categories: " + categories.getText());
-        }
-    }
-
-    @Override
-    public void onNothingSelected() {
-
-    }
-
-    class Adapter extends FilterAdapter<Categories> {
-        Adapter(@NotNull List<? extends Categories> items) {
-            super(items);
-        }
-
-        @NotNull
-        @Override
-        public FilterItem createView(int position, Categories item) {
-            FilterItem filterItem = new FilterItem(getApplicationContext());
-
-            filterItem.setStrokeColor(mColors[0]);
-            filterItem.setTextColor(mColors[0]);
-            filterItem.setCornerRadius(14);
-            filterItem.setCheckedTextColor(ContextCompat.getColor(getApplicationContext(), android.R.color.white));
-            filterItem.setColor(ContextCompat.getColor(getApplicationContext(), android.R.color.white));
-            filterItem.setCheckedColor(mColors[position]);
-            filterItem.setText(item.getText());
-            filterItem.deselect();
-
-            return filterItem;
-        }
     }
 
     private StringBuilder getParams(HashMap<String, String> filteringOption){
@@ -429,7 +360,7 @@ public class MainActivity extends AppCompatActivity
                             object.getString("height"),
                             object.getString("hourly_rate"),
                             object.getString("gender"),
-                            EndPoints.UPLOADS_URL + "talents_or_models/" + object.getString("talent_display_photo"),
+                            object.getString("talent_display_photo"),
                             object.getString("category_names"),
                             Integer.parseInt(object.getString("age")),
                             new Location(

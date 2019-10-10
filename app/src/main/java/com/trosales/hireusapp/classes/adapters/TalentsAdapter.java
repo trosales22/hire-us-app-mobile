@@ -4,8 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -23,7 +21,6 @@ import com.trosales.hireusapp.classes.beans.CategoryDetector;
 import com.trosales.hireusapp.classes.commons.SharedPrefManager;
 import com.trosales.hireusapp.classes.constants.CategoriesConstants;
 import com.trosales.hireusapp.classes.wrappers.TalentsDO;
-import com.trosales.hireusapp.fragments.UnavailableDatesFragment;
 
 import java.util.List;
 
@@ -60,7 +57,6 @@ public class TalentsAdapter extends RecyclerView.Adapter<TalentsAdapter.ViewHold
                 .into(viewHolder.imgTalentDisplayPhoto);
 
         viewHolder.lblTalentFullname.setText(talentsDO.getFullname());
-        viewHolder.lblTalentGenderAndAge.setText(talentsDO.getGender() + " | " + talentsDO.getTalentAge() + " years old");
         viewHolder.lblTalentLocation.setText(talentsDO.getLocation().getCityMuni() + ", " + talentsDO.getLocation().getProvince());
 
         CategoryDetector categoryDetector = new CategoryDetector(
@@ -78,18 +74,19 @@ public class TalentsAdapter extends RecyclerView.Adapter<TalentsAdapter.ViewHold
 
         detectCategory(categoryDetector, viewHolder);
 
-        viewHolder.lblTalentHourlyRate.setText(Html.fromHtml("&#8369;" + talentsDO.getHourlyRate() + " per hour"));
+        viewHolder.lblTalentHourlyRate.setText(Html.fromHtml("&#8369;" + talentsDO.getHourlyRate()));
         viewHolder.lblTalentCategories.setText(talentsDO.getCategoryNames());
 
-        viewHolder.btnMoreDetails.setOnClickListener(v -> {
+        viewHolder.cardView_talents.setOnClickListener(v -> {
             SharedPrefManager.getInstance(v.getContext()).saveTalentId(talentsDO.getTalent_id());
             v.getContext().startActivity(new Intent(v.getContext(), TalentModelProfileActivity.class));
         });
 
-        viewHolder.btnUnavailableDates.setOnClickListener(v -> {
-            UnavailableDatesFragment unavailableDatesFragment = UnavailableDatesFragment.getInstance();
-            unavailableDatesFragment.show(((AppCompatActivity) context).getSupportFragmentManager(), "Unavailable Dates");
-        });
+        /*
+        UnavailableDatesFragment unavailableDatesFragment = UnavailableDatesFragment.getInstance();
+        unavailableDatesFragment.show(((AppCompatActivity) context).getSupportFragmentManager(), "Unavailable Dates");
+
+         */
     }
 
     @Override
@@ -101,12 +98,9 @@ public class TalentsAdapter extends RecyclerView.Adapter<TalentsAdapter.ViewHold
         @BindView(R.id.cardView_talents) CardView cardView_talents;
         @BindView(R.id.imgTalentDisplayPhoto) ImageView imgTalentDisplayPhoto;
         @BindView(R.id.lblTalentFullname) TextView lblTalentFullname;
-        @BindView(R.id.lblTalentGenderAndAge) TextView lblTalentGenderAndAge;
         @BindView(R.id.lblTalentLocation) TextView lblTalentLocation;
         @BindView(R.id.lblTalentHourlyRate) TextView lblTalentHourlyRate;
         @BindView(R.id.lblTalentCategories) TextView lblTalentCategories;
-        @BindView(R.id.btnMoreDetails) AppCompatButton btnMoreDetails;
-        @BindView(R.id.btnUnavailableDates) AppCompatButton btnUnavailableDates;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
