@@ -33,7 +33,6 @@ import com.ethanhua.skeleton.SkeletonScreen;
 import com.michaldrabik.tapbarmenulib.TapBarMenu;
 import com.trosales.hireusapp.R;
 import com.trosales.hireusapp.classes.adapters.TalentsAdapter;
-import com.trosales.hireusapp.classes.beans.Categories;
 import com.trosales.hireusapp.classes.beans.Location;
 import com.trosales.hireusapp.classes.commons.AndroidNetworkingShortcuts;
 import com.trosales.hireusapp.classes.commons.AutoFitGridLayoutManager;
@@ -49,7 +48,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -67,15 +70,19 @@ public class MainActivity extends AppCompatActivity
     @BindView(R.id.swipeToRefresh_talents) SwipeRefreshLayout swipeToRefresh_talents;
     @BindView(R.id.recyclerView_talents) RecyclerView recyclerView_talents;
     @BindView(R.id.tapBarMenu) TapBarMenu tapBarMenu;
+    @BindView(R.id.btnChoosePreferredDateAndTime) ImageView btnChoosePreferredDateAndTime;
+    @BindView(R.id.btnSearchTalent) ImageView btnSearchTalent;
     @BindView(R.id.btnFilterCategory) ImageView btnFilterCategory;
+    @BindView(R.id.btnFilteringOption) ImageView btnFilteringOption;
+
+    private List<String> availableDateScheduleItems, availableTimeScheduleItems;
+    private String selectedCategory, selectedDate = "", selectedTime = "", reservedDate, reservedTime;
+    private HashMap<String, String> extraFiltering;
 
     private List<TalentsDO> talentsDOList;
     private TalentsAdapter talentsAdapter;
     protected Handler handler;
     private SkeletonScreen skeletonScreen;
-
-    private int[] mColors;
-    private String[] mTitles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +97,49 @@ public class MainActivity extends AppCompatActivity
             startActivity(new Intent(this, LoginActivity.class));
         }
 
+        availableDateScheduleItems = new ArrayList<>();
+        availableTimeScheduleItems = new ArrayList<>();
+        extraFiltering = new HashMap<>();
+
+        availableDateScheduleItems = getDatesUpToSpecificMonths(3);
+        setMorningSchedule();
+        setAfternoonSchedule();
+
         tapBarMenu.setOnClickListener(v -> tapBarMenu.toggle());
+
+        btnChoosePreferredDateAndTime.setOnClickListener(v -> {
+            new LovelyChoiceDialog(this, R.style.TintTheme)
+                    .setTopColorRes(R.color.colorPrimary)
+                    .setTitle("Choose Preferred Date")
+                    .setIcon(R.drawable.ic_date_range_white)
+                    .setItemsMultiChoice(availableDateScheduleItems, new LovelyChoiceDialog.OnItemsSelectedListener<String>() {
+                                @Override
+                                public void onItemsSelected(List<Integer> datePositions, List<String> dateItems) {
+                                    selectedDate = TextUtils.join(",", dateItems);
+                                    extraFiltering.put("selectedDate", selectedDate);
+
+                                    new LovelyChoiceDialog(MainActivity.this, R.style.TintTheme)
+                                            .setTopColorRes(R.color.colorPrimary)
+                                            .setTitle("Choose Preferred Time")
+                                            .setMessage("Selected date: " + selectedDate)
+                                            .setIcon(R.drawable.ic_access_time_white)
+                                            .setItemsMultiChoice(availableTimeScheduleItems, new LovelyChoiceDialog.OnItemsSelectedListener<String>() {
+                                                        @Override
+                                                        public void onItemsSelected(List<Integer> timePositions, List<String> timeItems) {
+                                                            selectedTime = TextUtils.join(",", timeItems);
+                                                            extraFiltering.put("selectedTime", selectedTime);
+                                                            getAllTalents(extraFiltering);
+                                                        }
+                                                    }
+                                            )
+                                            .setConfirmButtonText("Done")
+                                            .show();
+                                }
+                            }
+                    )
+                    .setConfirmButtonText("Next")
+                    .show();
+        });
 
         btnFilterCategory.setOnClickListener(v -> {
             String[] items = getResources().getStringArray(R.array.categories);
@@ -98,14 +147,20 @@ public class MainActivity extends AppCompatActivity
                     .setTopColorRes(R.color.colorPrimary)
                     .setTitle("Choose Categories")
                     .setIcon(R.drawable.ic_account_circle_white)
-                    .setItemsMultiChoice(items, (positions, items1) ->
-                            Toast.makeText(
-                                    MainActivity.this,
-                                    TextUtils.join("\n", items1),
-                                    Toast.LENGTH_SHORT).show())
+                    .setItemsMultiChoice(items, new LovelyChoiceDialog.OnItemsSelectedListener<String>() {
+                                @Override
+                                public void onItemsSelected(List<Integer> categoryPositions, List<String> categoryItems) {
+                                    selectedCategory = TextUtils.join(",", categoryItems);
+                                    extraFiltering.put("selectedCategory", selectedCategory);
+                                    getAllTalents(extraFiltering);
+                                }
+                            }
+                    )
                     .setConfirmButtonText("Done")
                     .show();
         });
+
+        btnFilteringOption.setOnClickListener(v -> startActivity(new Intent(v.getContext(), FilteringActivity.class)));
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -119,9 +174,6 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
-
-        mColors = getResources().getIntArray(R.array.colors);
-        mTitles = getResources().getStringArray(R.array.categories);
 
         talentsDOList = new ArrayList<>();
         handler = new Handler();
@@ -139,7 +191,9 @@ public class MainActivity extends AppCompatActivity
 
         //bundle = getIntent().getExtras();
 
-        handler.postDelayed(this::getAllTalents, 500);
+        handler.postDelayed(() -> {
+            getAllTalents(extraFiltering);
+        }, 500);
 
         swipeToRefresh_talents.setOnRefreshListener(() -> {
             skeletonScreen.show();
@@ -148,7 +202,9 @@ public class MainActivity extends AppCompatActivity
                 talentsDOList.clear();
             }
 
-            handler.postDelayed(this::getAllTalents, 500);
+            handler.postDelayed(() -> {
+                getAllTalents(extraFiltering);
+            }, 500);
             swipeToRefresh_talents.setRefreshing(false);
         });
 
@@ -235,14 +291,59 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private List<Categories> getCategoryTags() {
-        List<Categories> tags = new ArrayList<>();
+    private List<String> getDatesUpToSpecificMonths(int months){
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+        Calendar c = Calendar.getInstance();
+        List<String> availableDatesList = new ArrayList<>();
 
-        for (int i = 0; i < mTitles.length; ++i) {
-            tags.add(new Categories(mTitles[i], mColors[i]));
+        try {
+            c.setTime(sdf.parse(sdf.format(new Date())));
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
 
-        return tags;
+        int maxDay = c.getActualMaximum(Calendar.DAY_OF_MONTH) * months;
+        for(int co=0; co<=maxDay; co++){
+            c.add(Calendar.DATE, 1);
+            availableDatesList.add(sdf.format(c.getTime()));
+        }
+
+        return availableDatesList;
+    }
+
+    private void setMorningSchedule(){
+        int initialValue = 1;
+        String meridian = " AM";
+
+        availableTimeScheduleItems.add("12-1 AM");
+
+        for(int i = 1; i <= 11; i++){
+            initialValue++;
+
+            if(initialValue >= 12){
+                meridian = " PM";
+            }
+
+            availableTimeScheduleItems.add(i + "-" + initialValue + meridian);
+        }
+
+    }
+
+    private void setAfternoonSchedule(){
+        int initialValue = 1;
+        String meridian = " AM";
+
+        availableTimeScheduleItems.add("12-1 PM");
+
+        for(int i = 1; i <= 11; i++){
+            initialValue++;
+
+            if(initialValue >= 12){
+                meridian = " AM";
+            }
+
+            availableTimeScheduleItems.add(i + "-" + initialValue + meridian);
+        }
     }
 
     private StringBuilder getParams(HashMap<String, String> filteringOption){
@@ -311,12 +412,62 @@ public class MainActivity extends AppCompatActivity
         return sbParams;
     }
 
-    private void getAllTalents(){
+    private void getAllReservedScheduleOfTalent(String talent_id){
+        StringBuilder sbUrl = new StringBuilder();
+        sbUrl.append(EndPoints.GET_RESERVED_SCHEDULE_OF_TALENT);
+        sbUrl.append("?talent_id={talent_id}");
+
+        AndroidNetworking
+                .get(sbUrl.toString())
+                .addPathParameter("talent_id", talent_id)
+                .setTag(Tags.MAIN_ACTIVITY)
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONArray array = response.getJSONArray("reserved_schedule_list");
+
+                            if(response.has("flag") && response.has("msg")){
+                                Log.d("debug", response.getString("msg"));
+                            }else{
+                                for (int i = 0; i < array.length(); i++) {
+                                    JSONObject object = array.getJSONObject(i);
+                                    reservedDate = object.getString("reserved_date");
+                                    reservedTime = object.getString("reserved_time");
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(Tags.MAIN_ACTIVITY, anError.getErrorDetail());
+                    }
+                });
+    }
+
+    private void getAllTalents(HashMap<String, String> extraFiltering){
+        talentsDOList.clear();
         HashMap<String, String> filteringOption = SharedPrefManager.getInstance(this).getFilteringOption();
         Log.d("debug", EndPoints.GET_ALL_TALENTS_URL.concat(getParams(filteringOption).toString()));
 
+        StringBuilder sbExtraFilteringParams = new StringBuilder();
+
+        if(!extraFiltering.isEmpty()) {
+            Log.d("debug", "extraFiltering: " + extraFiltering.toString());
+            if(extraFiltering.get("selectedCategory") != null) {
+                if (!Objects.requireNonNull(extraFiltering.get("selectedCategory")).isEmpty()) {
+                    sbExtraFilteringParams.append("&selected_categories={selected_categories}");
+                }
+            }
+        }
+
         AndroidNetworking
-                .get(EndPoints.GET_ALL_TALENTS_URL.concat(getParams(filteringOption).toString()))
+                .get(EndPoints.GET_ALL_TALENTS_URL.concat(getParams(filteringOption).toString()).concat(sbExtraFilteringParams.toString()))
                 .addPathParameter("height_from", filteringOption.get("height_from"))
                 .addPathParameter("height_to", filteringOption.get("height_to"))
                 .addPathParameter("age_from", filteringOption.get("age_from"))
@@ -326,6 +477,7 @@ public class MainActivity extends AppCompatActivity
                 .addPathParameter("province_code", filteringOption.get("province_code"))
                 .addPathParameter("city_muni_code", filteringOption.get("city_muni_code"))
                 .addPathParameter("gender", filteringOption.get("gender"))
+                .addPathParameter("selected_categories", extraFiltering.get("selectedCategory"))
                 .setTag(Tags.MAIN_ACTIVITY)
                 .setPriority(Priority.MEDIUM)
                 .build()
@@ -351,9 +503,20 @@ public class MainActivity extends AppCompatActivity
             if(response.has("flag") && response.has("msg")){
                 Log.d("debug", response.getString("msg"));
             }else{
+                boolean isAvailable = true;
+
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject object = array.getJSONObject(i);
+                    getAllReservedScheduleOfTalent(object.getString("talent_id"));
 
+                    Log.d("debug", "selectedDate: " + selectedDate);
+                    Log.d("debug", "selectedTime: " + selectedTime);
+
+                    Log.d("debug", "reservedDate: " + reservedDate);
+                    Log.d("debug", "reservedTime: " + reservedTime);
+
+                    String[] selectedDateList = selectedDate.split(",");
+                    String[] selectedTimeList = selectedTime.split(",");
                     TalentsDO talentsDO = new TalentsDO(
                             object.getString("talent_id"),
                             object.getString("fullname"),
@@ -372,7 +535,31 @@ public class MainActivity extends AppCompatActivity
                             )
                     );
 
-                    talentsDOList.add(talentsDO);
+                    if(!selectedDate.isEmpty() && !selectedTime.isEmpty()) {
+                        for (String date : selectedDateList) {
+                            if (!reservedDate.contains(date)) {
+                                Log.d("debug", "WALANG NAKARESERVE NA DATE");
+
+                                for (String time : selectedTimeList) {
+                                    if (!reservedTime.contains(time)) {
+                                        Log.d("debug", "WALANG NAKARESERVE NA TIME");
+                                    } else {
+                                        Log.d("debug", "MAY NAKARESERVE NA TIME");
+                                        Toast.makeText(this, time + " was already reserved!", Toast.LENGTH_LONG).show();
+                                        isAvailable = false;
+                                    }
+                                }
+                            } else {
+                                isAvailable = false;
+                                Log.d("debug", "MAY NAKARESERVE NA DATE");
+                                Toast.makeText(this, date + " was already reserved!", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    }
+
+                    if(isAvailable){
+                        talentsDOList.add(talentsDO);
+                    }
                 }
             }
 
