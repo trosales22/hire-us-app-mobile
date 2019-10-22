@@ -4,10 +4,10 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatButton;
 import android.text.Html;
 import android.util.Log;
 import android.util.SparseBooleanArray;
@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
@@ -128,6 +129,21 @@ public class SetBookingDateAndTimeActivity extends AppCompatActivity{
         });
 
         btnProceedToCheckout.setOnClickListener(v -> {
+            Log.d("debug", "selectedDate: " + selectedDate);
+            Log.d("debug", "selectedTime: " + selectedTime);
+            Log.d("debug", "totalHours: " + totalHours);
+            Log.d("debug", "totalAmountDouble: " + totalAmountDouble);
+
+            if(selectedDate == null && selectedTime == null){
+                Toast.makeText(this, "Please choose your preferred date & time. Thank you.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if(totalHours == null){
+                Toast.makeText(this, "Please click 'Compute Total' to auto calculate your booked schedule. Thank you.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             Intent intent = new Intent(this, CheckoutActivity.class);
             bundle.putString("temp_booking_date", selectedDate);
             bundle.putString("temp_booking_time", selectedTime);
@@ -158,7 +174,9 @@ public class SetBookingDateAndTimeActivity extends AppCompatActivity{
         for(int co=0; co<=maxDay; co++){
             c.add(Calendar.DATE, 1);
 
-            if(!reservedDate.contains(sdf.format(c.getTime()))) {
+            if(reservedDate == null){
+                availableDatesList.add(sdf.format(c.getTime()));
+            }else if(!reservedDate.contains(sdf.format(c.getTime()))) {
                 availableDatesList.add(sdf.format(c.getTime()));
             }
         }
@@ -188,7 +206,9 @@ public class SetBookingDateAndTimeActivity extends AppCompatActivity{
         int initialValue = 1;
         String meridian = " AM";
 
-        if(!reservedTime.contains("12-1 AM")) {
+        if(reservedTime == null){
+            availableTimeScheduleItems.add("12-1 AM");
+        }else if(!reservedTime.contains("12-1 AM")) {
             availableTimeScheduleItems.add("12-1 AM");
         }
 
@@ -199,18 +219,21 @@ public class SetBookingDateAndTimeActivity extends AppCompatActivity{
                 meridian = " PM";
             }
 
-            if(!reservedTime.contains(i + "-" + initialValue + meridian)){
+            if(reservedTime == null){
+                availableTimeScheduleItems.add(i + "-" + initialValue + meridian);
+            }else if(!reservedTime.contains(i + "-" + initialValue + meridian)){
                 availableTimeScheduleItems.add(i + "-" + initialValue + meridian);
             }
         }
-
     }
 
     private void setAfternoonSchedule(String reservedTime){
         int initialValue = 1;
         String meridian = " AM";
 
-        if(!reservedTime.contains("12-1 PM")) {
+        if(reservedTime == null){
+            availableTimeScheduleItems.add("12-1 PM");
+        }else if(!reservedTime.contains("12-1 PM")) {
             availableTimeScheduleItems.add("12-1 PM");
         }
 
@@ -221,7 +244,9 @@ public class SetBookingDateAndTimeActivity extends AppCompatActivity{
                 meridian = " AM";
             }
 
-            if(!reservedTime.contains(i + "-" + initialValue + meridian)) {
+            if(reservedTime == null){
+                availableTimeScheduleItems.add(i + "-" + initialValue + meridian);
+            }else if(!reservedTime.contains(i + "-" + initialValue + meridian)) {
                 availableTimeScheduleItems.add(i + "-" + initialValue + meridian);
             }
         }

@@ -25,7 +25,7 @@
             android:layout_marginBottom="40dp"
             android:layout_gravity="center_horizontal"/>
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
@@ -42,9 +42,9 @@
                 android:hint="Email or Username"
                 tools:ignore="HardcodedText,TextFields" />
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
@@ -61,9 +61,9 @@
                 android:maxLength="16"
                 tools:ignore="HardcodedText" />
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <android.support.v7.widget.AppCompatCheckBox
+        <androidx.appcompat.widget.AppCompatCheckBox
             android:id="@+id/chkShowPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -71,7 +71,7 @@
             android:textColor="@color/white"
             tools:ignore="HardcodedText" />
 
-        <android.support.v7.widget.AppCompatCheckBox
+        <androidx.appcompat.widget.AppCompatCheckBox
             android:id="@+id/chkLoginAsTalentOrModel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

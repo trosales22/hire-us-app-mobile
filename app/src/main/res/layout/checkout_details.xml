@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/cardView_bookings"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -121,26 +121,34 @@
                 android:text="Booking Other Details"
                 card_view:ignore="HardcodedText,RtlSymmetry" />
 
-            <android.support.v7.widget.AppCompatButton
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnCancelBooking"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/lblBookingOtherDetails"
                 android:drawableStart="@drawable/ic_cancel_black"
                 android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:background="@color/basic_red"
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 android:text="Cancel Booking"
                 card_view:ignore="HardcodedText" />
 
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/btnPayUsingDebitOrCreditCard"
+            <com.stripe.android.view.CardMultilineWidget
+                android:id="@+id/card_multiline_widget"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/btnCancelBooking"
+                app:shouldShowPostalCode="false" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnPayUsingDebitOrCreditCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/card_multiline_widget"
                 android:layout_marginTop="10dp"
-                android:background="@color/orange"
+                android:background="@color/colorPrimary"
                 android:drawableStart="@drawable/ic_credit_card_black"
                 android:drawablePadding="10dp"
                 android:textColor="@color/white"
@@ -148,7 +156,7 @@
                 android:text="Pay using Debit/Credit Card"
                 card_view:ignore="HardcodedText" />
 
-            <android.support.v7.widget.AppCompatButton
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnPayUsingBankTransferOrDeposit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -163,6 +171,6 @@
 
         </RelativeLayout>
 
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
 </LinearLayout>

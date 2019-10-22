@@ -1,9 +1,9 @@
 package com.trosales.hireusapp.activities;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.AppCompatCheckBox;
+import androidx.appcompat.widget.AppCompatCheckBox;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
@@ -176,6 +176,8 @@ public class LoginActivity extends AppCompatActivity {
 
                 if(loginAsTalent){
                     SharedPrefManager.getInstance(getApplicationContext()).saveUserRole("TALENT_MODEL");
+                }else{
+                    SharedPrefManager.getInstance(getApplicationContext()).saveUserRole("CLIENT");
                 }
 
                 finish();

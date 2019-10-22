@@ -4,10 +4,10 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatButton;
 import android.text.Html;
 import android.util.Log;
 import android.view.MenuItem;
@@ -108,7 +108,7 @@ public class CheckoutActivity extends AppCompatActivity {
         btnPayUsingDebitOrCreditCard.setOnClickListener(v -> {
             //payUsingDebitOrCreditCard();
             selectedPaymentOption = "DEBIT_CREDIT_CARD";
-            addToClientBookingList(getClientBookingParams());
+            //addToClientBookingList(getClientBookingParams());
         });
     }
 

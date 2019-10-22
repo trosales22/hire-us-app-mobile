@@ -2,7 +2,7 @@ package com.trosales.hireusapp.classes.constants;
 
 public class EndPoints {
     //dev (just changed the ip address)
-    private static final String BASE_URL = "http://192.168.1.13/hire-us/";
+    private static final String BASE_URL = "http://192.168.1.11/hire-us/";
 
     //production
     //private static final String BASE_URL = "https://hireusph.com/";
