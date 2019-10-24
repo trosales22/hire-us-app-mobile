@@ -26,4 +26,5 @@ public class EndPoints {
     public static final String GET_ALL_CITY_MUNI_URL = API_URL + "client/get_city_muni_by_province_code";
     public static final String GET_ALL_CLIENT_BOOKED_URL = API_URL + "talents/get_all_client_booked";
     public static final String GET_RESERVED_SCHEDULE_OF_TALENT = API_URL + "talents/get_reserved_schedule_talent";
+    public static final String START_PAYMENT_URL = API_URL + "payment/start_payment";
 }
