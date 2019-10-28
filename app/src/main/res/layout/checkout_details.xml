@@ -109,10 +109,25 @@
                 card_view:ignore="HardcodedText,RtlSymmetry" />
 
             <TextView
-                android:id="@+id/lblBookingOtherDetails"
+                android:id="@+id/lblBookingPreferredVenue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/lblBookingPreferredDate"
+                android:paddingStart="5dp"
+                android:drawableStart="@drawable/ic_my_location_black"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:gravity="start"
+                android:text="Preferred Venue or Location"
+                card_view:ignore="HardcodedText,RtlSymmetry" />
+
+            <TextView
+                android:id="@+id/lblBookingOtherDetails"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lblBookingPreferredVenue"
                 android:paddingStart="5dp"
                 android:layout_marginTop="5dp"
                 android:textSize="18sp"

@@ -56,6 +56,7 @@ public class BookingsAdapter extends RecyclerView.Adapter<BookingsAdapter.ViewHo
         viewHolder.lblTalentRatePerHour.setText(Html.fromHtml("&#8369;" + clientBookingsDO.getTalentDetails().getHourlyRate() + " per hour"));
         viewHolder.lblBookingPreferredDate.setText(clientBookingsDO.getPreferredBookingDate());
         viewHolder.lblBookingPreferredTime.setText(clientBookingsDO.getPreferredBookingTime());
+        viewHolder.lblBookingPreferredVenue.setText(clientBookingsDO.getPreferredBookingVenue());
 
         StringBuilder sbBookingOtherDetails = new StringBuilder();
         sbBookingOtherDetails
@@ -103,6 +104,7 @@ public class BookingsAdapter extends RecyclerView.Adapter<BookingsAdapter.ViewHo
         @BindView(R.id.lblTalentCategories) TextView lblTalentCategories;
         @BindView(R.id.lblBookingPreferredDate)TextView lblBookingPreferredDate;
         @BindView(R.id.lblBookingPreferredTime) TextView lblBookingPreferredTime;
+        @BindView(R.id.lblBookingPreferredVenue) TextView lblBookingPreferredVenue;
         @BindView(R.id.lblBookingOtherDetails) TextView lblBookingOtherDetails;
         @BindView(R.id.btnMoreDetails) AppCompatButton btnMoreDetails;
 

@@ -5,14 +5,18 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import androidx.annotation.RequiresApi;
+import android.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.appcompat.widget.AppCompatButton;
 import android.text.Html;
 import android.util.Log;
 import android.util.SparseBooleanArray;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,7 +50,9 @@ public class SetBookingDateAndTimeActivity extends AppCompatActivity{
     @BindView(R.id.listDateSchedule) ListView listDateSchedule;
     @BindView(R.id.listTimeSchedule) ListView listTimeSchedule;
     @BindView(R.id.lblSelectedSchedule) TextView lblSelectedSchedule;
+    @BindView(R.id.lblBookingVenueCaption) TextView lblBookingVenueCaption;
     @BindView(R.id.btnComputeTotal) AppCompatButton btnComputeTotal;
+    @BindView(R.id.btnSetBookingVenue) AppCompatButton btnSetBookingVenue;
     @BindView(R.id.btnProceedToCheckout) AppCompatButton btnProceedToCheckout;
 
     private List<String> availableDateScheduleItems, availableTimeScheduleItems;
@@ -54,7 +60,7 @@ public class SetBookingDateAndTimeActivity extends AppCompatActivity{
     private StringBuilder sbSelectedDateSched, sbSelectedTimeSched, sbReservedDate, sbReservedTime;
     private int dateScheduleCount = 0, timeScheduleCount = 0;
     private double totalAmountDouble;
-    private String selectedDate, selectedTime, totalHours;
+    private String selectedDate, selectedTime, totalHours, selectedVenue;
     private Bundle bundle;
     private DecimalFormat formatter = new DecimalFormat("#,###.00");
 
@@ -128,14 +134,42 @@ public class SetBookingDateAndTimeActivity extends AppCompatActivity{
             lblSelectedSchedule.setText(sbOutput.toString());
         });
 
+        btnSetBookingVenue.setOnClickListener(v -> {
+            LayoutInflater layoutInflaterAndroid = LayoutInflater.from(SetBookingDateAndTimeActivity.this);
+            View mView = layoutInflaterAndroid.inflate(R.layout.user_input_dialog_box, null);
+            AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(SetBookingDateAndTimeActivity.this, R.style.AlertDialogTheme);
+            alertDialogBuilderUserInput.setView(mView);
+
+            final EditText userInputDialogEditText = mView.findViewById(R.id.userInputDialog);
+
+
+            alertDialogBuilderUserInput
+                    .setCancelable(false)
+                    .setPositiveButton("Set", (dialogBox, id) -> {
+                        selectedVenue = userInputDialogEditText.getText().toString().trim();
+                        lblBookingVenueCaption.setText("Booking Venue: " + selectedVenue);
+                    })
+                    .setNegativeButton("Cancel",
+                            (dialogBox, id) -> dialogBox.cancel());
+
+            AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
+            alertDialogAndroid.show();
+        });
+
         btnProceedToCheckout.setOnClickListener(v -> {
             Log.d("debug", "selectedDate: " + selectedDate);
             Log.d("debug", "selectedTime: " + selectedTime);
             Log.d("debug", "totalHours: " + totalHours);
             Log.d("debug", "totalAmountDouble: " + totalAmountDouble);
+            Log.d("debug", "selectedVenue: " + selectedVenue);
 
             if(selectedDate == null && selectedTime == null){
                 Toast.makeText(this, "Please choose your preferred date & time. Thank you.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if(selectedVenue == null){
+                Toast.makeText(this, "Please choose your preferred venue. Thank you.", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -154,6 +188,7 @@ public class SetBookingDateAndTimeActivity extends AppCompatActivity{
             bundle.putString("talent_rate_per_hour", bundle.getString("talent_rate_per_hour"));
             bundle.putString("total_hours", totalHours);
             bundle.putString("total_amount", formatter.format(totalAmountDouble));
+            bundle.putString("selected_venue", selectedVenue);
             intent.putExtras(bundle);
             startActivity(intent);
         });

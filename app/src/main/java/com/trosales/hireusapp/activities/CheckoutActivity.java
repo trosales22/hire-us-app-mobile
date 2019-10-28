@@ -44,12 +44,13 @@ public class CheckoutActivity extends AppCompatActivity {
     @BindView(R.id.lblTalentCategories) TextView lblTalentCategories;
     @BindView(R.id.lblBookingPreferredDate)TextView lblBookingPreferredDate;
     @BindView(R.id.lblBookingPreferredTime) TextView lblBookingPreferredTime;
+    @BindView(R.id.lblBookingPreferredVenue) TextView lblBookingPreferredVenue;
     @BindView(R.id.lblBookingOtherDetails) TextView lblBookingOtherDetails;
     @BindView(R.id.btnCancelBooking) AppCompatButton btnCancelBooking;
     @BindView(R.id.card_multiline_widget) CardMultilineWidget cardMultilineWidget;
     @BindView(R.id.btnPayUsingDebitOrCreditCard) AppCompatButton btnPayUsingDebitOrCreditCard;
 
-    private String selectedDate, selectedTime, selectedTalentId, selectedPaymentOption;
+    private String selectedDate, selectedTime, selectedVenue, selectedTalentId, selectedPaymentOption;
     private Bundle bundle;
 
     private Stripe stripe;
@@ -68,6 +69,7 @@ public class CheckoutActivity extends AppCompatActivity {
         bundle = getIntent().getExtras();
         selectedDate = Objects.requireNonNull(bundle).getString("temp_booking_date");
         selectedTime = Objects.requireNonNull(bundle).getString("temp_booking_time");
+        selectedVenue = Objects.requireNonNull(bundle).getString("selected_venue");
         selectedTalentId = Objects.requireNonNull(bundle).getString("temp_talent_id");
 
         Picasso
@@ -81,6 +83,7 @@ public class CheckoutActivity extends AppCompatActivity {
         lblTalentCategories.setText(bundle.getString("talent_category"));
         lblBookingPreferredDate.setText(selectedDate);
         lblBookingPreferredTime.setText(selectedTime);
+        lblBookingPreferredVenue.setText(selectedVenue);
 
         StringBuilder sbBookingOtherDetails = new StringBuilder();
         sbBookingOtherDetails

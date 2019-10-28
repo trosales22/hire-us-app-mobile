@@ -160,6 +160,7 @@ public class BookingListActivity extends AppCompatActivity {
                             Integer.parseInt(object.getString("booking_id")),
                             object.getString("preferred_date"),
                             object.getString("preferred_time"),
+                            object.getString("preferred_venue"),
                             object.getString("payment_option"),
                             object.getString("total_amount"),
                             object.getString("date_paid"),

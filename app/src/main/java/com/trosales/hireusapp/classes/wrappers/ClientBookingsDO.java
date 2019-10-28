@@ -4,13 +4,14 @@ import org.jetbrains.annotations.NotNull;
 
 public class ClientBookingsDO {
     private int bookingId;
-    private String preferredBookingDate, preferredBookingTime, bookingPaymentOption, bookingTotalAmount, bookingDatePaid;
+    private String preferredBookingDate, preferredBookingTime, preferredBookingVenue, bookingPaymentOption, bookingTotalAmount, bookingDatePaid;
     private TalentsDO talentDetails;
 
-    public ClientBookingsDO(int bookingId, String preferredBookingDate, String preferredBookingTime, String bookingPaymentOption, String bookingTotalAmount, String bookingDatePaid, TalentsDO talentDetails) {
+    public ClientBookingsDO(int bookingId, String preferredBookingDate, String preferredBookingTime, String preferredBookingVenue, String bookingPaymentOption, String bookingTotalAmount, String bookingDatePaid, TalentsDO talentDetails) {
         this.bookingId = bookingId;
         this.preferredBookingDate = preferredBookingDate;
         this.preferredBookingTime = preferredBookingTime;
+        this.preferredBookingVenue = preferredBookingVenue;
         this.bookingPaymentOption = bookingPaymentOption;
         this.bookingTotalAmount = bookingTotalAmount;
         this.bookingDatePaid = bookingDatePaid;
@@ -27,6 +28,10 @@ public class ClientBookingsDO {
 
     public String getPreferredBookingTime() {
         return preferredBookingTime;
+    }
+
+    public String getPreferredBookingVenue() {
+        return preferredBookingVenue;
     }
 
     public String getBookingPaymentOption() {
@@ -52,6 +57,7 @@ public class ClientBookingsDO {
                 "bookingId=" + bookingId +
                 ", preferredBookingDate='" + preferredBookingDate + '\'' +
                 ", preferredBookingTime='" + preferredBookingTime + '\'' +
+                ", preferredBookingVenue='" + preferredBookingVenue + '\'' +
                 ", bookingPaymentOption='" + bookingPaymentOption + '\'' +
                 ", bookingTotalAmount='" + bookingTotalAmount + '\'' +
                 ", bookingDatePaid='" + bookingDatePaid + '\'' +
