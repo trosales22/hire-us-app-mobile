@@ -1,6 +1,7 @@
 package com.trosales.hireusapp.activities;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
 import com.stripe.android.ApiResultCallback;
 import com.stripe.android.Stripe;
@@ -25,6 +27,7 @@ import com.stripe.android.view.CardMultilineWidget;
 import com.trosales.hireusapp.R;
 import com.trosales.hireusapp.classes.commons.SharedPrefManager;
 import com.trosales.hireusapp.classes.constants.EndPoints;
+import com.trosales.hireusapp.classes.constants.Messages;
 import com.trosales.hireusapp.classes.constants.Tags;
 
 import org.jetbrains.annotations.NotNull;
@@ -49,6 +52,7 @@ public class CheckoutActivity extends AppCompatActivity {
     @BindView(R.id.btnCancelBooking) AppCompatButton btnCancelBooking;
     @BindView(R.id.card_multiline_widget) CardMultilineWidget cardMultilineWidget;
     @BindView(R.id.btnPayUsingDebitOrCreditCard) AppCompatButton btnPayUsingDebitOrCreditCard;
+    @BindView(R.id.btnPayUsingBankTransferOrDeposit) AppCompatButton btnPayUsingBankTransferOrDeposit;
 
     private String selectedDate, selectedTime, selectedVenue, selectedTalentId, selectedPaymentOption;
     private Bundle bundle;
@@ -95,22 +99,23 @@ public class CheckoutActivity extends AppCompatActivity {
 
         lblBookingOtherDetails.setText( sbBookingOtherDetails.toString());
 
-        btnCancelBooking.setOnClickListener(v -> {
-            //insert logic here
-        });
+        btnCancelBooking.setOnClickListener(v -> startActivity(new Intent(this, MainActivity.class)));
 
         btnPayUsingDebitOrCreditCard.setOnClickListener(v -> {
-            //payUsingDebitOrCreditCard();
             selectedPaymentOption = "DEBIT_CREDIT_CARD";
-            //addToClientBookingList(getClientBookingParams());
             final Card cardToSave = cardMultilineWidget.getCard();
 
             if (cardToSave == null) {
-                Toast.makeText(this, "Invalid Card Data", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Invalid Card Details", Toast.LENGTH_SHORT).show();
             }else{
                 stripe.createToken(cardToSave, new ApiResultCallback<Token>() {
                     @Override
                     public void onSuccess(Token token) {
+                        final ProgressDialog progressDialog = new ProgressDialog(CheckoutActivity.this);
+                        progressDialog.setMessage(Messages.PLEASE_WAIT_MSG);
+                        progressDialog.setCancelable(false);
+                        progressDialog.show();
+
                         StringBuilder sbDescription = new StringBuilder();
                         sbDescription
                                 .append(bundle.getString("talent_fullname"))
@@ -127,24 +132,26 @@ public class CheckoutActivity extends AppCompatActivity {
                                 .getAsJSONObject(new JSONObjectRequestListener() {
                                     @Override
                                     public void onResponse(JSONObject response) {
+                                        progressDialog.dismiss();
                                         try {
                                             String status = response.getString("flag");
                                             String msg = response.has("msg") ? response.getString("msg") : "";
 
                                             if(status.equals("1")){
-                                                //finish();
-                                                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
-                                                //startActivity(new Intent(getApplicationContext(), CheckoutActivity.class));
+                                                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+                                                addToClientBookingList(getClientBookingParams());
                                             }else{
-                                                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+                                                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                                             }
                                         } catch (JSONException e) {
+                                            progressDialog.dismiss();
                                             e.printStackTrace();
                                         }
                                     }
 
                                     @Override
                                     public void onError(ANError anError) {
+                                        progressDialog.dismiss();
                                         String errorResponse = "\n\nCode: " +
                                                 anError.getErrorCode() +
                                                 "\nDetail: " +
@@ -166,11 +173,13 @@ public class CheckoutActivity extends AppCompatActivity {
                         Toast.makeText(
                                 getApplicationContext(),
                                 e.getLocalizedMessage(),
-                                Toast.LENGTH_LONG).show();
+                                Toast.LENGTH_SHORT).show();
                     }
                 });
             }
         });
+
+        btnPayUsingBankTransferOrDeposit.setOnClickListener(v -> addToTempBookingList(getClientBookingParams()));
     }
 
     @Override
@@ -196,11 +205,17 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     private void addToTempBookingList(HashMap<String, String> params){
+        final ProgressDialog progressDialog = new ProgressDialog(CheckoutActivity.this);
+        progressDialog.setMessage(Messages.PLEASE_WAIT_WHILE_ADDING_TO_BOOKING_LIST_MSG);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
         AndroidNetworking.post(EndPoints.ADD_TO_TEMP_BOOKING_LIST_URL)
                 .addBodyParameter("temp_talent_id", params.get("temp_talent_id"))
                 .addBodyParameter("temp_client_id", params.get("temp_client_id"))
                 .addBodyParameter("temp_booking_date", params.get("temp_booking_date"))
                 .addBodyParameter("temp_booking_time", params.get("temp_booking_time"))
+                .addBodyParameter("temp_booking_venue", selectedVenue)
                 .addBodyParameter("temp_total_amount", params.get("temp_total_amount"))
                 .addBodyParameter("temp_status", params.get("temp_status"))
                 .addBodyParameter("temp_payment_option", params.get("temp_payment_option"))
@@ -210,11 +225,13 @@ public class CheckoutActivity extends AppCompatActivity {
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        progressDialog.dismiss();
                         getAddToTempBookingListResponse(response);
                     }
 
                     @Override
                     public void onError(ANError anError) {
+                        progressDialog.dismiss();
                         String errorResponse = "\n\nCode: " +
                                 anError.getErrorCode() +
                                 "\nDetail: " +
@@ -227,6 +244,7 @@ public class CheckoutActivity extends AppCompatActivity {
                                 anError.getMessage();
 
                         Log.e(Tags.CHECKOUT_ACTIVITY, errorResponse);
+                        Snackbar.make(findViewById(android.R.id.content), "Something's wrong! Please contact administrator.", Snackbar.LENGTH_LONG).show();
                     }
                 });
     }
@@ -241,18 +259,26 @@ public class CheckoutActivity extends AppCompatActivity {
                 startActivity(new Intent(this, MainActivity.class));
             }else{
                 //error message
+                Snackbar.make(findViewById(android.R.id.content), msg, Snackbar.LENGTH_SHORT).show();
             }
         } catch (JSONException e) {
             e.printStackTrace();
+            Snackbar.make(findViewById(android.R.id.content), "Something's wrong! Please contact administrator.", Snackbar.LENGTH_LONG).show();
         }
     }
 
     private void addToClientBookingList(HashMap<String, String> params){
+        final ProgressDialog progressDialog = new ProgressDialog(CheckoutActivity.this);
+        progressDialog.setMessage(Messages.PLEASE_WAIT_WHILE_ADDING_TO_BOOKING_LIST_MSG);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
         AndroidNetworking.post(EndPoints.ADD_TO_CLIENT_BOOKING_LIST_URL)
                 .addBodyParameter("talent_id", params.get("talent_id"))
                 .addBodyParameter("client_id", params.get("client_id"))
                 .addBodyParameter("preferred_date", params.get("preferred_date"))
                 .addBodyParameter("preferred_time", params.get("preferred_time"))
+                .addBodyParameter("preferred_venue", selectedVenue)
                 .addBodyParameter("total_amount", params.get("total_amount"))
                 .addBodyParameter("payment_option", params.get("payment_option"))
                 .setTag(Tags.CHECKOUT_ACTIVITY)
@@ -261,11 +287,13 @@ public class CheckoutActivity extends AppCompatActivity {
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        progressDialog.dismiss();
                         getClientBookingResponse(response);
                     }
 
                     @Override
                     public void onError(ANError anError) {
+                        progressDialog.dismiss();
                         String errorResponse = "\n\nCode: " +
                                 anError.getErrorCode() +
                                 "\nDetail: " +
@@ -289,10 +317,10 @@ public class CheckoutActivity extends AppCompatActivity {
 
             if(status.equals("OK")){
                 finish();
-                Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
-                startActivity(new Intent(this, MainActivity.class));
+                Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getApplicationContext(), BookingListActivity.class));
             }else{
-                Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+                Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
             }
         } catch (JSONException e) {
             e.printStackTrace();

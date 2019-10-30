@@ -8,14 +8,12 @@ public class EndPoints {
     //private static final String BASE_URL = "https://hireusph.com/";
 
     private static final String API_URL = BASE_URL + "api/";
-    public static final String UPLOADS_URL = BASE_URL + "uploads/";
 
     public static final String LOGIN_USER_URL = API_URL + "mobile/user_login";
     public static final String LOGIN_TALENT_URL = API_URL + "mobile/talent_login";
     public static final String GET_PERSONAL_INFO_URL = API_URL + "mobile/get_personal_info";
     public static final String GET_TALENT_PERSONAL_INFO_URL = API_URL + "mobile/get_talent_personal_info";
     public static final String GET_ALL_TALENTS_URL = API_URL + "talents/get_all_talents";
-    public static final String GET_ALL_CATEGORIES_URL = API_URL + "categories/get_all_categories";
     public static final String GET_SELECTED_TALENT_DETAILS_URL = API_URL + "talents/get_talent_details";
     public static final String GET_UNAVAILABLE_DATES_URL = API_URL + "talents/get_talent_unavailable_dates";
     public static final String GET_BOOKING_LIST_BY_CLIENT_ID_URL = API_URL + "client/get_booking_list_by_client_id";
