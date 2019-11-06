@@ -46,7 +46,7 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class SetBookingDateAndTimeActivity extends AppCompatActivity{
+public class SetBookingDetailsActivity extends AppCompatActivity{
     @BindView(R.id.listDateSchedule) ListView listDateSchedule;
     @BindView(R.id.listTimeSchedule) ListView listTimeSchedule;
     @BindView(R.id.lblSelectedSchedule) TextView lblSelectedSchedule;
@@ -69,7 +69,7 @@ public class SetBookingDateAndTimeActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_set_booking_date_and_time);
+        setContentView(R.layout.activity_set_booking_details);
         ButterKnife.bind(this);
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
@@ -135,9 +135,9 @@ public class SetBookingDateAndTimeActivity extends AppCompatActivity{
         });
 
         btnSetBookingVenue.setOnClickListener(v -> {
-            LayoutInflater layoutInflaterAndroid = LayoutInflater.from(SetBookingDateAndTimeActivity.this);
+            LayoutInflater layoutInflaterAndroid = LayoutInflater.from(SetBookingDetailsActivity.this);
             View mView = layoutInflaterAndroid.inflate(R.layout.user_input_dialog_box, null);
-            AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(SetBookingDateAndTimeActivity.this, R.style.AlertDialogTheme);
+            AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(SetBookingDetailsActivity.this, R.style.AlertDialogTheme);
             alertDialogBuilderUserInput.setView(mView);
 
             final EditText userInputDialogEditText = mView.findViewById(R.id.userInputDialog);

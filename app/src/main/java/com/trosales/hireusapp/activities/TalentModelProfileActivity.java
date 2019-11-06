@@ -134,7 +134,7 @@ public class TalentModelProfileActivity extends AppCompatActivity implements Bas
         talentGallerySlider.addOnPageChangeListener(this);
 
         btnAddToBookingList.setOnClickListener(v -> {
-            Intent intent = new Intent(this, SetBookingDateAndTimeActivity.class);
+            Intent intent = new Intent(this, SetBookingDetailsActivity.class);
             Bundle bundle = new Bundle();
             bundle.putString("talent_fullname", talentFullname);
             bundle.putString("talent_profile_pic", talentProfilePic);

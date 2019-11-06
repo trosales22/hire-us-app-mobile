@@ -9,6 +9,7 @@ import androidx.appcompat.widget.AppCompatButton;
 import android.text.Html;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,7 +53,8 @@ public class CheckoutActivity extends AppCompatActivity {
     @BindView(R.id.btnCancelBooking) AppCompatButton btnCancelBooking;
     @BindView(R.id.card_multiline_widget) CardMultilineWidget cardMultilineWidget;
     @BindView(R.id.btnPayUsingDebitOrCreditCard) AppCompatButton btnPayUsingDebitOrCreditCard;
-    @BindView(R.id.btnPayUsingBankTransferOrDeposit) AppCompatButton btnPayUsingBankTransferOrDeposit;
+    @BindView(R.id.btnPayUsingBankDeposit) AppCompatButton btnPayUsingBankDeposit;
+    @BindView(R.id.btnPayUsingBankTransfer) AppCompatButton btnPayUsingBankTransfer;
 
     private String selectedDate, selectedTime, selectedVenue, selectedTalentId, selectedPaymentOption;
     private Bundle bundle;
@@ -179,7 +181,15 @@ public class CheckoutActivity extends AppCompatActivity {
             }
         });
 
-        btnPayUsingBankTransferOrDeposit.setOnClickListener(v -> addToTempBookingList(getClientBookingParams()));
+        btnPayUsingBankTransfer.setOnClickListener(v -> {
+            selectedPaymentOption = "BANK_TRANSFER";
+            addToTempBookingList(getTemporaryClientBookingParams());
+        });
+
+        btnPayUsingBankDeposit.setOnClickListener(v -> {
+            selectedPaymentOption = "BANK_DEPOSIT";
+            addToTempBookingList(getTemporaryClientBookingParams());
+        });
     }
 
     @Override
@@ -204,11 +214,25 @@ public class CheckoutActivity extends AppCompatActivity {
         return params;
     }
 
+    private HashMap<String, String> getTemporaryClientBookingParams(){
+        HashMap<String, String> params = new HashMap<>();
+        params.put("temp_talent_id", selectedTalentId);
+        params.put("temp_client_id", SharedPrefManager.getInstance(this).getUserId());
+        params.put("temp_booking_date", selectedDate);
+        params.put("temp_booking_time", selectedTime);
+        params.put("temp_total_amount", bundle.getString("total_amount"));
+        params.put("temp_payment_option", selectedPaymentOption);
+
+        return params;
+    }
+
     private void addToTempBookingList(HashMap<String, String> params){
         final ProgressDialog progressDialog = new ProgressDialog(CheckoutActivity.this);
         progressDialog.setMessage(Messages.PLEASE_WAIT_WHILE_ADDING_TO_BOOKING_LIST_MSG);
         progressDialog.setCancelable(false);
         progressDialog.show();
+
+        Log.d(Tags.CHECKOUT_ACTIVITY, "params: " + params.toString());
 
         AndroidNetworking.post(EndPoints.ADD_TO_TEMP_BOOKING_LIST_URL)
                 .addBodyParameter("temp_talent_id", params.get("temp_talent_id"))
@@ -217,7 +241,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 .addBodyParameter("temp_booking_time", params.get("temp_booking_time"))
                 .addBodyParameter("temp_booking_venue", selectedVenue)
                 .addBodyParameter("temp_total_amount", params.get("temp_total_amount"))
-                .addBodyParameter("temp_status", params.get("temp_status"))
+                .addBodyParameter("temp_status", "WAITING_FOR_PAYMENT")
                 .addBodyParameter("temp_payment_option", params.get("temp_payment_option"))
                 .setTag(Tags.CHECKOUT_ACTIVITY)
                 .setPriority(Priority.MEDIUM)
@@ -251,10 +275,10 @@ public class CheckoutActivity extends AppCompatActivity {
 
     private void getAddToTempBookingListResponse(JSONObject response){
         try {
-            String status = response.getString("status");
+            String status = response.getString("flag");
             String msg = response.has("msg") ? response.getString("msg") : "";
 
-            if(status.equals("OK")){
+            if(status.equals("1")){
                 finish();
                 startActivity(new Intent(this, MainActivity.class));
             }else{
