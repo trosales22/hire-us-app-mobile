@@ -29,8 +29,12 @@
         android:roundIcon="@drawable/hire_us_logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:ignore="GoogleAppIndexingWarning">
-
+        tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
+        <activity
+            android:name=".activities.AddReviewsActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/title_activity_add_reviews"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"

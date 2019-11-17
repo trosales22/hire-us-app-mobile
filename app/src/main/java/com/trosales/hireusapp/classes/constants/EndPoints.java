@@ -1,8 +1,11 @@
 package com.trosales.hireusapp.classes.constants;
 
 public class EndPoints {
-    //dev (just change the ip address)
-    private static final String BASE_URL = "http://192.168.1.10/hire-us/";
+    //local
+    private static final String BASE_URL = "http://192.168.1.8/hire-us/";
+    
+    //development
+    //private static final String BASE_URL = "https://hireusph-dev.tristanrosales.com/";
 
     //production
     //private static final String BASE_URL = "https://hireusph.com/";
@@ -25,4 +28,6 @@ public class EndPoints {
     public static final String GET_ALL_CLIENT_BOOKED_URL = API_URL + "talents/get_all_client_booked";
     public static final String GET_RESERVED_SCHEDULE_OF_TALENT = API_URL + "talents/get_reserved_schedule_talent";
     public static final String START_PAYMENT_URL = API_URL + "payment/start_payment";
+    public static final String GET_ALL_TALENT_CATEGORIES_URL = API_URL + "categories/get_all_categories";
+    public static final String GET_ALL_TALENT_BY_SELECTED_CATEGORY_URL = API_URL + "talents/get_all_talent_by_category";
 }

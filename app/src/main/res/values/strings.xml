@@ -34,6 +34,7 @@
     <string name="title_activity_booking_date_and_time">Booking Details</string>
     <string name="title_activity_checkout">Checkout</string>
     <string name="title_activity_payment">Payment</string>
+    <string name="title_activity_add_reviews">Add Reviews</string>
 
     <string name="str_all_selected">All Categories</string>
 
