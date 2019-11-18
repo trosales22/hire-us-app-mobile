@@ -21,12 +21,6 @@
             android:visible="false"
             tools:ignore="HardcodedText" />
         <item
-            android:id="@+id/nav_add_reviews"
-            android:icon="@drawable/ic_rate_review_black"
-            android:title="Add Reviews"
-            android:visible="false"
-            tools:ignore="HardcodedText" />
-        <item
             android:id="@+id/nav_check_availability"
             android:icon="@drawable/ic_schedule_black"
             android:title="Check Availability"

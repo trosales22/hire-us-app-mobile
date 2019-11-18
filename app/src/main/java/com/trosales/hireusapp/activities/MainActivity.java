@@ -274,8 +274,6 @@ public class MainActivity extends AppCompatActivity
             startActivity(new Intent(this, MainActivity.class));
         } else if (id == R.id.nav_booking_list) {
             startActivity(new Intent(this, BookingListActivity.class));
-        } else if(id == R.id.nav_add_reviews){
-            startActivity(new Intent(this, AddReviewsActivity.class));
         } else if (id == R.id.nav_clients_booked) {
             startActivity(new Intent(this, ClientsActivity.class));
         } else if (id == R.id.nav_check_availability) {
@@ -659,7 +657,6 @@ public class MainActivity extends AppCompatActivity
         switch (userRole){
             case "CLIENT_COMPANY": case "CLIENT_INDIVIDUAL":
                 navigationViewMenu.findItem(R.id.nav_booking_list).setVisible(true);
-                navigationViewMenu.findItem(R.id.nav_add_reviews).setVisible(true);
                 break;
             default:
                 navigationViewMenu.findItem(R.id.nav_clients_booked).setVisible(true);

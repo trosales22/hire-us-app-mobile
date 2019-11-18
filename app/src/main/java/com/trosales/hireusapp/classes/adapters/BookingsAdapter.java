@@ -1,5 +1,7 @@
 package com.trosales.hireusapp.classes.adapters;
 
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import androidx.annotation.NonNull;
@@ -9,8 +11,10 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.trosales.hireusapp.R;
@@ -22,6 +26,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
 public class BookingsAdapter extends RecyclerView.Adapter<BookingsAdapter.ViewHolder>{
     private List<ClientBookingsDO> clientBookingsDOList;
@@ -52,26 +57,47 @@ public class BookingsAdapter extends RecyclerView.Adapter<BookingsAdapter.ViewHo
                 .into(viewHolder.imgTalentDisplayPhoto);
 
         viewHolder.lblTalentFullname.setText(clientBookingsDO.getTalentDetails().getFullname());
-        viewHolder.lblTalentCategories.setText(clientBookingsDO.getTalentDetails().getCategoryNames());
-        viewHolder.lblTalentRatePerHour.setText(Html.fromHtml("&#8369;" + clientBookingsDO.getTalentDetails().getHourlyRate() + " per hour"));
         viewHolder.lblBookingPreferredDate.setText(clientBookingsDO.getPreferredBookingDate());
         viewHolder.lblBookingPreferredTime.setText(clientBookingsDO.getPreferredBookingTime());
         viewHolder.lblBookingPreferredVenue.setText(clientBookingsDO.getPreferredBookingVenue());
 
-        StringBuilder sbBookingOtherDetails = new StringBuilder();
-        sbBookingOtherDetails
-                .append("Payment Option: ")
-                .append(getPaymentOption(clientBookingsDO.getBookingPaymentOption()))
-                .append("\nDate Paid: ")
-                .append(clientBookingsDO.getBookingDatePaid())
-                .append("\nTotal Amount: ")
-                .append(Html.fromHtml("&#8369;"))
-                .append(clientBookingsDO.getBookingTotalAmount());
+        String sbBookingOtherDetails = "Payment Option: " +
+                getPaymentOption(clientBookingsDO.getBookingPaymentOption()) +
+                "\nDate Paid: " +
+                clientBookingsDO.getBookingDatePaid() +
+                "\nTotal Amount: " +
+                Html.fromHtml("&#8369;") +
+                clientBookingsDO.getBookingTotalAmount();
 
-        viewHolder.lblBookingOtherDetails.setText( sbBookingOtherDetails.toString());
-        viewHolder.btnMoreDetails.setOnClickListener(v -> {
+        viewHolder.lblBookingOtherDetails.setText(sbBookingOtherDetails);
+        viewHolder.btnTalentDetails.setOnClickListener(v -> {
             SharedPrefManager.getInstance(v.getContext()).saveTalentId(clientBookingsDO.getTalentDetails().getTalent_id());
             v.getContext().startActivity(new Intent(v.getContext(), TalentModelProfileActivity.class));
+        });
+
+        viewHolder.btnAddTalentReviews.setOnClickListener(v -> {
+            LayoutInflater layoutInflaterAndroid = LayoutInflater.from(v.getContext());
+            @SuppressLint("InflateParams") View mView = layoutInflaterAndroid.inflate(R.layout.dialog_add_talent_reviews, null);
+            AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(v.getContext(), R.style.AlertDialogTheme);
+            alertDialogBuilderUserInput.setView(mView);
+
+            EditText txtReviewsDescription = mView.findViewById(R.id.txtReviewsDescription);
+            MaterialRatingBar talentRatingBar = mView.findViewById(R.id.talentRatingBar);
+
+            //talentRatingBar.getRating();
+
+            alertDialogBuilderUserInput
+                    .setCancelable(false)
+                    .setPositiveButton("Submit", (dialogBox, id) -> {
+//                        selectedVenue = userInputDialogEditText.getText().toString().trim();
+//                        lblBookingVenueCaption.setText("Booking Venue: " + selectedVenue);
+                        Toast.makeText(context, "rating: " + talentRatingBar.getRating(), Toast.LENGTH_SHORT).show();
+                    })
+                    .setNegativeButton("Cancel",
+                            (dialogBox, id) -> dialogBox.cancel());
+
+            AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
+            alertDialogAndroid.show();
         });
     }
 
@@ -100,14 +126,12 @@ public class BookingsAdapter extends RecyclerView.Adapter<BookingsAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.imgTalentDisplayPhoto) ImageView imgTalentDisplayPhoto;
         @BindView(R.id.lblTalentFullname) TextView lblTalentFullname;
-        @BindView(R.id.lblTalentRatePerHour) TextView lblTalentRatePerHour;
-        @BindView(R.id.lblTalentCategories) TextView lblTalentCategories;
         @BindView(R.id.lblBookingPreferredDate)TextView lblBookingPreferredDate;
         @BindView(R.id.lblBookingPreferredTime) TextView lblBookingPreferredTime;
         @BindView(R.id.lblBookingPreferredVenue) TextView lblBookingPreferredVenue;
         @BindView(R.id.lblBookingOtherDetails) TextView lblBookingOtherDetails;
-        @BindView(R.id.btnMoreDetails) AppCompatButton btnMoreDetails;
-
+        @BindView(R.id.btnTalentDetails) AppCompatButton btnTalentDetails;
+        @BindView(R.id.btnAddTalentReviews) AppCompatButton btnAddTalentReviews;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
