@@ -2,12 +2,14 @@ package com.trosales.hireusapp.classes.adapters;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.RecyclerView;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,17 +18,31 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.squareup.picasso.Picasso;
 import com.trosales.hireusapp.R;
+import com.trosales.hireusapp.activities.CheckoutActivity;
 import com.trosales.hireusapp.activities.TalentModelProfileActivity;
 import com.trosales.hireusapp.classes.commons.SharedPrefManager;
+import com.trosales.hireusapp.classes.constants.EndPoints;
+import com.trosales.hireusapp.classes.constants.Messages;
+import com.trosales.hireusapp.classes.constants.Tags;
 import com.trosales.hireusapp.classes.wrappers.ClientBookingsDO;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
+import spencerstudios.com.ezdialoglib.EZDialog;
+import spencerstudios.com.ezdialoglib.Font;
 
 public class BookingsAdapter extends RecyclerView.Adapter<BookingsAdapter.ViewHolder>{
     private List<ClientBookingsDO> clientBookingsDOList;
@@ -84,14 +100,82 @@ public class BookingsAdapter extends RecyclerView.Adapter<BookingsAdapter.ViewHo
             EditText txtReviewsDescription = mView.findViewById(R.id.txtReviewsDescription);
             MaterialRatingBar talentRatingBar = mView.findViewById(R.id.talentRatingBar);
 
-            //talentRatingBar.getRating();
-
             alertDialogBuilderUserInput
                     .setCancelable(false)
                     .setPositiveButton("Submit", (dialogBox, id) -> {
-//                        selectedVenue = userInputDialogEditText.getText().toString().trim();
-//                        lblBookingVenueCaption.setText("Booking Venue: " + selectedVenue);
-                        Toast.makeText(context, "rating: " + talentRatingBar.getRating(), Toast.LENGTH_SHORT).show();
+                        if(txtReviewsDescription.getText().toString().trim().isEmpty()){
+                            txtReviewsDescription.setError("Please write some reviews..");
+                        }else{
+                            new EZDialog.Builder(context)
+                                    .setTitle("Review Confirmation")
+                                    .setMessage("Are you sure you want to submit this review?")
+                                    .setPositiveBtnText("Yes")
+                                    .setNegativeBtnText("No")
+                                    .setButtonTextColor(R.color.colorPrimaryDarker)
+                                    .setTitleTextColor(R.color.white)
+                                    .setMessageTextColor(R.color.black)
+                                    .setFont(Font.COMFORTAA)
+                                    .setCancelableOnTouchOutside(false)
+                                    .OnPositiveClicked(() -> {
+                                        final ProgressDialog progressDialog = new ProgressDialog(context);
+                                        progressDialog.setMessage(Messages.PLEASE_WAIT_MSG);
+                                        progressDialog.setCancelable(false);
+                                        progressDialog.show();
+
+                                        AndroidNetworking.post(EndPoints.ADD_TALENT_REVIEWS_URL)
+                                                .addBodyParameter("review_feedback", txtReviewsDescription.getText().toString().trim())
+                                                .addBodyParameter("review_rating", String.valueOf(talentRatingBar.getRating()))
+                                                .addBodyParameter("review_to", clientBookingsDO.getTalentDetails().getTalent_id())
+                                                .addBodyParameter("review_from", SharedPrefManager.getInstance(context).getUserId())
+                                                .setTag(Tags.BOOKING_LIST_ACTIVITY)
+                                                .setPriority(Priority.MEDIUM)
+                                                .build()
+                                                .getAsJSONObject(new JSONObjectRequestListener() {
+                                                    @Override
+                                                    public void onResponse(JSONObject response) {
+                                                        progressDialog.dismiss();
+                                                        try {
+                                                            String status = response.getString("flag");
+                                                            String msg = response.has("msg") ? response.getString("msg") : "";
+
+                                                            if(status.equals("1")){
+                                                                Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+                                                                dialogBox.dismiss();
+                                                            }else{
+                                                                Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        } catch (JSONException e) {
+                                                            progressDialog.dismiss();
+                                                            e.printStackTrace();
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onError(ANError anError) {
+                                                        progressDialog.dismiss();
+                                                        String errorResponse = "\n\nCode: " +
+                                                                anError.getErrorCode() +
+                                                                "\nDetail: " +
+                                                                anError.getErrorDetail() +
+                                                                "\nBody: " +
+                                                                anError.getErrorBody() +
+                                                                "\nResponse: " +
+                                                                anError.getResponse() +
+                                                                "\nMessage: " +
+                                                                anError.getMessage();
+
+                                                        Log.e(Tags.BOOKING_LIST_ACTIVITY, errorResponse);
+                                                    }
+                                                });
+                                    })
+                                    .OnNegativeClicked(() -> {
+                                        //todo
+                                    })
+                                    .build();
+                        }
+
+
+
                     })
                     .setNegativeButton("Cancel",
                             (dialogBox, id) -> dialogBox.cancel());
