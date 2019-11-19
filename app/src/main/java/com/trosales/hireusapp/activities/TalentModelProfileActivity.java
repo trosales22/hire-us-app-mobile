@@ -24,6 +24,7 @@ import com.trosales.hireusapp.classes.constants.EndPoints;
 import com.trosales.hireusapp.classes.constants.Tags;
 import com.trosales.hireusapp.classes.constants.Variables;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -67,11 +68,7 @@ public class TalentModelProfileActivity extends AppCompatActivity implements Bas
     @BindView(R.id.reviewsListView) ExpandableHeightListView reviewsListView;
     @BindView(R.id.talentGallerySlider) SliderLayout talentGallerySlider;
 
-    private int[] REVIEWEE_DISPLAY_PIC = {R.drawable.p1, R.drawable.p2, R.drawable.p3};
-    private String[] COMMENT = {"The best!", "Highly recommended!", "Awesome. Worth the fee!"};
-    private String[] RATING = {"4.5 rating", "5 rating", "4 rating"};
-    private String[] REVIEWEE = {"by Josh Saratan","by Albert Boholano","by Tristan Rosales"};
-
+    private ArrayList<Reviews> reviewsArrayList;
     private String talentFullname, talentProfilePic, talentRatePerHour, talentCategory;
 
     @Override
@@ -80,19 +77,10 @@ public class TalentModelProfileActivity extends AppCompatActivity implements Bas
         setContentView(R.layout.activity_talent_model_profile);
         ButterKnife.bind(this);
 
+        reviewsArrayList = new ArrayList<>();
+
         getTalentDetails();
-
-        ArrayList<Reviews> reviewsArrayList = new ArrayList<>();
-
-        for (int i= 0; i< COMMENT.length; i++){
-            Reviews reviews = new Reviews(REVIEWEE_DISPLAY_PIC[i], COMMENT[i], RATING[i], REVIEWEE[i]);
-            reviewsArrayList.add(reviews);
-        }
-
-        JayBaseAdapter baseAdapter = new JayBaseAdapter(TalentModelProfileActivity.this, reviewsArrayList) {
-        };
-
-        reviewsListView.setAdapter(baseAdapter);
+        getTalentReviews();
 
         linearLayoutShowMore.setOnClickListener(v -> {
             linearLayoutShowMoreDetails.setVisibility(View.VISIBLE);
@@ -147,15 +135,11 @@ public class TalentModelProfileActivity extends AppCompatActivity implements Bas
 
     @Override
     public void onSliderClick(BaseSliderView baseSliderView) {
-
     }
 
     private void getTalentDetails(){
-        StringBuilder sbParams = new StringBuilder();
-        sbParams.append("?talent_id={talent_id}");
-
         AndroidNetworking
-                .get(EndPoints.GET_SELECTED_TALENT_DETAILS_URL.concat(sbParams.toString()))
+                .get(EndPoints.GET_SELECTED_TALENT_DETAILS_URL.concat("?talent_id={talent_id}"))
                 .addPathParameter("talent_id", SharedPrefManager.getInstance(getApplicationContext()).getTalentId())
                 .setTag(Tags.TALENT_DETAILS_ACTIVITY)
                 .setPriority(Priority.MEDIUM)
@@ -231,6 +215,71 @@ public class TalentModelProfileActivity extends AppCompatActivity implements Bas
 
                                 lblTalentLocation.setText(sbLocation.toString());
                                 lblExperiencesOrPreviousClients.setText(response.getString("talent_experiences") + "\n");
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(Tags.TALENT_DETAILS_ACTIVITY, anError.getErrorDetail());
+                    }
+                });
+    }
+
+    private void getTalentReviews(){
+        AndroidNetworking
+                .get(EndPoints.GET_TALENT_REVIEWS_URL.concat("?talent_id={talent_id}"))
+                .addPathParameter("talent_id", SharedPrefManager.getInstance(getApplicationContext()).getTalentId())
+                .setTag(Tags.TALENT_DETAILS_ACTIVITY)
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @SuppressLint("SetTextI18n")
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            if(response.has("flag") && response.has("msg")){
+                                Log.d("debug", response.getString("msg"));
+                            }else{
+                                JSONArray array = response.getJSONArray("client_reviews_list");
+
+                                for (int i = 0; i < array.length(); i++) {
+                                    JSONObject object = array.getJSONObject(i);
+
+                                    int clientDisplayPhoto = 0;
+
+                                    switch (object.getJSONObject("review_from").getString("role_code")){
+                                        case "CLIENT_COMPANY":
+                                            clientDisplayPhoto = R.drawable.customer_company;
+                                            break;
+                                        case "CLIENT_INDIVIDUAL":
+                                            switch (object.getJSONObject("review_from").getString("gender")){
+                                                case "Male":
+                                                    clientDisplayPhoto = R.drawable.customer_male;
+                                                    break;
+                                                case "Female":
+                                                    clientDisplayPhoto = R.drawable.customer_female;
+                                                    break;
+                                            }
+
+                                            break;
+                                    }
+
+                                    Reviews reviews = new Reviews(
+                                            clientDisplayPhoto,
+                                            object.getString("review_feedback"),
+                                            object.getString("review_rating") + " rating",
+                                            "by " + object.getJSONObject("review_from").getString("fullname"));
+
+                                    reviewsArrayList.add(reviews);
+                                }
+
+                                JayBaseAdapter baseAdapter = new JayBaseAdapter(TalentModelProfileActivity.this, reviewsArrayList) {
+                                };
+
+                                reviewsListView.setAdapter(baseAdapter);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
