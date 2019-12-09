@@ -18,6 +18,7 @@ import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.trosales.hireusapp.R;
 import com.trosales.hireusapp.classes.beans.CategoryDetector;
 import com.trosales.hireusapp.classes.beans.Reviews;
+import com.trosales.hireusapp.classes.commons.AppSecurity;
 import com.trosales.hireusapp.classes.commons.SharedPrefManager;
 import com.trosales.hireusapp.classes.constants.CategoriesConstants;
 import com.trosales.hireusapp.classes.constants.EndPoints;
@@ -76,6 +77,8 @@ public class TalentModelProfileActivity extends AppCompatActivity implements Bas
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_talent_model_profile);
         ButterKnife.bind(this);
+
+        AppSecurity.disableScreenshotRecording(this);
 
         reviewsArrayList = new ArrayList<>();
 
@@ -162,7 +165,7 @@ public class TalentModelProfileActivity extends AppCompatActivity implements Bas
 
                                 StringBuilder sbFullnameAndAge = new StringBuilder();
                                 sbFullnameAndAge
-                                        .append(response.getString("fullname"))
+                                        .append(response.getString("screen_name"))
                                         .append(", ")
                                         .append(response.getString("age"))
                                         .append(" years old");

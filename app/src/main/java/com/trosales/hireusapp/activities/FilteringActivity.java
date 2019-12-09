@@ -14,6 +14,7 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.trosales.hireusapp.R;
 import com.trosales.hireusapp.classes.beans.CityMuni;
 import com.trosales.hireusapp.classes.beans.Provinces;
+import com.trosales.hireusapp.classes.commons.AppSecurity;
 import com.trosales.hireusapp.classes.commons.SharedPrefManager;
 import com.trosales.hireusapp.classes.constants.EndPoints;
 import com.trosales.hireusapp.classes.constants.Tags;
@@ -60,6 +61,8 @@ public class FilteringActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         Objects.requireNonNull(getSupportActionBar()).setTitle("Filtering Option");
         Objects.requireNonNull(getSupportActionBar()).setSubtitle("Filter by height,age,etc.");
+
+        AppSecurity.disableScreenshotRecording(this);
 
         provincesList = new ArrayList<>();
         cityMuniList = new ArrayList<>();

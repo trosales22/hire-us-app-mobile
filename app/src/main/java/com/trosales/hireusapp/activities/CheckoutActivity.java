@@ -25,6 +25,7 @@ import com.stripe.android.model.Card;
 import com.stripe.android.model.Token;
 import com.stripe.android.view.CardMultilineWidget;
 import com.trosales.hireusapp.R;
+import com.trosales.hireusapp.classes.commons.AppSecurity;
 import com.trosales.hireusapp.classes.commons.SharedPrefManager;
 import com.trosales.hireusapp.classes.constants.EndPoints;
 import com.trosales.hireusapp.classes.constants.Messages;
@@ -70,6 +71,8 @@ public class CheckoutActivity extends AppCompatActivity {
         stripe = new Stripe(getApplicationContext(), "pk_test_pHHixfchBGl7tkRAanAoe7TN00O13SSzVp");
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+
+        AppSecurity.disableScreenshotRecording(this);
 
         bundle = getIntent().getExtras();
         selectedDate = Objects.requireNonNull(bundle).getString("temp_booking_date");

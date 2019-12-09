@@ -26,6 +26,7 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.trosales.hireusapp.R;
+import com.trosales.hireusapp.classes.commons.AppSecurity;
 import com.trosales.hireusapp.classes.commons.SharedPrefManager;
 import com.trosales.hireusapp.classes.constants.EndPoints;
 import com.trosales.hireusapp.classes.constants.Tags;
@@ -71,6 +72,8 @@ public class SetBookingDetailsActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_booking_details);
         ButterKnife.bind(this);
+
+        AppSecurity.disableScreenshotRecording(this);
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         bundle = getIntent().getExtras();

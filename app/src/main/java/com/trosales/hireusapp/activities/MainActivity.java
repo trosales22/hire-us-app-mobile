@@ -35,6 +35,7 @@ import com.trosales.hireusapp.R;
 import com.trosales.hireusapp.classes.adapters.TalentsAdapter;
 import com.trosales.hireusapp.classes.beans.Location;
 import com.trosales.hireusapp.classes.commons.AndroidNetworkingShortcuts;
+import com.trosales.hireusapp.classes.commons.AppSecurity;
 import com.trosales.hireusapp.classes.commons.AutoFitGridLayoutManager;
 import com.trosales.hireusapp.classes.commons.SharedPrefManager;
 import com.trosales.hireusapp.classes.constants.EndPoints;
@@ -91,6 +92,8 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ButterKnife.bind(this);
+
+        AppSecurity.disableScreenshotRecording(this);
 
         if (!SharedPrefManager.getInstance(this).isLoggedIn()) {
             finish();
@@ -519,7 +522,7 @@ public class MainActivity extends AppCompatActivity
                     String[] selectedTimeList = selectedTime.split(",");
                     TalentsDO talentsDO = new TalentsDO(
                             object.getString("talent_id"),
-                            object.getString("fullname"),
+                            object.getString("screen_name"),
                             object.getString("height"),
                             object.getString("hourly_rate"),
                             object.getString("gender"),

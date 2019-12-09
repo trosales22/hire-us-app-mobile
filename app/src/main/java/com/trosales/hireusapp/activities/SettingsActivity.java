@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.trosales.hireusapp.R;
+import com.trosales.hireusapp.classes.commons.AppSecurity;
 
 import java.util.Objects;
 
@@ -16,6 +17,8 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+
+        AppSecurity.disableScreenshotRecording(this);
     }
 
     @Override

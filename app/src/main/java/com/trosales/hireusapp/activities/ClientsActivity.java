@@ -16,6 +16,7 @@ import com.ethanhua.skeleton.Skeleton;
 import com.ethanhua.skeleton.SkeletonScreen;
 import com.trosales.hireusapp.R;
 import com.trosales.hireusapp.classes.adapters.ClientsAdapter;
+import com.trosales.hireusapp.classes.commons.AppSecurity;
 import com.trosales.hireusapp.classes.commons.SharedPrefManager;
 import com.trosales.hireusapp.classes.constants.EndPoints;
 import com.trosales.hireusapp.classes.constants.Tags;
@@ -51,6 +52,8 @@ public class ClientsActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+
+        AppSecurity.disableScreenshotRecording(this);
 
         clientsBookedDOList = new ArrayList<>();
         handler = new Handler();

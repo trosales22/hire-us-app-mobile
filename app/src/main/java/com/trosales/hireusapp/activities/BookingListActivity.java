@@ -18,6 +18,7 @@ import com.ethanhua.skeleton.SkeletonScreen;
 import com.trosales.hireusapp.R;
 import com.trosales.hireusapp.classes.adapters.BookingsAdapter;
 import com.trosales.hireusapp.classes.beans.Location;
+import com.trosales.hireusapp.classes.commons.AppSecurity;
 import com.trosales.hireusapp.classes.commons.SharedPrefManager;
 import com.trosales.hireusapp.classes.constants.EndPoints;
 import com.trosales.hireusapp.classes.constants.Tags;
@@ -56,6 +57,8 @@ public class BookingListActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+
+        AppSecurity.disableScreenshotRecording(this);
 
         clientBookingsDOList = new ArrayList<>();
         handler = new Handler();
@@ -146,7 +149,7 @@ public class BookingListActivity extends AppCompatActivity {
 
                     TalentsDO talentsDO = new TalentsDO(
                             object.getJSONObject("talent_id").getString("talent_id"),
-                            object.getJSONObject("talent_id").getString("fullname"),
+                            object.getJSONObject("talent_id").getString("screen_name"),
                             object.getJSONObject("talent_id").getString("height"),
                             object.getJSONObject("talent_id").getString("hourly_rate"),
                             object.getJSONObject("talent_id").getString("gender"),
