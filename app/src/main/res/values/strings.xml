@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HIRE US</string>
+    <string name="app_name">Hire Us PH</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -11,9 +11,10 @@
     <string name="login_email_input_hint">Email or Username</string>
     <string name="password_input_hint">Password</string>
     <string name="login_button">LOG IN</string>
-    <string name="sign_up_button">SIGN UP</string>
+    <string name="individual_client_reg">INDIVIDUAL CLIENT</string>
+    <string name="company_client_reg">COMPANY CLIENT</string>
     <string name="forgot_password_button">Forgot Password?</string>
-    <string name="need_account_label">Need an account?</string>
+    <string name="need_account_label">Need an account? Sign up now!</string>
 
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>

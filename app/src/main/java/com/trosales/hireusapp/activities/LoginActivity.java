@@ -3,6 +3,8 @@ package com.trosales.hireusapp.activities;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.net.Uri;
 import android.os.Bundle;
 import androidx.appcompat.widget.AppCompatCheckBox;
 import android.text.method.HideReturnsTransformationMethod;
@@ -39,8 +41,8 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.chkShowPassword) AppCompatCheckBox chkShowPassword;
     @BindView(R.id.chkLoginAsTalentOrModel) AppCompatCheckBox chkLoginAsTalentOrModel;
     @BindView(R.id.btnLoginUser) StripedProcessButton btnLoginUser;
-    @BindView(R.id.btnGoToForgotPasswordPage)TextView btnGoToForgotPasswordPage;
-    @BindView(R.id.btnGoToSignUpPage) TextView btnGoToSignUpPage;
+    @BindView(R.id.btnGoToIndividualClientRegistration) TextView btnGoToIndividualClientRegistration;
+    @BindView(R.id.btnGoToCompanyClientRegistration) TextView btnGoToCompanyClientRegistration;
     @BindView(R.id.lblAppVersion) TextView lblAppVersion;
 
     private boolean loginAsTalent = false;
@@ -95,6 +97,27 @@ public class LoginActivity extends AppCompatActivity {
                             btnLoginUser.stop();
                         }, 500
                 );
+            }
+        });
+
+        btnGoToIndividualClientRegistration.setOnClickListener(view -> {
+            String url = EndPoints.BASE_URL + "client_individual_registration";
+            Uri uri = Uri.parse(url);
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            // Verify that the intent will resolve to an activity
+            if (intent.resolveActivity(getPackageManager()) != null) {
+                // Here we use an intent without a Chooser unlike the next example
+                startActivity(intent);
+            }
+        });
+
+        btnGoToCompanyClientRegistration.setOnClickListener(view -> {
+            String url = EndPoints.BASE_URL + "client_company_registration";
+            Uri uri = Uri.parse(url);
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            // Verify that the intent will resolve to an activity
+            if (intent.resolveActivity(getPackageManager()) != null) {
+                startActivity(intent);
             }
         });
     }
