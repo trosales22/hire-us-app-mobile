@@ -22,9 +22,8 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 import com.trosales.hireusapp.R;
-import com.trosales.hireusapp.activities.CheckoutActivity;
 import com.trosales.hireusapp.activities.TalentModelProfileActivity;
 import com.trosales.hireusapp.classes.commons.SharedPrefManager;
 import com.trosales.hireusapp.classes.constants.EndPoints;
@@ -36,7 +35,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -65,8 +63,8 @@ public class BookingsAdapter extends RecyclerView.Adapter<BookingsAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull BookingsAdapter.ViewHolder viewHolder, int i) {
         final ClientBookingsDO clientBookingsDO = clientBookingsDOList.get(i);
-        //insert logic here
-        Picasso
+
+        Glide
                 .with(context)
                 .load(clientBookingsDO.getTalentDetails().getTalentDisplayPhoto())
                 .placeholder(R.drawable.no_profile_pic)

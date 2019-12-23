@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 import com.trosales.hireusapp.R;
 import com.trosales.hireusapp.activities.TalentModelProfileActivity;
 import com.trosales.hireusapp.classes.beans.CategoryDetector;
@@ -50,7 +50,7 @@ public class TalentsAdapter extends RecyclerView.Adapter<TalentsAdapter.ViewHold
     public void onBindViewHolder(@NonNull TalentsAdapter.ViewHolder viewHolder, int i) {
         final TalentsDO talentsDO = talentsDOList.get(i);
 
-        Picasso
+        Glide
                 .with(context)
                 .load(talentsDO.getTalentDisplayPhoto())
                 .placeholder(R.drawable.no_profile_pic)

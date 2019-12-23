@@ -155,19 +155,6 @@
             android:background="@drawable/underline_labels"
             android:layout_marginBottom="10dp"/>
 
-        <TextView
-            android:id="@+id/lblAppVersion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|bottom"
-            android:gravity="center|bottom"
-            android:text="HIRE US PH"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:layout_marginBottom="20dp"
-            tools:ignore="HardcodedText" />
-
     </LinearLayout>
 
 </FrameLayout>

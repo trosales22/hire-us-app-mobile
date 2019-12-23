@@ -18,7 +18,6 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.github.nikartm.support.StripedProcessButton;
-import com.trosales.hireusapp.BuildConfig;
 import com.trosales.hireusapp.R;
 import com.trosales.hireusapp.classes.commons.AppSecurity;
 import com.trosales.hireusapp.classes.commons.SharedPrefManager;
@@ -43,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.btnLoginUser) StripedProcessButton btnLoginUser;
     @BindView(R.id.btnGoToIndividualClientRegistration) TextView btnGoToIndividualClientRegistration;
     @BindView(R.id.btnGoToCompanyClientRegistration) TextView btnGoToCompanyClientRegistration;
-    @BindView(R.id.lblAppVersion) TextView lblAppVersion;
+
 
     private boolean loginAsTalent = false;
 
@@ -57,8 +56,6 @@ public class LoginActivity extends AppCompatActivity {
         AndroidNetworking.initialize(getApplicationContext());
 
         AppSecurity.disableScreenshotRecording(this);
-
-        lblAppVersion.setText("HIRE US PH v" + BuildConfig.VERSION_NAME);
 
         if(SharedPrefManager.getInstance(this).isLoggedIn()){
             finish();

@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 import com.trosales.hireusapp.R;
 import com.trosales.hireusapp.classes.wrappers.ClientsBookedDO;
 
@@ -77,7 +77,7 @@ public class ClientsAdapter extends RecyclerView.Adapter<ClientsAdapter.ViewHold
                 break;
         }
 
-        Picasso
+        Glide
                 .with(context)
                 .load(clientDisplayPhoto)
                 .placeholder(R.drawable.customer_company)
