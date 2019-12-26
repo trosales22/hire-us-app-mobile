@@ -3,6 +3,8 @@ package com.trosales.hireusapp.activities;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
@@ -99,8 +101,13 @@ public class TalentModelProfileActivity extends AppCompatActivity implements Bas
 
 //         ********Slider*********
 
-        HashMap<String,Integer> file_maps = new HashMap<>();
-        file_maps.put("1", R.drawable.girl);
+        HashMap<String,String> file_maps = new HashMap<>();
+
+        if(talentProfilePic.isEmpty()){
+            file_maps.put("1", Uri.parse(getResources().getDrawable(R.drawable.no_profile_pic).toString()).toString());
+        }else{
+            file_maps.put("1", talentProfilePic);
+        }
 
         for(String name : file_maps.keySet()){
             TextSliderView textSliderView = new TextSliderView(this);
@@ -110,7 +117,6 @@ public class TalentModelProfileActivity extends AppCompatActivity implements Bas
 //                    .setScaleType(BaseSliderView.ScaleType.CenterInside)
                     .setScaleType(BaseSliderView.ScaleType.Fit)
                     .setOnSliderClickListener(this);
-
 
             textSliderView.bundle(new Bundle());
             textSliderView.getBundle().putString("extra", name);

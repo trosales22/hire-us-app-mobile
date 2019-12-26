@@ -22,7 +22,7 @@
         android:layout_gravity="bottom"
         android:gravity="center_horizontal"
         android:text="HIRE US PH"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:textStyle="bold"
         android:layout_below="@id/imgLogo"
         android:textColor="@color/white"
