@@ -3,10 +3,12 @@ package com.trosales.hireusapp.activities;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import com.google.android.material.snackbar.Snackbar;
 import androidx.core.view.GravityCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,13 +38,13 @@ import com.trosales.hireusapp.classes.adapters.TalentsAdapter;
 import com.trosales.hireusapp.classes.beans.Location;
 import com.trosales.hireusapp.classes.commons.AndroidNetworkingShortcuts;
 import com.trosales.hireusapp.classes.commons.AppSecurity;
-import com.trosales.hireusapp.classes.commons.AutoFitGridLayoutManager;
 import com.trosales.hireusapp.classes.commons.SharedPrefManager;
 import com.trosales.hireusapp.classes.constants.EndPoints;
 import com.trosales.hireusapp.classes.constants.Messages;
 import com.trosales.hireusapp.classes.constants.Tags;
 import com.trosales.hireusapp.classes.wrappers.TalentsDO;
 import com.yarolegovich.lovelydialog.LovelyChoiceDialog;
+import com.yarolegovich.lovelydialog.LovelyInfoDialog;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -115,30 +117,24 @@ public class MainActivity extends AppCompatActivity
                     .setTopColorRes(R.color.colorPrimary)
                     .setTitle("Choose Preferred Date")
                     .setIcon(R.drawable.ic_date_range_white)
-                    .setItemsMultiChoice(availableDateScheduleItems, new LovelyChoiceDialog.OnItemsSelectedListener<String>() {
-                                @Override
-                                public void onItemsSelected(List<Integer> datePositions, List<String> dateItems) {
-                                    selectedDate = TextUtils.join(",", dateItems);
-                                    extraFiltering.put("selectedDate", selectedDate);
+                    .setItemsMultiChoice(availableDateScheduleItems, (datePositions, dateItems) -> {
+                        selectedDate = TextUtils.join(",", dateItems);
+                        extraFiltering.put("selectedDate", selectedDate);
 
-                                    new LovelyChoiceDialog(MainActivity.this, R.style.TintTheme)
-                                            .setTopColorRes(R.color.colorPrimary)
-                                            .setTitle("Choose Preferred Time")
-                                            .setMessage("Selected date: " + selectedDate)
-                                            .setIcon(R.drawable.ic_access_time_white)
-                                            .setItemsMultiChoice(availableTimeScheduleItems, new LovelyChoiceDialog.OnItemsSelectedListener<String>() {
-                                                        @Override
-                                                        public void onItemsSelected(List<Integer> timePositions, List<String> timeItems) {
-                                                            selectedTime = TextUtils.join(",", timeItems);
-                                                            extraFiltering.put("selectedTime", selectedTime);
-                                                            getAllTalents(extraFiltering);
-                                                        }
-                                                    }
-                                            )
-                                            .setConfirmButtonText("Done")
-                                            .show();
+                        new LovelyChoiceDialog(MainActivity.this, R.style.TintTheme)
+                                .setTopColorRes(R.color.colorPrimary)
+                                .setTitle("Choose Preferred Time")
+                                .setMessage("Selected date: " + selectedDate)
+                                .setIcon(R.drawable.ic_access_time_white)
+                                .setItemsMultiChoice(availableTimeScheduleItems, (timePositions, timeItems) -> {
+                                    selectedTime = TextUtils.join(",", timeItems);
+                                    extraFiltering.put("selectedTime", selectedTime);
+                                    getAllTalents(extraFiltering);
                                 }
-                            }
+                                )
+                                .setConfirmButtonText("Done")
+                                .show();
+                    }
                     )
                     .setConfirmButtonText("Next")
                     .show();
@@ -150,14 +146,11 @@ public class MainActivity extends AppCompatActivity
                     .setTopColorRes(R.color.colorPrimary)
                     .setTitle("Choose Categories")
                     .setIcon(R.drawable.ic_account_circle_white)
-                    .setItemsMultiChoice(items, new LovelyChoiceDialog.OnItemsSelectedListener<String>() {
-                                @Override
-                                public void onItemsSelected(List<Integer> categoryPositions, List<String> categoryItems) {
-                                    selectedCategory = TextUtils.join(",", categoryItems);
-                                    extraFiltering.put("selectedCategory", selectedCategory);
-                                    getAllTalents(extraFiltering);
-                                }
-                            }
+                    .setItemsMultiChoice(items, (categoryPositions, categoryItems) -> {
+                        selectedCategory = TextUtils.join(",", categoryItems);
+                        extraFiltering.put("selectedCategory", selectedCategory);
+                        getAllTalents(extraFiltering);
+                    }
                     )
                     .setConfirmButtonText("Done")
                     .show();
@@ -181,8 +174,8 @@ public class MainActivity extends AppCompatActivity
         talentsDOList = new ArrayList<>();
         handler = new Handler();
 
-        AutoFitGridLayoutManager autoFitGridLayoutManager = new AutoFitGridLayoutManager(this, 500);
-        recyclerView_talents.setLayoutManager(autoFitGridLayoutManager);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+        recyclerView_talents.setLayoutManager(gridLayoutManager);
 
         skeletonScreen = Skeleton.bind(recyclerView_talents)
                 .adapter(talentsAdapter)
@@ -284,9 +277,21 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_logout) {
             showLogoutPrompt(Messages.CONFIRMATION_CAPTION, Messages.LOGOUT_PROMPT);
         } else if (id == R.id.nav_about_app) {
-            //go to about app
+            new LovelyInfoDialog(this)
+                    .setTopColorRes(R.color.colorPrimary)
+                    .setIcon(R.drawable.ic_info_outline_white)
+                    .setTitle("About Hire Us PH")
+                    .setMessage("A mobile app/web based booking application that will cater market in entertainment and events industry. " +
+                            "To have own payment system that allows customers/client to pay online in order to book using debit/credit card.\n\n" +
+                            "Founder:\n1. Josh Saratan\n2. Albert Boholano\n\nDeveloper: Tristan Jules B. Rosales\n")
+                    .show();
         } else if (id == R.id.nav_about_dev) {
-            //go to about dev
+            Uri uri = Uri.parse("https://tristanrosales.com/");
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            // Verify that the intent will resolve to an activity
+            if (intent.resolveActivity(getPackageManager()) != null) {
+                startActivity(intent);
+            }
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -522,7 +527,7 @@ public class MainActivity extends AppCompatActivity
                     String[] selectedTimeList = selectedTime.split(",");
                     TalentsDO talentsDO = new TalentsDO(
                             object.getString("talent_id"),
-                            object.getString("screen_name"),
+                            object.getString("screen_name").isEmpty() ? object.getString("fullname") : object.getString("screen_name"),
                             object.getString("height"),
                             object.getString("hourly_rate"),
                             object.getString("gender"),
@@ -607,16 +612,13 @@ public class MainActivity extends AppCompatActivity
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-        StringBuilder sbParams = new StringBuilder();
-        sbParams.append("?username_email={username_email}");
-
         String finalUrl = EndPoints.GET_PERSONAL_INFO_URL;
 
         if(SharedPrefManager.getInstance(this).getUserRole().equals("TALENT_MODEL")){
             finalUrl = EndPoints.GET_TALENT_PERSONAL_INFO_URL;
         }
 
-        AndroidNetworking.get(finalUrl.concat(sbParams.toString()))
+        AndroidNetworking.get(finalUrl.concat("?username_email={username_email}"))
                 .addPathParameter("username_email", SharedPrefManager.getInstance(MainActivity.this).getEmailOrUsername())
                 .setTag(Tags.MAIN_ACTIVITY)
                 .setPriority(Priority.LOW)

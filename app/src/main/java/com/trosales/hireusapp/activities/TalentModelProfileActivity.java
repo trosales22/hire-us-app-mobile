@@ -99,37 +99,6 @@ public class TalentModelProfileActivity extends AppCompatActivity implements Bas
             linearLayoutShowMore.setVisibility(View.VISIBLE);
         });
 
-//         ********Slider*********
-
-        HashMap<String,String> file_maps = new HashMap<>();
-
-        if(talentProfilePic.isEmpty()){
-            file_maps.put("1", Uri.parse(getResources().getDrawable(R.drawable.no_profile_pic).toString()).toString());
-        }else{
-            file_maps.put("1", talentProfilePic);
-        }
-
-        for(String name : file_maps.keySet()){
-            TextSliderView textSliderView = new TextSliderView(this);
-            textSliderView
-                    //  .description(name)
-                    .image(file_maps.get(name))
-//                    .setScaleType(BaseSliderView.ScaleType.CenterInside)
-                    .setScaleType(BaseSliderView.ScaleType.Fit)
-                    .setOnSliderClickListener(this);
-
-            textSliderView.bundle(new Bundle());
-            textSliderView.getBundle().putString("extra", name);
-
-            talentGallerySlider.addSlider(textSliderView);
-        }
-
-        talentGallerySlider.setPresetTransformer(SliderLayout.Transformer.Default);
-        talentGallerySlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
-        talentGallerySlider.setCustomAnimation(new ChildAnimationExample());
-        talentGallerySlider.setDuration(3000);
-        talentGallerySlider.addOnPageChangeListener(this);
-
         btnAddToBookingList.setOnClickListener(v -> {
             Intent intent = new Intent(this, SetBookingDetailsActivity.class);
             Bundle bundle = new Bundle();
@@ -166,12 +135,41 @@ public class TalentModelProfileActivity extends AppCompatActivity implements Bas
                                 talentRatePerHour = response.getString("hourly_rate");
                                 talentCategory = response.getString("category_names");
 
+                                HashMap<String,String> file_maps = new HashMap<>();
+
+                                if(talentProfilePic.isEmpty() || "null".equals(talentProfilePic)){
+                                    file_maps.put("1", Uri.parse(getResources().getDrawable(R.drawable.no_profile_pic).toString()).toString());
+                                }else{
+                                    file_maps.put("1", talentProfilePic);
+                                }
+
+                                for(String name : file_maps.keySet()){
+                                    TextSliderView textSliderView = new TextSliderView(getApplicationContext());
+                                    textSliderView
+                                            //  .description(name)
+                                            .image(file_maps.get(name))
+//                    .setScaleType(BaseSliderView.ScaleType.CenterInside)
+                                            .setScaleType(BaseSliderView.ScaleType.Fit)
+                                            .setOnSliderClickListener(TalentModelProfileActivity.this);
+
+                                    textSliderView.bundle(new Bundle());
+                                    textSliderView.getBundle().putString("extra", name);
+
+                                    talentGallerySlider.addSlider(textSliderView);
+                                }
+
+                                talentGallerySlider.setPresetTransformer(SliderLayout.Transformer.Default);
+                                talentGallerySlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+                                talentGallerySlider.setCustomAnimation(new ChildAnimationExample());
+                                talentGallerySlider.setDuration(3000);
+                                talentGallerySlider.addOnPageChangeListener(TalentModelProfileActivity.this);
+
                                 StringBuilder sbTalentDisplayPhoto = new StringBuilder();
                                 sbTalentDisplayPhoto.append(response.getString("talent_display_photo"));
 
                                 StringBuilder sbFullnameAndAge = new StringBuilder();
                                 sbFullnameAndAge
-                                        .append(response.getString("screen_name"))
+                                        .append(response.getString("screen_name").isEmpty() ? talentFullname : response.getString("screen_name"))
                                         .append(", ")
                                         .append(response.getString("age"))
                                         .append(" years old");
