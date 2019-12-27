@@ -296,7 +296,7 @@ public class SetBookingDetailsActivity extends AppCompatActivity{
 
     private void getAlreadyReservedScheduleOfTalent(){
         AndroidNetworking
-                .get(EndPoints.GET_ALREADY_RESERVED_SCHED_URL.concat("?talent_id={talent_id}"))
+                .get(EndPoints.GET_ALREADY_RESERVED_SCHEDULE_URL.concat("?talent_id={talent_id}"))
                 .addPathParameter("talent_id", SharedPrefManager.getInstance(getApplicationContext()).getTalentId())
                 .setTag(Tags.SET_BOOKING_DATE_AND_TIME_ACTIVITY)
                 .setPriority(Priority.MEDIUM)

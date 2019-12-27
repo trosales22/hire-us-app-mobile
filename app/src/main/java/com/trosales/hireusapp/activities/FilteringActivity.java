@@ -271,7 +271,7 @@ public class FilteringActivity extends AppCompatActivity {
         cityMuniList.add(new CityMuni("", "Choose City/Muni", ""));
 
         AndroidNetworking
-                .get(EndPoints.GET_ALL_CITY_MUNI_URL.concat(sbParams.toString()))
+                .get(EndPoints.GET_ALL_CITY_MUNI_BY_PROVINCE_CODE_URL.concat(sbParams.toString()))
                 .addPathParameter("province_code", provCode)
                 .setTag(Tags.FILTERING_ACTIVITY)
                 .setPriority(Priority.MEDIUM)
