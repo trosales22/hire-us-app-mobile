@@ -29,6 +29,18 @@
                     android:textSize="18sp"
                     tools:ignore="HardcodedText" />
 
+                <org.angmarch.views.NiceSpinner
+                    android:id="@+id/cmbRegion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:hint="Choose Region"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black"
+                    android:textSize="18sp"
+                    android:textAlignment="textStart"
+                    tools:ignore="HardcodedText" />
+
                 <LinearLayout
                     android:id="@+id/linearLayoutLocation"
                     android:layout_width="match_parent"
@@ -44,7 +56,7 @@
                         android:hint="Choose Province"
                         android:textColor="@color/black"
                         android:textColorHint="@color/black"
-                        android:textSize="18sp"
+                        android:textSize="15sp"
                         android:textAlignment="textStart"
                         tools:ignore="HardcodedText" />
 
@@ -57,7 +69,7 @@
                         android:hint="Choose City"
                         android:textColor="@color/black"
                         android:textColorHint="@color/black"
-                        android:textSize="18sp"
+                        android:textSize="15sp"
                         tools:ignore="HardcodedText" />
 
                 </LinearLayout>

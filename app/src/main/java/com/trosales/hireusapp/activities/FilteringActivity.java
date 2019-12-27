@@ -14,6 +14,7 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.trosales.hireusapp.R;
 import com.trosales.hireusapp.classes.beans.CityMuni;
 import com.trosales.hireusapp.classes.beans.Provinces;
+import com.trosales.hireusapp.classes.beans.Regions;
 import com.trosales.hireusapp.classes.commons.AppSecurity;
 import com.trosales.hireusapp.classes.commons.SharedPrefManager;
 import com.trosales.hireusapp.classes.constants.EndPoints;
@@ -36,6 +37,7 @@ import butterknife.ButterKnife;
 import me.abhinay.input.CurrencyEditText;
 
 public class FilteringActivity extends AppCompatActivity {
+    @BindView(R.id.cmbRegion) NiceSpinner cmbRegion;
     @BindView(R.id.cmbProvince) NiceSpinner cmbProvince;
     @BindView(R.id.cmbCity) NiceSpinner cmbCity;
     @BindView(R.id.cmbAgeFrom) NiceSpinner cmbAgeFrom;
@@ -47,10 +49,11 @@ public class FilteringActivity extends AppCompatActivity {
     @BindView(R.id.cmbGender) NiceSpinner cmbGender;
     @BindView(R.id.btnFilterNow) AppCompatButton btnFilterNow;
 
+    private List<Regions> regionsList;
     private List<Provinces> provincesList;
     private List<CityMuni> cityMuniList;
 
-    String selectedProvCode,selectedCityMuni;
+    String selectedRegionCode, selectedProvCode, selectedCityMuni;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,14 +67,20 @@ public class FilteringActivity extends AppCompatActivity {
 
         AppSecurity.disableScreenshotRecording(this);
 
+        regionsList = new ArrayList<>();
         provincesList = new ArrayList<>();
         cityMuniList = new ArrayList<>();
 
-        getAllProvinces();
+        getAllRegions();
+
+        cmbRegion.setOnSpinnerItemSelectedListener((parent, view, position, id) -> {
+            selectedRegionCode = regionsList.get(position).getRegionCode();
+            getAllProvincesByRegionCode(selectedRegionCode);
+        });
 
         cmbProvince.setOnSpinnerItemSelectedListener((parent, view, position, id) -> {
             selectedProvCode = provincesList.get(position).getProvinceCode();
-            getAllCityMuni(selectedProvCode);
+            getAllCityMuniByProvinceCode(selectedProvCode);
         });
 
         cmbCity.setOnSpinnerItemSelectedListener((parent, view, position, id) -> {
@@ -128,7 +137,55 @@ public class FilteringActivity extends AppCompatActivity {
         cmbAgeTo.attachDataSource(ageToList);
     }
 
-    private void getProvinceResponse(JSONObject response){
+    private void getAllRegions(){
+        regionsList.clear();
+        regionsList.add(new Regions("", "Choose Region", ""));
+
+        AndroidNetworking
+                .get(EndPoints.GET_ALL_REGIONS_URL)
+                .setTag(Tags.FILTERING_ACTIVITY)
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        getRegionResponse(response);
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e(Tags.FILTERING_ACTIVITY, anError.getErrorDetail());
+                    }
+                });
+    }
+
+    private void getRegionResponse(JSONObject response){
+        try {
+            JSONArray array = response.getJSONArray("region_list");
+
+            if(response.has("flag") && response.has("msg")){
+                Log.d("debug", response.getString("msg"));
+            }else{
+                for (int i = 0; i < array.length(); i++) {
+                    JSONObject object = array.getJSONObject(i);
+
+                    Regions regions = new Regions(
+                            object.getString("id"),
+                            object.getString("region_name"),
+                            object.getString("regCode")
+                    );
+
+                    regionsList.add(regions);
+                }
+
+                cmbRegion.attachDataSource(regionsList);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void getProvinceByRegionCodeResponse(JSONObject response){
         try {
             JSONArray array = response.getJSONArray("provinces_list");
 
@@ -154,19 +211,23 @@ public class FilteringActivity extends AppCompatActivity {
         }
     }
 
-    private void getAllProvinces(){
+    private void getAllProvincesByRegionCode(String regionCode){
         provincesList.clear();
         provincesList.add(new Provinces("", "Choose Province", ""));
 
+        StringBuilder sbParams = new StringBuilder();
+        sbParams.append("?region_code={region_code}");
+
         AndroidNetworking
-                .get(EndPoints.GET_ALL_PROVINCES_URL)
+                .get(EndPoints.GET_ALL_PROVINCES_BY_REGION_CODE_URL.concat(sbParams.toString()))
+                .addPathParameter("region_code", regionCode)
                 .setTag(Tags.FILTERING_ACTIVITY)
                 .setPriority(Priority.MEDIUM)
                 .build()
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        getProvinceResponse(response);
+                        getProvinceByRegionCodeResponse(response);
                     }
 
                     @Override
@@ -176,7 +237,7 @@ public class FilteringActivity extends AppCompatActivity {
                 });
     }
 
-    private void getCityMuniResponse(JSONObject response){
+    private void getCityMuniByProvinceCodeResponse(JSONObject response){
         try {
             JSONArray array = response.getJSONArray("city_muni_list");
 
@@ -202,7 +263,7 @@ public class FilteringActivity extends AppCompatActivity {
         }
     }
 
-    private void getAllCityMuni(String provCode){
+    private void getAllCityMuniByProvinceCode(String provCode){
         StringBuilder sbParams = new StringBuilder();
         sbParams.append("?province_code={province_code}");
 
@@ -218,7 +279,7 @@ public class FilteringActivity extends AppCompatActivity {
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        getCityMuniResponse(response);
+                        getCityMuniByProvinceCodeResponse(response);
                     }
 
                     @Override

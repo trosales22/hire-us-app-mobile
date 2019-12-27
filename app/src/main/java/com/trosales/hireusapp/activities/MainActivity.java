@@ -140,6 +140,16 @@ public class MainActivity extends AppCompatActivity
                     .show();
         });
 
+        btnSearchTalent.setOnClickListener(view -> {
+            new LovelyInfoDialog(this)
+                    .setTopColorRes(R.color.colorPrimary)
+                    .setIcon(R.drawable.ic_info_outline_white)
+                    .setTitle("Announcement")
+                    .setMessage("Search Talent Feature: Ongoing Development\n\nStay tuned for more updates. \nThank you for your patience.")
+                    .show();
+        });
+
+
         btnFilterCategory.setOnClickListener(v -> {
             String[] items = getResources().getStringArray(R.array.categories);
             new LovelyChoiceDialog(this, R.style.TintTheme)
@@ -321,7 +331,7 @@ public class MainActivity extends AppCompatActivity
 
     private void setMorningSchedule(){
         int initialValue = 1;
-        String meridian = " AM";
+        String meridian;
 
         availableTimeScheduleItems.add("12-1 AM");
 
@@ -330,6 +340,8 @@ public class MainActivity extends AppCompatActivity
 
             if(initialValue >= 12){
                 meridian = " PM";
+            }else{
+                meridian = " AM";
             }
 
             availableTimeScheduleItems.add(i + "-" + initialValue + meridian);
@@ -339,7 +351,7 @@ public class MainActivity extends AppCompatActivity
 
     private void setAfternoonSchedule(){
         int initialValue = 1;
-        String meridian = " AM";
+        String meridian;
 
         availableTimeScheduleItems.add("12-1 PM");
 
@@ -348,6 +360,8 @@ public class MainActivity extends AppCompatActivity
 
             if(initialValue >= 12){
                 meridian = " AM";
+            }else{
+                meridian = " PM";
             }
 
             availableTimeScheduleItems.add(i + "-" + initialValue + meridian);

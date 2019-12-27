@@ -77,6 +77,11 @@ public class TalentsAdapter extends RecyclerView.Adapter<TalentsAdapter.ViewHold
         viewHolder.lblTalentHourlyRate.setText(Html.fromHtml("&#8369;" + talentsDO.getHourlyRate()));
         viewHolder.lblTalentCategories.setText(talentsDO.getCategoryNames());
 
+        viewHolder.imgTalentDisplayPhoto.setOnClickListener(v -> {
+            SharedPrefManager.getInstance(v.getContext()).saveTalentId(talentsDO.getTalent_id());
+            v.getContext().startActivity(new Intent(v.getContext(), TalentModelProfileActivity.class));
+        });
+
         viewHolder.cardView_talents.setOnClickListener(v -> {
             SharedPrefManager.getInstance(v.getContext()).saveTalentId(talentsDO.getTalent_id());
             v.getContext().startActivity(new Intent(v.getContext(), TalentModelProfileActivity.class));

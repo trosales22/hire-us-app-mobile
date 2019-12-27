@@ -17,8 +17,8 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
-import com.squareup.picasso.Picasso;
 import com.stripe.android.ApiResultCallback;
 import com.stripe.android.Stripe;
 import com.stripe.android.model.Card;
@@ -30,6 +30,7 @@ import com.trosales.hireusapp.classes.commons.SharedPrefManager;
 import com.trosales.hireusapp.classes.constants.EndPoints;
 import com.trosales.hireusapp.classes.constants.Messages;
 import com.trosales.hireusapp.classes.constants.Tags;
+import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
@@ -80,7 +81,7 @@ public class CheckoutActivity extends AppCompatActivity {
         selectedVenue = Objects.requireNonNull(bundle).getString("selected_venue");
         selectedTalentId = Objects.requireNonNull(bundle).getString("temp_talent_id");
 
-        Picasso
+        Glide
                 .with(getApplicationContext())
                 .load(bundle.getString("talent_profile_pic"))
                 .placeholder(R.drawable.no_profile_pic)
@@ -184,13 +185,33 @@ public class CheckoutActivity extends AppCompatActivity {
         });
 
         btnPayUsingBankTransfer.setOnClickListener(v -> {
-            selectedPaymentOption = "BANK_TRANSFER";
-            addToTempBookingList(getTemporaryClientBookingParams());
+            new LovelyStandardDialog(this, LovelyStandardDialog.ButtonLayout.HORIZONTAL)
+                    .setTopColorRes(R.color.colorPrimary)
+                    .setButtonsColorRes(R.color.colorPrimary)
+                    .setIcon(R.drawable.ic_add_alert_white)
+                    .setTitle("Attention!")
+                    .setMessage("Please pay your booking fee via Bank Transfer to this account: 123456789\n\nNote: After you clicked Ok, you have 24hrs to pay your pending booking fee.\n\nThank you for supporting Hire Us PH.")
+                    .setPositiveButton(android.R.string.ok, v1 -> {
+                        selectedPaymentOption = "BANK_TRANSFER";
+                        addToTempBookingList(getTemporaryClientBookingParams());
+                    })
+                    .setNegativeButton(android.R.string.no, null)
+                    .show();
         });
 
         btnPayUsingBankDeposit.setOnClickListener(v -> {
-            selectedPaymentOption = "BANK_DEPOSIT";
-            addToTempBookingList(getTemporaryClientBookingParams());
+            new LovelyStandardDialog(this, LovelyStandardDialog.ButtonLayout.HORIZONTAL)
+                    .setTopColorRes(R.color.colorPrimary)
+                    .setButtonsColorRes(R.color.colorPrimary)
+                    .setIcon(R.drawable.ic_add_alert_white)
+                    .setTitle("Attention!")
+                    .setMessage("Please pay your booking fee via Bank Deposit to this account: 123456789\n\nNote: After you clicked Ok, you have 24hrs to pay your pending booking fee.\n\nThank you for supporting Hire Us PH.")
+                    .setPositiveButton(android.R.string.ok, v1 -> {
+                        selectedPaymentOption = "BANK_DEPOSIT";
+                        addToTempBookingList(getTemporaryClientBookingParams());
+                    })
+                    .setNegativeButton(android.R.string.no, null)
+                    .show();
         });
     }
 

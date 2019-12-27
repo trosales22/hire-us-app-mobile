@@ -242,7 +242,7 @@ public class SetBookingDetailsActivity extends AppCompatActivity{
 
     private void setMorningSchedule(String reservedTime){
         int initialValue = 1;
-        String meridian = " AM";
+        String meridian;
 
         if(reservedTime == null){
             availableTimeScheduleItems.add("12-1 AM");
@@ -255,6 +255,8 @@ public class SetBookingDetailsActivity extends AppCompatActivity{
 
             if(initialValue >= 12){
                 meridian = " PM";
+            }else{
+                meridian = " AM";
             }
 
             if(reservedTime == null){
@@ -267,7 +269,7 @@ public class SetBookingDetailsActivity extends AppCompatActivity{
 
     private void setAfternoonSchedule(String reservedTime){
         int initialValue = 1;
-        String meridian = " AM";
+        String meridian;
 
         if(reservedTime == null){
             availableTimeScheduleItems.add("12-1 PM");
@@ -280,6 +282,8 @@ public class SetBookingDetailsActivity extends AppCompatActivity{
 
             if(initialValue >= 12){
                 meridian = " AM";
+            }else{
+                meridian = " PM";
             }
 
             if(reservedTime == null){
@@ -291,11 +295,8 @@ public class SetBookingDetailsActivity extends AppCompatActivity{
     }
 
     private void getAlreadyReservedScheduleOfTalent(){
-        StringBuilder sbParams = new StringBuilder();
-        sbParams.append("?talent_id={talent_id}");
-
         AndroidNetworking
-                .get(EndPoints.GET_ALREADY_RESERVED_SCHED_URL.concat(sbParams.toString()))
+                .get(EndPoints.GET_ALREADY_RESERVED_SCHED_URL.concat("?talent_id={talent_id}"))
                 .addPathParameter("talent_id", SharedPrefManager.getInstance(getApplicationContext()).getTalentId())
                 .setTag(Tags.SET_BOOKING_DATE_AND_TIME_ACTIVITY)
                 .setPriority(Priority.MEDIUM)
