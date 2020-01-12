@@ -12,13 +12,12 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.trosales.hireusapp.R;
 import com.trosales.hireusapp.classes.commons.AppSecurity;
-import com.trosales.hireusapp.classes.commons.SharedPrefManager;
-import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
 import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import customfonts.MyTextView;
 
 public class SetBookingDetailsActivity extends AppCompatActivity{
@@ -31,8 +30,6 @@ public class SetBookingDetailsActivity extends AppCompatActivity{
     @BindView(R.id.txtBookingTalentFee) EditText txtBookingTalentFee;
     @BindView(R.id.btnProceed) AppCompatButton btnProceed;
 
-    private Bundle bundle;
-
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,52 +40,71 @@ public class SetBookingDetailsActivity extends AppCompatActivity{
         AppSecurity.disableScreenshotRecording(this);
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        bundle = getIntent().getExtras();
+        Bundle bookingBundleArgs = getIntent().getExtras();
 
         Glide
                 .with(getApplicationContext())
-                .load(bundle.getString("talent_profile_pic"))
+                .load(bookingBundleArgs.getString("talent_profile_pic"))
                 .placeholder(R.drawable.no_profile_pic)
                 .into(imgTalentDisplayPhoto);
 
-        lblTalentFullname.setText(bundle.getString("talent_fullname"));
-        lblTalentCategories.setText(bundle.getString("talent_category"));
+        lblTalentFullname.setText(bookingBundleArgs.getString("talent_fullname"));
+        lblTalentCategories.setText(bookingBundleArgs.getString("talent_category"));
 
         StringBuilder sbBookingDetails = new StringBuilder();
         sbBookingDetails
                 .append("Selected Date: \n")
-                .append(bundle.getString("selected_date")).append("\n\n")
+                .append(bookingBundleArgs.getString("selected_date")).append("\n\n")
                 .append("Selected Time: \n")
-                .append(bundle.getString("selected_time")).append("\n");
+                .append(bookingBundleArgs.getString("selected_time")).append("\n");
 
         lblSelectedSchedule.setText(sbBookingDetails.toString());
 
         btnProceed.setOnClickListener(v -> {
-            Intent intent = new Intent(this, CheckoutActivity.class);
-            bundle.putString("temp_booking_date", bundle.getString("selected_date"));
-            bundle.putString("temp_booking_time", bundle.getString("selected_time"));
-            bundle.putString("temp_talent_id", SharedPrefManager.getInstance(getApplicationContext()).getTalentId());
-            bundle.putString("talent_fullname", bundle.getString("talent_fullname"));
-            bundle.putString("talent_profile_pic", bundle.getString("talent_profile_pic"));
-            bundle.putString("talent_category", bundle.getString("talent_category"));
-            bundle.putString("booking_event_title", txtBookingEventTitle.getText().toString().trim());
-            bundle.putString("booking_preferred_venue", txtBookingVenueOrLocation.getText().toString().trim());
-            bundle.putString("booking_talent_fee", txtBookingTalentFee.getText().toString().trim());
 
-            intent.putExtras(bundle);
-            //startActivity(intent);
+            if(txtBookingEventTitle.getText().toString().trim().isEmpty()){
+                showErrorMessage("Please enter booking event title!");
+            } else if(txtBookingVenueOrLocation.getText().toString().trim().isEmpty()){
+                showErrorMessage("Please enter booking venue/location!");
+            } else if(txtBookingTalentFee.getText().toString().trim().isEmpty()){
+                showErrorMessage("Please enter booking fee!");
+            }else{
+//                Intent intent = new Intent(this, CheckoutActivity.class);
+//                bundle.putString("temp_booking_date", bundle.getString("selected_date"));
+//                bundle.putString("temp_booking_time", bundle.getString("selected_time"));
+//                bundle.putString("temp_talent_id", SharedPrefManager.getInstance(getApplicationContext()).getTalentId());
+//                bundle.putString("talent_fullname", bundle.getString("talent_fullname"));
+//                bundle.putString("talent_profile_pic", bundle.getString("talent_profile_pic"));
+//                bundle.putString("talent_category", bundle.getString("talent_category"));
+//                bundle.putString("booking_event_title", txtBookingEventTitle.getText().toString().trim());
+//                bundle.putString("booking_preferred_venue", txtBookingVenueOrLocation.getText().toString().trim());
+//                bundle.putString("booking_talent_fee", txtBookingTalentFee.getText().toString().trim());
+//                intent.putExtras(bundle);
+//                startActivity(intent);
 
-            new LovelyStandardDialog(this, LovelyStandardDialog.ButtonLayout.HORIZONTAL)
-                    .setTopColorRes(R.color.colorPrimary)
-                    .setButtonsColorRes(R.color.colorPrimary)
-                    .setIcon(R.drawable.ic_add_alert_white)
-                    .setTitle("Attention!")
-                    .setMessage("You've successfully booked a talent. Please wait for his/her confirmation or approval before paying via cash or any of the preferred payment option. \n\nThank you for supporting Hire Us PH.")
-                    .setPositiveButton(android.R.string.ok, v1 -> {
-                    })
-                    .setNegativeButton(android.R.string.no, null)
-                    .show();
+                new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("Are you sure?")
+                        .setContentText("Please check inputted details before proceeding.")
+                        .setConfirmText("Yes")
+                        .setConfirmClickListener(sDialog -> {
+                            new SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
+                                    .setTitleText("Congratulations!")
+                                    .setContentText("Booking successful! Please check your email for more info. Thank you.")
+                                    .setConfirmClickListener(sweetAlertDialog -> startActivity(new Intent(this, MainActivity.class)))
+                                    .show();
+                        })
+                        .setCancelText("No")
+                        .setCancelClickListener(SweetAlertDialog::dismissWithAnimation)
+                        .show();
+            }
         });
+    }
+
+    private void showErrorMessage(String msg){
+        new SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+                .setTitleText("Oops...")
+                .setContentText(msg)
+                .show();
     }
 
     @Override
