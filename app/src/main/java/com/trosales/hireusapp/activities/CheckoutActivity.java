@@ -45,7 +45,6 @@ import butterknife.ButterKnife;
 public class CheckoutActivity extends AppCompatActivity {
     @BindView(R.id.imgTalentDisplayPhoto) ImageView imgTalentDisplayPhoto;
     @BindView(R.id.lblTalentFullname) TextView lblTalentFullname;
-    @BindView(R.id.lblTalentRatePerHour) TextView lblTalentRatePerHour;
     @BindView(R.id.lblTalentCategories) TextView lblTalentCategories;
     @BindView(R.id.lblBookingPreferredDate)TextView lblBookingPreferredDate;
     @BindView(R.id.lblBookingPreferredTime) TextView lblBookingPreferredTime;
@@ -88,7 +87,6 @@ public class CheckoutActivity extends AppCompatActivity {
                 .into(imgTalentDisplayPhoto);
 
         lblTalentFullname.setText(bundle.getString("talent_fullname"));
-        lblTalentRatePerHour.setText(Html.fromHtml("&#8369;" + bundle.getString("talent_rate_per_hour") + " per hour"));
         lblTalentCategories.setText(bundle.getString("talent_category"));
         lblBookingPreferredDate.setText(selectedDate);
         lblBookingPreferredTime.setText(selectedTime);

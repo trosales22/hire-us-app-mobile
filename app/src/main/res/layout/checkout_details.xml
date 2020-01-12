@@ -55,24 +55,11 @@
                     card_view:ignore="HardcodedText" />
 
                 <TextView
-                    android:id="@+id/lblTalentRatePerHour"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toEndOf="@id/imgTalentDisplayPhoto"
-                    android:layout_below="@id/lblTalentFullname"
-                    android:paddingStart="5dp"
-                    android:textSize="18sp"
-                    android:textColor="@color/black"
-                    android:gravity="start"
-                    android:text="Rate Per Hour"
-                    card_view:ignore="HardcodedText,RtlSymmetry" />
-
-                <TextView
                     android:id="@+id/lblTalentCategories"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_toEndOf="@id/imgTalentDisplayPhoto"
-                    android:layout_below="@id/lblTalentRatePerHour"
+                    android:layout_below="@id/lblTalentFullname"
                     android:layout_marginStart="5dp"
                     android:layout_marginBottom="5dp"
                     android:background="@drawable/textview_border_style_color_primary"

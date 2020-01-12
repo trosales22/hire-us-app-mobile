@@ -12,9 +12,9 @@ android {
     }
     buildTypes {
         release {
-            //minifyEnabled false //use for development
-            minifyEnabled true //use for production
-            shrinkResources true //use for production
+            minifyEnabled false //use for development
+            //minifyEnabled true //use for production
+            //shrinkResources true //use for production
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

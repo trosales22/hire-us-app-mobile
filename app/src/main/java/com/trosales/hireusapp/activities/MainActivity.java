@@ -24,7 +24,6 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
@@ -51,11 +50,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -73,13 +68,10 @@ public class MainActivity extends AppCompatActivity
     @BindView(R.id.swipeToRefresh_talents) SwipeRefreshLayout swipeToRefresh_talents;
     @BindView(R.id.recyclerView_talents) RecyclerView recyclerView_talents;
     @BindView(R.id.tapBarMenu) TapBarMenu tapBarMenu;
-    @BindView(R.id.btnChoosePreferredDateAndTime) ImageView btnChoosePreferredDateAndTime;
     @BindView(R.id.btnSearchTalent) ImageView btnSearchTalent;
     @BindView(R.id.btnFilterCategory) ImageView btnFilterCategory;
-    @BindView(R.id.btnFilteringOption) ImageView btnFilteringOption;
 
-    private List<String> availableDateScheduleItems, availableTimeScheduleItems;
-    private String selectedCategory, selectedDate = "", selectedTime = "", reservedDate, reservedTime;
+    private String selectedCategory, reservedDate, reservedTime;
     private HashMap<String, String> extraFiltering;
 
     private List<TalentsDO> talentsDOList;
@@ -102,52 +94,16 @@ public class MainActivity extends AppCompatActivity
             startActivity(new Intent(this, LoginActivity.class));
         }
 
-        availableDateScheduleItems = new ArrayList<>();
-        availableTimeScheduleItems = new ArrayList<>();
         extraFiltering = new HashMap<>();
-
-        availableDateScheduleItems = getDatesUpToSpecificMonths(3);
-        setMorningSchedule();
-        setAfternoonSchedule();
 
         tapBarMenu.setOnClickListener(v -> tapBarMenu.toggle());
 
-        btnChoosePreferredDateAndTime.setOnClickListener(v -> {
-            new LovelyChoiceDialog(this, R.style.TintTheme)
-                    .setTopColorRes(R.color.colorPrimary)
-                    .setTitle("Choose Preferred Date")
-                    .setIcon(R.drawable.ic_date_range_white)
-                    .setItemsMultiChoice(availableDateScheduleItems, (datePositions, dateItems) -> {
-                        selectedDate = TextUtils.join(",", dateItems);
-                        extraFiltering.put("selectedDate", selectedDate);
-
-                        new LovelyChoiceDialog(MainActivity.this, R.style.TintTheme)
-                                .setTopColorRes(R.color.colorPrimary)
-                                .setTitle("Choose Preferred Time")
-                                .setMessage("Selected date: " + selectedDate)
-                                .setIcon(R.drawable.ic_access_time_white)
-                                .setItemsMultiChoice(availableTimeScheduleItems, (timePositions, timeItems) -> {
-                                    selectedTime = TextUtils.join(",", timeItems);
-                                    extraFiltering.put("selectedTime", selectedTime);
-                                    getAllTalents(extraFiltering);
-                                }
-                                )
-                                .setConfirmButtonText("Done")
-                                .show();
-                    }
-                    )
-                    .setConfirmButtonText("Next")
-                    .show();
-        });
-
-        btnSearchTalent.setOnClickListener(view -> {
-            new LovelyInfoDialog(this)
-                    .setTopColorRes(R.color.colorPrimary)
-                    .setIcon(R.drawable.ic_info_outline_white)
-                    .setTitle("Announcement")
-                    .setMessage("Search Talent Feature: Ongoing Development\n\nStay tuned for more updates. \nThank you for your patience.")
-                    .show();
-        });
+        btnSearchTalent.setOnClickListener(view -> new LovelyInfoDialog(this)
+                .setTopColorRes(R.color.colorPrimary)
+                .setIcon(R.drawable.ic_info_outline_white)
+                .setTitle("Announcement")
+                .setMessage("Search Talent Feature: Ongoing Development\n\nStay tuned for more updates. \nThank you for your patience.")
+                .show());
 
 
         btnFilterCategory.setOnClickListener(v -> {
@@ -165,8 +121,6 @@ public class MainActivity extends AppCompatActivity
                     .setConfirmButtonText("Done")
                     .show();
         });
-
-        btnFilteringOption.setOnClickListener(v -> startActivity(new Intent(v.getContext(), FilteringActivity.class)));
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -307,65 +261,6 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    private List<String> getDatesUpToSpecificMonths(int months){
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-        Calendar c = Calendar.getInstance();
-        List<String> availableDatesList = new ArrayList<>();
-
-        try {
-            c.setTime(sdf.parse(sdf.format(new Date())));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        int maxDay = c.getActualMaximum(Calendar.DAY_OF_MONTH) * months;
-        for(int co=0; co<=maxDay; co++){
-            c.add(Calendar.DATE, 1);
-            availableDatesList.add(sdf.format(c.getTime()));
-        }
-
-        return availableDatesList;
-    }
-
-    private void setMorningSchedule(){
-        int initialValue = 1;
-        String meridian;
-
-        availableTimeScheduleItems.add("12-1 AM");
-
-        for(int i = 1; i <= 11; i++){
-            initialValue++;
-
-            if(initialValue >= 12){
-                meridian = " PM";
-            }else{
-                meridian = " AM";
-            }
-
-            availableTimeScheduleItems.add(i + "-" + initialValue + meridian);
-        }
-
-    }
-
-    private void setAfternoonSchedule(){
-        int initialValue = 1;
-        String meridian;
-
-        availableTimeScheduleItems.add("12-1 PM");
-
-        for(int i = 1; i <= 11; i++){
-            initialValue++;
-
-            if(initialValue >= 12){
-                meridian = " AM";
-            }else{
-                meridian = " PM";
-            }
-
-            availableTimeScheduleItems.add(i + "-" + initialValue + meridian);
-        }
     }
 
     private StringBuilder getParams(HashMap<String, String> filteringOption){
@@ -525,20 +420,13 @@ public class MainActivity extends AppCompatActivity
             if(response.has("flag") && response.has("msg")){
                 Log.d("debug", response.getString("msg"));
             }else{
-                boolean isAvailable = true;
-
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject object = array.getJSONObject(i);
                     getAllReservedScheduleOfTalent(object.getString("talent_id"));
 
-                    Log.d("debug", "selectedDate: " + selectedDate);
-                    Log.d("debug", "selectedTime: " + selectedTime);
-
                     Log.d("debug", "reservedDate: " + reservedDate);
                     Log.d("debug", "reservedTime: " + reservedTime);
 
-                    String[] selectedDateList = selectedDate.split(",");
-                    String[] selectedTimeList = selectedTime.split(",");
                     TalentsDO talentsDO = new TalentsDO(
                             object.getString("talent_id"),
                             object.getString("screen_name").isEmpty() ? object.getString("fullname") : object.getString("screen_name"),
@@ -557,31 +445,7 @@ public class MainActivity extends AppCompatActivity
                             )
                     );
 
-                    if(!selectedDate.isEmpty() && !selectedTime.isEmpty()) {
-                        for (String date : selectedDateList) {
-                            if (!reservedDate.contains(date)) {
-                                Log.d("debug", "WALANG NAKARESERVE NA DATE");
-
-                                for (String time : selectedTimeList) {
-                                    if (!reservedTime.contains(time)) {
-                                        Log.d("debug", "WALANG NAKARESERVE NA TIME");
-                                    } else {
-                                        Log.d("debug", "MAY NAKARESERVE NA TIME");
-                                        Toast.makeText(this, time + " was already reserved!", Toast.LENGTH_LONG).show();
-                                        isAvailable = false;
-                                    }
-                                }
-                            } else {
-                                isAvailable = false;
-                                Log.d("debug", "MAY NAKARESERVE NA DATE");
-                                Toast.makeText(this, date + " was already reserved!", Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    }
-
-                    if(isAvailable){
-                        talentsDOList.add(talentsDO);
-                    }
+                    talentsDOList.add(talentsDO);
                 }
             }
 

@@ -6,7 +6,6 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
-import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -72,9 +71,7 @@ public class TalentsAdapter extends RecyclerView.Adapter<TalentsAdapter.ViewHold
 
         Log.d("debug", "categories_detector: " + categoryDetector.toString());
 
-        detectCategory(categoryDetector, viewHolder);
-
-        viewHolder.lblTalentHourlyRate.setText(Html.fromHtml("&#8369;" + talentsDO.getHourlyRate()));
+        //detectCategory(categoryDetector, viewHolder);
         viewHolder.lblTalentCategories.setText(talentsDO.getCategoryNames());
 
         viewHolder.imgTalentDisplayPhoto.setOnClickListener(v -> {
@@ -104,7 +101,6 @@ public class TalentsAdapter extends RecyclerView.Adapter<TalentsAdapter.ViewHold
         @BindView(R.id.imgTalentDisplayPhoto) ImageView imgTalentDisplayPhoto;
         @BindView(R.id.lblTalentFullname) TextView lblTalentFullname;
         @BindView(R.id.lblTalentLocation) TextView lblTalentLocation;
-        @BindView(R.id.lblTalentHourlyRate) TextView lblTalentHourlyRate;
         @BindView(R.id.lblTalentCategories) TextView lblTalentCategories;
 
         public ViewHolder(@NonNull View itemView) {
@@ -113,11 +109,11 @@ public class TalentsAdapter extends RecyclerView.Adapter<TalentsAdapter.ViewHold
         }
     }
 
-    private void detectCategory(CategoryDetector categoryDetector, TalentsAdapter.ViewHolder viewHolder){
-        if(categoryDetector.isCelebrity()){
-            viewHolder.lblTalentHourlyRate.setVisibility(View.GONE);
-        }else{
-            viewHolder.lblTalentHourlyRate.setVisibility(View.VISIBLE);
-        }
-    }
+//    private void detectCategory(CategoryDetector categoryDetector, TalentsAdapter.ViewHolder viewHolder){
+//        if(categoryDetector.isCelebrity()){
+//            viewHolder.lblTalentHourlyRate.setVisibility(View.GONE);
+//        }else{
+//            viewHolder.lblTalentHourlyRate.setVisibility(View.VISIBLE);
+//        }
+//    }
 }

@@ -1,12 +1,12 @@
 package com.trosales.hireusapp.activities;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Html;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -26,13 +26,20 @@ import com.trosales.hireusapp.classes.constants.CategoriesConstants;
 import com.trosales.hireusapp.classes.constants.EndPoints;
 import com.trosales.hireusapp.classes.constants.Tags;
 import com.trosales.hireusapp.classes.constants.Variables;
+import com.yarolegovich.lovelydialog.LovelyChoiceDialog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,9 +52,6 @@ import ws.wolfsoft.get_detail.SliderLayout;
 public class TalentModelProfileActivity extends AppCompatActivity implements BaseSliderView.OnSliderClickListener{
     @BindView(R.id.lblTalentFullname) MyTextView lblTalentFullname;
     @BindView(R.id.lblTalentCategory) MyTextView lblTalentCategory;
-    @BindView(R.id.linearLayoutHourlyRate) LinearLayout linearLayoutHourlyRate;
-    @BindView(R.id.lblTalentHourlyRateCaption) MyTextView lblTalentHourlyRateCaption;
-    @BindView(R.id.lblTalentHourlyRate) MyTextView lblTalentHourlyRate;
     @BindView(R.id.linearLayoutVitalStats) LinearLayout linearLayoutVitalStats;
     @BindView(R.id.lblTalentVitalStats) MyTextView lblTalentVitalStats;
     @BindView(R.id.linearLayoutTalentGenre) LinearLayout linearLayoutTalentGenre;
@@ -72,7 +76,8 @@ public class TalentModelProfileActivity extends AppCompatActivity implements Bas
     @BindView(R.id.talentGallerySlider) SliderLayout talentGallerySlider;
 
     private ArrayList<Reviews> reviewsArrayList;
-    private String talentFullname, talentProfilePic, talentRatePerHour, talentCategory;
+    private String talentFullName, talentProfilePic, selectedDate = "", selectedTime = "";
+    private List<String> availableDateScheduleItems, availableTimeScheduleItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +88,12 @@ public class TalentModelProfileActivity extends AppCompatActivity implements Bas
         AppSecurity.disableScreenshotRecording(this);
 
         reviewsArrayList = new ArrayList<>();
+        availableDateScheduleItems = new ArrayList<>();
+        availableTimeScheduleItems = new ArrayList<>();
+
+        availableDateScheduleItems = getDatesUpToSpecificMonths(3);
+        setMorningSchedule();
+        setAfternoonSchedule();
 
         getTalentDetails();
         getTalentReviews();
@@ -100,19 +111,101 @@ public class TalentModelProfileActivity extends AppCompatActivity implements Bas
         });
 
         btnAddToBookingList.setOnClickListener(v -> {
-            Intent intent = new Intent(this, SetBookingDetailsActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString("talent_fullname", talentFullname);
-            bundle.putString("talent_profile_pic", talentProfilePic);
-            bundle.putString("talent_rate_per_hour", talentRatePerHour);
-            bundle.putString("talent_category", talentCategory);
-            intent.putExtras(bundle);
-            startActivity(intent);
+            new LovelyChoiceDialog(this, R.style.TintTheme)
+                    .setTopColorRes(R.color.colorPrimary)
+                    .setTitle("Choose Preferred Date")
+                    .setIcon(R.drawable.ic_date_range_white)
+                    .setItemsMultiChoice(availableDateScheduleItems, (datePositions, dateItems) -> {
+                                selectedDate = TextUtils.join(",", dateItems);
+
+                                new LovelyChoiceDialog(TalentModelProfileActivity.this, R.style.TintTheme)
+                                        .setTopColorRes(R.color.colorPrimary)
+                                        .setTitle("Choose Preferred Time")
+                                        .setMessage("Selected date: " + selectedDate)
+                                        .setIcon(R.drawable.ic_access_time_white)
+                                        .setItemsMultiChoice(availableTimeScheduleItems, (timePositions, timeItems) -> {
+                                                    selectedTime = TextUtils.join(",", timeItems);
+
+                                                    Intent intent = new Intent(this, SetBookingDetailsActivity.class);
+                                                    Bundle bundle = new Bundle();
+                                                    bundle.putString("talent_fullname", talentFullName);
+                                                    bundle.putString("talent_profile_pic", talentProfilePic);
+                                                    bundle.putString("talent_category", lblTalentCategory.getText().toString().trim());
+                                                    bundle.putString("selected_date", selectedDate);
+                                                    bundle.putString("selected_time", selectedTime);
+                                                    intent.putExtras(bundle);
+                                                    startActivity(intent);
+                                                }
+                                        )
+                                        .setConfirmButtonText("Done")
+                                        .show();
+                            }
+                    )
+                    .setConfirmButtonText("Next")
+                    .show();
         });
     }
 
     @Override
     public void onSliderClick(BaseSliderView baseSliderView) {
+    }
+
+    private List<String> getDatesUpToSpecificMonths(int months){
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+        Calendar c = Calendar.getInstance();
+        List<String> availableDatesList = new ArrayList<>();
+
+        try {
+            c.setTime(Objects.requireNonNull(sdf.parse(sdf.format(new Date()))));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        int maxDay = c.getActualMaximum(Calendar.DAY_OF_MONTH) * months;
+        for(int co=0; co<=maxDay; co++){
+            c.add(Calendar.DATE, 1);
+            availableDatesList.add(sdf.format(c.getTime()));
+        }
+
+        return availableDatesList;
+    }
+
+    private void setMorningSchedule(){
+        int initialValue = 1;
+        String meridian;
+
+        availableTimeScheduleItems.add("12-1 AM");
+
+        for(int i = 1; i <= 11; i++){
+            initialValue++;
+
+            if(initialValue >= 12){
+                meridian = " PM";
+            }else{
+                meridian = " AM";
+            }
+
+            availableTimeScheduleItems.add(i + "-" + initialValue + meridian);
+        }
+    }
+
+    private void setAfternoonSchedule(){
+        int initialValue = 1;
+        String meridian;
+
+        availableTimeScheduleItems.add("12-1 PM");
+
+        for(int i = 1; i <= 11; i++){
+            initialValue++;
+
+            if(initialValue >= 12){
+                meridian = " AM";
+            }else{
+                meridian = " PM";
+            }
+
+            availableTimeScheduleItems.add(i + "-" + initialValue + meridian);
+        }
     }
 
     private void getTalentDetails(){
@@ -130,10 +223,8 @@ public class TalentModelProfileActivity extends AppCompatActivity implements Bas
                             if(response.has("flag") && response.has("msg")){
                                 Log.d("debug", response.getString("msg"));
                             }else{
-                                talentFullname = response.getString("fullname");
+                                talentFullName = response.getString("fullname");
                                 talentProfilePic = response.getString("talent_display_photo");
-                                talentRatePerHour = response.getString("hourly_rate");
-                                talentCategory = response.getString("category_names");
 
                                 HashMap<String,String> file_maps = new HashMap<>();
 
@@ -169,7 +260,7 @@ public class TalentModelProfileActivity extends AppCompatActivity implements Bas
 
                                 StringBuilder sbFullnameAndAge = new StringBuilder();
                                 sbFullnameAndAge
-                                        .append(response.getString("screen_name").isEmpty() ? talentFullname : response.getString("screen_name"))
+                                        .append(response.getString("screen_name").isEmpty() ? talentFullName : response.getString("screen_name"))
                                         .append(", ")
                                         .append(response.getString("age"))
                                         .append(" years old");
@@ -194,7 +285,6 @@ public class TalentModelProfileActivity extends AppCompatActivity implements Bas
 
                                 detectCategory(categoryDetector);
 
-                                lblTalentHourlyRate.setText(Html.fromHtml("&#8369;" + response.getString("hourly_rate")));
                                 lblTalentVitalStats.setText(response.getString("vital_stats"));
 
                                 String genre = response.getString("genre").isEmpty() ? "N/A" : response.getString("genre");
@@ -318,7 +408,6 @@ public class TalentModelProfileActivity extends AppCompatActivity implements Bas
             lblExperiencesOrPreviousClientsCaption.setText(Variables.PREVIOUS_CLIENTS);
         }else if(categoryDetector.isCelebrity()){
             linearLayoutTalentDescription.setVisibility(View.VISIBLE);
-            linearLayoutHourlyRate.setVisibility(View.GONE);
             linearLayoutVitalStats.setVisibility(View.GONE);
             linearLayoutLocation.setVisibility(View.GONE);
             linearLayoutTalentHeight.setVisibility(View.GONE);
@@ -327,7 +416,6 @@ public class TalentModelProfileActivity extends AppCompatActivity implements Bas
             btnAddToBookingList.setVisibility(View.GONE);
             btnInquireNow.setVisibility(View.VISIBLE);
         }else if(categoryDetector.isDancer() || categoryDetector.isDiskJockey()){
-            linearLayoutHourlyRate.setVisibility(View.GONE);
             btnAddToBookingList.setVisibility(View.GONE);
             btnInquireNow.setVisibility(View.VISIBLE);
         }

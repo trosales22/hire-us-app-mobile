@@ -54,15 +54,6 @@
         app:tbm_backgroundColor="@color/colorPrimary">
 
         <ImageView
-            android:id="@+id/btnChoosePreferredDateAndTime"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:src="@drawable/date_time" />
-
-        <ImageView
             android:id="@+id/btnSearchTalent"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -83,15 +74,6 @@
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
             android:src="@drawable/filter_category" />
-
-        <ImageView
-            android:id="@+id/btnFilteringOption"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:src="@drawable/filter" />
 
     </com.michaldrabik.tapbarmenulib.TapBarMenu>
 

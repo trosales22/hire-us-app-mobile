@@ -49,24 +49,10 @@
                 card_view:ignore="HardcodedText" />
 
             <TextView
-                android:id="@+id/lblTalentHourlyRate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/lblTalentFullname"
-                android:layout_marginStart="5dp"
-                android:layout_marginBottom="5dp"
-                android:textSize="12sp"
-                android:textColor="@color/orange"
-                android:textStyle="bold"
-                android:gravity="start"
-                android:text="Talent Hourly Rate"
-                card_view:ignore="HardcodedText,RtlSymmetry" />
-
-            <TextView
                 android:id="@+id/lblTalentCategories"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/lblTalentHourlyRate"
+                android:layout_below="@id/lblTalentFullname"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="10dp"
@@ -94,8 +80,6 @@
                 card_view:ignore="HardcodedText,RtlSymmetry" />
 
         </RelativeLayout>
-
-
 
     </androidx.cardview.widget.CardView>
 

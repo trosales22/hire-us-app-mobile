@@ -65,7 +65,7 @@
 
                     <customfonts.MyTextView
                         android:id="@+id/lblTalentCategory"
-                        android:layout_width="180dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/rect"
                         android:text="Category"
@@ -74,33 +74,6 @@
                         android:gravity="center"
                         tools:ignore="HardcodedText" />
 
-                    <LinearLayout
-                        android:id="@+id/linearLayoutHourlyRate"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:orientation="vertical">
-
-                        <customfonts.MyTextView
-                            android:id="@+id/lblTalentHourlyRateCaption"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Hourly Rate"
-                            android:textSize="20sp"
-                            android:textColor="@color/colorSub"
-                            tools:ignore="HardcodedText" />
-
-                        <customfonts.MyTextView
-                            android:id="@+id/lblTalentHourlyRate"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.8"
-                            android:text="&#8369;750.00"
-                            android:textSize="22sp"
-                            android:textColor="@color/colorTex"
-                            tools:ignore="HardcodedText" />
-                    </LinearLayout>
                 </LinearLayout>
 
                 <View
