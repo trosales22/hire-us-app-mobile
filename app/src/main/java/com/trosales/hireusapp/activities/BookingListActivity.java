@@ -139,7 +139,7 @@ public class BookingListActivity extends AppCompatActivity {
 
                     TalentsDO talentsDO = new TalentsDO(
                             object.getJSONObject("talent_id").getString("talent_id"),
-                            object.getJSONObject("talent_id").getString("screen_name"),
+                            object.getJSONObject("talent_id").getString("screen_name").isEmpty() ? object.getJSONObject("talent_id").getString("fullname") : object.getJSONObject("talent_id").getString("screen_name"),
                             object.getJSONObject("talent_id").getString("height"),
                             object.getJSONObject("talent_id").getString("hourly_rate"),
                             object.getJSONObject("talent_id").getString("gender"),

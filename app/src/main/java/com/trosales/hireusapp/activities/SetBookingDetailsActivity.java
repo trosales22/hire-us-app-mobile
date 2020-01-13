@@ -18,6 +18,7 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.bumptech.glide.Glide;
+import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 import com.trosales.hireusapp.R;
 import com.trosales.hireusapp.classes.commons.AppSecurity;
 import com.trosales.hireusapp.classes.constants.EndPoints;
@@ -33,7 +34,6 @@ import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.pedant.SweetAlert.SweetAlertDialog;
 import customfonts.MyTextView;
 
 public class SetBookingDetailsActivity extends AppCompatActivity{
