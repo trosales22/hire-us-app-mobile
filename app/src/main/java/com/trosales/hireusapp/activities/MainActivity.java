@@ -57,13 +57,14 @@ import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import cz.kinst.jakub.view.SimpleStatefulLayout;
 import spencerstudios.com.ezdialoglib.EZDialog;
 import spencerstudios.com.ezdialoglib.Font;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
-    private TextView lblLoggedInFullname,lblLoggedInRole;
+    private TextView lblLoggedInFullname, lblLoggedInRole;
     @BindView(R.id.stateful_layout) SimpleStatefulLayout simpleStatefulLayout;
     @BindView(R.id.swipeToRefresh_talents) SwipeRefreshLayout swipeToRefresh_talents;
     @BindView(R.id.recyclerView_talents) RecyclerView recyclerView_talents;
@@ -98,12 +99,13 @@ public class MainActivity extends AppCompatActivity
 
         tapBarMenu.setOnClickListener(v -> tapBarMenu.toggle());
 
-        btnSearchTalent.setOnClickListener(view -> new LovelyInfoDialog(this)
-                .setTopColorRes(R.color.colorPrimary)
-                .setIcon(R.drawable.ic_info_outline_white)
-                .setTitle("Announcement")
-                .setMessage("Search Talent Feature: Ongoing Development\n\nStay tuned for more updates. \nThank you for your patience.")
-                .show());
+        btnSearchTalent.setOnClickListener(view -> {
+            new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                    .setTitleText("Oops! We're sorry!")
+                    .setContentText("Ongoing development. Thank you for your patience.")
+                    .setConfirmText("Ok, I understand!")
+                    .show();
+        });
 
 
         btnFilterCategory.setOnClickListener(v -> {

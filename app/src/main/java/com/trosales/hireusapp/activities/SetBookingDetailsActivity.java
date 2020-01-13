@@ -61,14 +61,21 @@ public class SetBookingDetailsActivity extends AppCompatActivity{
         lblSelectedSchedule.setText(sbBookingDetails.toString());
 
         btnProceed.setOnClickListener(v -> {
-
             if(txtBookingEventTitle.getText().toString().trim().isEmpty()){
-                showErrorMessage("Please enter booking event title!");
-            } else if(txtBookingVenueOrLocation.getText().toString().trim().isEmpty()){
-                showErrorMessage("Please enter booking venue/location!");
-            } else if(txtBookingTalentFee.getText().toString().trim().isEmpty()){
-                showErrorMessage("Please enter booking fee!");
-            }else{
+                txtBookingEventTitle.setError("Please enter booking event title!");
+                return;
+            }
+
+            if(txtBookingVenueOrLocation.getText().toString().trim().isEmpty()){
+                txtBookingVenueOrLocation.setError("Please enter booking venue/location!");
+                return;
+            }
+
+            if(txtBookingTalentFee.getText().toString().trim().isEmpty()){
+                txtBookingTalentFee.setError("Please enter booking fee!");
+                return;
+            }
+
 //                Intent intent = new Intent(this, CheckoutActivity.class);
 //                bundle.putString("temp_booking_date", bundle.getString("selected_date"));
 //                bundle.putString("temp_booking_time", bundle.getString("selected_time"));
@@ -96,15 +103,7 @@ public class SetBookingDetailsActivity extends AppCompatActivity{
                         .setCancelText("No")
                         .setCancelClickListener(SweetAlertDialog::dismissWithAnimation)
                         .show();
-            }
         });
-    }
-
-    private void showErrorMessage(String msg){
-        new SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
-                .setTitleText("Oops...")
-                .setContentText(msg)
-                .show();
     }
 
     @Override

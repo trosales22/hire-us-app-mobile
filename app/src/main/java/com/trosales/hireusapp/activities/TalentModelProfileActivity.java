@@ -91,7 +91,7 @@ public class TalentModelProfileActivity extends AppCompatActivity implements Bas
         availableDateScheduleItems = new ArrayList<>();
         availableTimeScheduleItems = new ArrayList<>();
 
-        availableDateScheduleItems = getDatesUpToSpecificMonths(2);
+        availableDateScheduleItems = getDatesUpToSpecificMonths(1);
         setMorningSchedule();
         setAfternoonSchedule();
 
