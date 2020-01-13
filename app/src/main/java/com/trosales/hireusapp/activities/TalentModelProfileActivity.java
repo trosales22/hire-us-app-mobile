@@ -76,7 +76,7 @@ public class TalentModelProfileActivity extends AppCompatActivity implements Bas
     @BindView(R.id.talentGallerySlider) SliderLayout talentGallerySlider;
 
     private ArrayList<Reviews> reviewsArrayList;
-    private String talentFullName, talentProfilePic, selectedDate = "", selectedTime = "";
+    private String talentFullName, talentProfilePic, selectedDate = "", selectedTime = "", selectedTalentId = "";
     private List<String> availableDateScheduleItems, availableTimeScheduleItems;
 
     @Override
@@ -86,6 +86,9 @@ public class TalentModelProfileActivity extends AppCompatActivity implements Bas
         ButterKnife.bind(this);
 
         AppSecurity.disableScreenshotRecording(this);
+
+        Bundle talentProfileBundleArgs = getIntent().getExtras();
+        selectedTalentId = Objects.requireNonNull(talentProfileBundleArgs).getString("talent_id");
 
         reviewsArrayList = new ArrayList<>();
         availableDateScheduleItems = new ArrayList<>();
@@ -128,6 +131,8 @@ public class TalentModelProfileActivity extends AppCompatActivity implements Bas
 
                                                     Intent intent = new Intent(this, SetBookingDetailsActivity.class);
                                                     Bundle bundle = new Bundle();
+                                                    bundle.putString("talent_id", selectedTalentId);
+                                                    bundle.putString("client_id", SharedPrefManager.getInstance(this).getUserId());
                                                     bundle.putString("talent_fullname", talentFullName);
                                                     bundle.putString("talent_profile_pic", talentProfilePic);
                                                     bundle.putString("talent_category", lblTalentCategory.getText().toString().trim());
@@ -211,7 +216,7 @@ public class TalentModelProfileActivity extends AppCompatActivity implements Bas
     private void getTalentDetails(){
         AndroidNetworking
                 .get(EndPoints.GET_SELECTED_TALENT_DETAILS_URL.concat("?talent_id={talent_id}"))
-                .addPathParameter("talent_id", SharedPrefManager.getInstance(getApplicationContext()).getTalentId())
+                .addPathParameter("talent_id", selectedTalentId)
                 .setTag(Tags.TALENT_DETAILS_ACTIVITY)
                 .setPriority(Priority.MEDIUM)
                 .build()
@@ -328,7 +333,7 @@ public class TalentModelProfileActivity extends AppCompatActivity implements Bas
     private void getTalentReviews(){
         AndroidNetworking
                 .get(EndPoints.GET_TALENT_REVIEWS_URL.concat("?talent_id={talent_id}"))
-                .addPathParameter("talent_id", SharedPrefManager.getInstance(getApplicationContext()).getTalentId())
+                .addPathParameter("talent_id", selectedTalentId)
                 .setTag(Tags.TALENT_DETAILS_ACTIVITY)
                 .setPriority(Priority.MEDIUM)
                 .build()

@@ -18,7 +18,6 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.bumptech.glide.Glide;
-import com.google.android.material.snackbar.Snackbar;
 import com.stripe.android.ApiResultCallback;
 import com.stripe.android.Stripe;
 import com.stripe.android.model.Card;
@@ -26,7 +25,6 @@ import com.stripe.android.model.Token;
 import com.stripe.android.view.CardMultilineWidget;
 import com.trosales.hireusapp.R;
 import com.trosales.hireusapp.classes.commons.AppSecurity;
-import com.trosales.hireusapp.classes.commons.SharedPrefManager;
 import com.trosales.hireusapp.classes.constants.EndPoints;
 import com.trosales.hireusapp.classes.constants.Messages;
 import com.trosales.hireusapp.classes.constants.Tags;
@@ -36,7 +34,6 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -56,7 +53,7 @@ public class CheckoutActivity extends AppCompatActivity {
     @BindView(R.id.btnPayUsingBankDeposit) AppCompatButton btnPayUsingBankDeposit;
     @BindView(R.id.btnPayUsingBankTransfer) AppCompatButton btnPayUsingBankTransfer;
 
-    private String selectedDate, selectedTime, selectedVenue, selectedTalentId, selectedPaymentOption;
+    private String selectedDate, selectedTime, selectedVenue;
     private Bundle bundle;
 
     private Stripe stripe;
@@ -78,7 +75,6 @@ public class CheckoutActivity extends AppCompatActivity {
         selectedDate = Objects.requireNonNull(bundle).getString("temp_booking_date");
         selectedTime = Objects.requireNonNull(bundle).getString("temp_booking_time");
         selectedVenue = Objects.requireNonNull(bundle).getString("selected_venue");
-        selectedTalentId = Objects.requireNonNull(bundle).getString("temp_talent_id");
 
         Glide
                 .with(getApplicationContext())
@@ -105,7 +101,6 @@ public class CheckoutActivity extends AppCompatActivity {
         btnCancelBooking.setOnClickListener(v -> startActivity(new Intent(this, MainActivity.class)));
 
         btnPayUsingDebitOrCreditCard.setOnClickListener(v -> {
-            selectedPaymentOption = "DEBIT_CREDIT_CARD";
             final Card cardToSave = cardMultilineWidget.getCard();
 
             if (cardToSave == null) {
@@ -142,7 +137,6 @@ public class CheckoutActivity extends AppCompatActivity {
 
                                             if(status.equals("1")){
                                                 Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
-                                                addToClientBookingList(getClientBookingParams());
                                             }else{
                                                 Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                                             }
@@ -190,8 +184,6 @@ public class CheckoutActivity extends AppCompatActivity {
                     .setTitle("Attention!")
                     .setMessage("Please pay your booking fee via Bank Transfer to this account: 123456789\n\nNote: After you clicked Ok, you have 24hrs to pay your pending booking fee.\n\nThank you for supporting Hire Us PH.")
                     .setPositiveButton(android.R.string.ok, v1 -> {
-                        selectedPaymentOption = "BANK_TRANSFER";
-                        addToTempBookingList(getTemporaryClientBookingParams());
                     })
                     .setNegativeButton(android.R.string.no, null)
                     .show();
@@ -205,8 +197,6 @@ public class CheckoutActivity extends AppCompatActivity {
                     .setTitle("Attention!")
                     .setMessage("Please pay your booking fee via Bank Deposit to this account: 123456789\n\nNote: After you clicked Ok, you have 24hrs to pay your pending booking fee.\n\nThank you for supporting Hire Us PH.")
                     .setPositiveButton(android.R.string.ok, v1 -> {
-                        selectedPaymentOption = "BANK_DEPOSIT";
-                        addToTempBookingList(getTemporaryClientBookingParams());
                     })
                     .setNegativeButton(android.R.string.no, null)
                     .show();
@@ -221,154 +211,5 @@ public class CheckoutActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private HashMap<String, String> getClientBookingParams(){
-        HashMap<String, String> params = new HashMap<>();
-        params.put("talent_id", selectedTalentId);
-        params.put("client_id", SharedPrefManager.getInstance(this).getUserId());
-        params.put("preferred_date", selectedDate);
-        params.put("preferred_time", selectedTime);
-        params.put("total_amount", bundle.getString("total_amount"));
-        params.put("payment_option", selectedPaymentOption);
-
-        return params;
-    }
-
-    private HashMap<String, String> getTemporaryClientBookingParams(){
-        HashMap<String, String> params = new HashMap<>();
-        params.put("temp_talent_id", selectedTalentId);
-        params.put("temp_client_id", SharedPrefManager.getInstance(this).getUserId());
-        params.put("temp_booking_date", selectedDate);
-        params.put("temp_booking_time", selectedTime);
-        params.put("temp_total_amount", bundle.getString("total_amount"));
-        params.put("temp_payment_option", selectedPaymentOption);
-
-        return params;
-    }
-
-    private void addToTempBookingList(HashMap<String, String> params){
-        final ProgressDialog progressDialog = new ProgressDialog(CheckoutActivity.this);
-        progressDialog.setMessage(Messages.PLEASE_WAIT_WHILE_ADDING_TO_BOOKING_LIST_MSG);
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-
-        Log.d(Tags.CHECKOUT_ACTIVITY, "params: " + params.toString());
-
-        AndroidNetworking.post(EndPoints.ADD_TO_TEMP_BOOKING_LIST_URL)
-                .addBodyParameter("temp_talent_id", params.get("temp_talent_id"))
-                .addBodyParameter("temp_client_id", params.get("temp_client_id"))
-                .addBodyParameter("temp_booking_date", params.get("temp_booking_date"))
-                .addBodyParameter("temp_booking_time", params.get("temp_booking_time"))
-                .addBodyParameter("temp_booking_venue", selectedVenue)
-                .addBodyParameter("temp_total_amount", params.get("temp_total_amount"))
-                .addBodyParameter("temp_status", "WAITING_FOR_PAYMENT")
-                .addBodyParameter("temp_payment_option", params.get("temp_payment_option"))
-                .setTag(Tags.CHECKOUT_ACTIVITY)
-                .setPriority(Priority.MEDIUM)
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        progressDialog.dismiss();
-                        getAddToTempBookingListResponse(response);
-                    }
-
-                    @Override
-                    public void onError(ANError anError) {
-                        progressDialog.dismiss();
-                        String errorResponse = "\n\nCode: " +
-                                anError.getErrorCode() +
-                                "\nDetail: " +
-                                anError.getErrorDetail() +
-                                "\nBody: " +
-                                anError.getErrorBody() +
-                                "\nResponse: " +
-                                anError.getResponse() +
-                                "\nMessage: " +
-                                anError.getMessage();
-
-                        Log.e(Tags.CHECKOUT_ACTIVITY, errorResponse);
-                        Snackbar.make(findViewById(android.R.id.content), "Something's wrong! Please contact administrator.", Snackbar.LENGTH_LONG).show();
-                    }
-                });
-    }
-
-    private void getAddToTempBookingListResponse(JSONObject response){
-        try {
-            String status = response.getString("flag");
-            String msg = response.has("msg") ? response.getString("msg") : "";
-
-            if(status.equals("1")){
-                finish();
-                startActivity(new Intent(this, MainActivity.class));
-            }else{
-                //error message
-                Snackbar.make(findViewById(android.R.id.content), msg, Snackbar.LENGTH_SHORT).show();
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Snackbar.make(findViewById(android.R.id.content), "Something's wrong! Please contact administrator.", Snackbar.LENGTH_LONG).show();
-        }
-    }
-
-    private void addToClientBookingList(HashMap<String, String> params){
-        final ProgressDialog progressDialog = new ProgressDialog(CheckoutActivity.this);
-        progressDialog.setMessage(Messages.PLEASE_WAIT_WHILE_ADDING_TO_BOOKING_LIST_MSG);
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-
-        AndroidNetworking.post(EndPoints.ADD_TO_CLIENT_BOOKING_LIST_URL)
-                .addBodyParameter("talent_id", params.get("talent_id"))
-                .addBodyParameter("client_id", params.get("client_id"))
-                .addBodyParameter("preferred_date", params.get("preferred_date"))
-                .addBodyParameter("preferred_time", params.get("preferred_time"))
-                .addBodyParameter("preferred_venue", selectedVenue)
-                .addBodyParameter("total_amount", params.get("total_amount"))
-                .addBodyParameter("payment_option", params.get("payment_option"))
-                .setTag(Tags.CHECKOUT_ACTIVITY)
-                .setPriority(Priority.MEDIUM)
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        progressDialog.dismiss();
-                        getClientBookingResponse(response);
-                    }
-
-                    @Override
-                    public void onError(ANError anError) {
-                        progressDialog.dismiss();
-                        String errorResponse = "\n\nCode: " +
-                                anError.getErrorCode() +
-                                "\nDetail: " +
-                                anError.getErrorDetail() +
-                                "\nBody: " +
-                                anError.getErrorBody() +
-                                "\nResponse: " +
-                                anError.getResponse() +
-                                "\nMessage: " +
-                                anError.getMessage();
-
-                        Log.e(Tags.CHECKOUT_ACTIVITY, errorResponse);
-                    }
-                });
-    }
-
-    private void getClientBookingResponse(JSONObject response){
-        try {
-            String status = response.getString("status");
-            String msg = response.has("msg") ? response.getString("msg") : "";
-
-            if(status.equals("OK")){
-                finish();
-                Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getApplicationContext(), BookingListActivity.class));
-            }else{
-                Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
     }
 }

@@ -137,6 +137,26 @@
                         android:padding="10dp"
                         android:layout_gravity="top"
                         android:textColorHint="@color/black"
+                        android:layout_marginBottom="10dp"
+                        tools:ignore="HardcodedText" />
+
+                    <EditText
+                        android:id="@+id/txtBookingOtherDetails"
+                        android:layout_width="match_parent"
+                        android:layout_height="160sp"
+                        android:background="#d1d1d1"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:hint="Enter other booking details.."
+                        android:inputType="textFilter"
+                        android:singleLine="true"
+                        android:layout_below="@id/txtBookingTalentFee"
+                        android:maxLength="100"
+                        android:textColor="@color/black"
+                        android:textSize="21sp"
+                        android:textColorHint="@color/black"
+                        android:padding="10dp"
+                        android:gravity="top"
                         android:layout_marginBottom="30dp"
                         tools:ignore="HardcodedText" />
 
@@ -144,7 +164,7 @@
                         android:id="@+id/btnProceed"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
-                        android:layout_below="@id/txtBookingTalentFee"
+                        android:layout_below="@id/txtBookingOtherDetails"
                         android:background="@color/colorPrimary"
                         android:padding="15dp"
                         android:layout_marginStart="10dp"

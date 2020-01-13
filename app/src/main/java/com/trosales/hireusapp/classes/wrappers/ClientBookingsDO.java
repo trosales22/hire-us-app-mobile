@@ -4,17 +4,25 @@ import org.jetbrains.annotations.NotNull;
 
 public class ClientBookingsDO {
     private int bookingId;
-    private String preferredBookingDate, preferredBookingTime, preferredBookingVenue, bookingPaymentOption, bookingTotalAmount, bookingDatePaid;
+    private String bookingGeneratedId, bookingEventTitle, bookingTalentFee, bookingVenueLocation,
+            bookingPaymentOption,  bookingDate, bookingTime, bookingOtherDetails, bookingOfferStatus,
+            bookingCreatedDate, bookingDeclineReason, bookingApprovedOrDeclinedDate;
     private TalentsDO talentDetails;
 
-    public ClientBookingsDO(int bookingId, String preferredBookingDate, String preferredBookingTime, String preferredBookingVenue, String bookingPaymentOption, String bookingTotalAmount, String bookingDatePaid, TalentsDO talentDetails) {
+    public ClientBookingsDO(int bookingId, String bookingGeneratedId, String bookingEventTitle, String bookingTalentFee, String bookingVenueLocation, String bookingPaymentOption, String bookingDate, String bookingTime, String bookingOtherDetails, String bookingOfferStatus, String bookingCreatedDate, String bookingDeclineReason, String bookingApprovedOrDeclinedDate, TalentsDO talentDetails) {
         this.bookingId = bookingId;
-        this.preferredBookingDate = preferredBookingDate;
-        this.preferredBookingTime = preferredBookingTime;
-        this.preferredBookingVenue = preferredBookingVenue;
+        this.bookingGeneratedId = bookingGeneratedId;
+        this.bookingEventTitle = bookingEventTitle;
+        this.bookingTalentFee = bookingTalentFee;
+        this.bookingVenueLocation = bookingVenueLocation;
         this.bookingPaymentOption = bookingPaymentOption;
-        this.bookingTotalAmount = bookingTotalAmount;
-        this.bookingDatePaid = bookingDatePaid;
+        this.bookingDate = bookingDate;
+        this.bookingTime = bookingTime;
+        this.bookingOtherDetails = bookingOtherDetails;
+        this.bookingOfferStatus = bookingOfferStatus;
+        this.bookingCreatedDate = bookingCreatedDate;
+        this.bookingDeclineReason = bookingDeclineReason;
+        this.bookingApprovedOrDeclinedDate = bookingApprovedOrDeclinedDate;
         this.talentDetails = talentDetails;
     }
 
@@ -22,28 +30,52 @@ public class ClientBookingsDO {
         return bookingId;
     }
 
-    public String getPreferredBookingDate() {
-        return preferredBookingDate;
+    public String getBookingGeneratedId() {
+        return bookingGeneratedId;
     }
 
-    public String getPreferredBookingTime() {
-        return preferredBookingTime;
+    public String getBookingEventTitle() {
+        return bookingEventTitle;
     }
 
-    public String getPreferredBookingVenue() {
-        return preferredBookingVenue;
+    public String getBookingTalentFee() {
+        return bookingTalentFee;
+    }
+
+    public String getBookingVenueLocation() {
+        return bookingVenueLocation;
     }
 
     public String getBookingPaymentOption() {
         return bookingPaymentOption;
     }
 
-    public String getBookingTotalAmount() {
-        return bookingTotalAmount;
+    public String getBookingDate() {
+        return bookingDate;
     }
 
-    public String getBookingDatePaid() {
-        return bookingDatePaid;
+    public String getBookingTime() {
+        return bookingTime;
+    }
+
+    public String getBookingOtherDetails() {
+        return bookingOtherDetails;
+    }
+
+    public String getBookingOfferStatus() {
+        return bookingOfferStatus;
+    }
+
+    public String getBookingCreatedDate() {
+        return bookingCreatedDate;
+    }
+
+    public String getBookingDeclineReason() {
+        return bookingDeclineReason;
+    }
+
+    public String getBookingApprovedOrDeclinedDate() {
+        return bookingApprovedOrDeclinedDate;
     }
 
     public TalentsDO getTalentDetails() {
@@ -55,12 +87,18 @@ public class ClientBookingsDO {
     public String toString() {
         return "ClientBookingsDO{" +
                 "bookingId=" + bookingId +
-                ", preferredBookingDate='" + preferredBookingDate + '\'' +
-                ", preferredBookingTime='" + preferredBookingTime + '\'' +
-                ", preferredBookingVenue='" + preferredBookingVenue + '\'' +
+                ", bookingGeneratedId='" + bookingGeneratedId + '\'' +
+                ", bookingEventTitle='" + bookingEventTitle + '\'' +
+                ", bookingTalentFee='" + bookingTalentFee + '\'' +
+                ", bookingVenueLocation='" + bookingVenueLocation + '\'' +
                 ", bookingPaymentOption='" + bookingPaymentOption + '\'' +
-                ", bookingTotalAmount='" + bookingTotalAmount + '\'' +
-                ", bookingDatePaid='" + bookingDatePaid + '\'' +
+                ", bookingDate='" + bookingDate + '\'' +
+                ", bookingTime='" + bookingTime + '\'' +
+                ", bookingOtherDetails='" + bookingOtherDetails + '\'' +
+                ", bookingOfferStatus='" + bookingOfferStatus + '\'' +
+                ", bookingCreatedDate='" + bookingCreatedDate + '\'' +
+                ", bookingDeclineReason='" + bookingDeclineReason + '\'' +
+                ", bookingApprovedOrDeclinedDate='" + bookingApprovedOrDeclinedDate + '\'' +
                 ", talentDetails=" + talentDetails +
                 '}';
     }

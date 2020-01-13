@@ -6,6 +6,8 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +19,6 @@ import com.bumptech.glide.Glide;
 import com.trosales.hireusapp.R;
 import com.trosales.hireusapp.activities.TalentModelProfileActivity;
 import com.trosales.hireusapp.classes.beans.CategoryDetector;
-import com.trosales.hireusapp.classes.commons.SharedPrefManager;
 import com.trosales.hireusapp.classes.constants.CategoriesConstants;
 import com.trosales.hireusapp.classes.wrappers.TalentsDO;
 
@@ -75,13 +76,21 @@ public class TalentsAdapter extends RecyclerView.Adapter<TalentsAdapter.ViewHold
         viewHolder.lblTalentCategories.setText(talentsDO.getCategoryNames());
 
         viewHolder.imgTalentDisplayPhoto.setOnClickListener(v -> {
-            SharedPrefManager.getInstance(v.getContext()).saveTalentId(talentsDO.getTalent_id());
-            v.getContext().startActivity(new Intent(v.getContext(), TalentModelProfileActivity.class));
+            Intent intent = new Intent(v.getContext(), TalentModelProfileActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("talent_id", talentsDO.getTalent_id());
+
+            intent.putExtras(bundle);
+            v.getContext().startActivity(intent);
         });
 
         viewHolder.cardView_talents.setOnClickListener(v -> {
-            SharedPrefManager.getInstance(v.getContext()).saveTalentId(talentsDO.getTalent_id());
-            v.getContext().startActivity(new Intent(v.getContext(), TalentModelProfileActivity.class));
+            Intent intent = new Intent(v.getContext(), TalentModelProfileActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("talent_id", talentsDO.getTalent_id());
+
+            intent.putExtras(bundle);
+            v.getContext().startActivity(intent);
         });
 
         /*

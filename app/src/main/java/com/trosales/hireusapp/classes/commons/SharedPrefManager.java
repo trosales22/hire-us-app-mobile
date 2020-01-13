@@ -16,7 +16,6 @@ public class SharedPrefManager {
     private static final String KEY_USER = "keyUser";
     private static final String KEY_USER_ID = "keyUserId";
     private static final String KEY_USER_ROLE = "keyUserRole";
-    private static final String KEY_TALENT_ID = "keyTalentId";
     private static final String KEY_FILTER_PROVINCE = "keyFilterProvince";
     private static final String KEY_FILTER_CITY_MUNI = "keyFilterCityMuni";
     private static final String KEY_FILTER_AGE_FROM = "keyFilterAgeFrom";
@@ -64,14 +63,6 @@ public class SharedPrefManager {
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         editor.putString(KEY_USER_ID, userId);
-        editor.apply();
-    }
-
-    public void saveTalentId(String talentId){
-        SharedPreferences sharedPreferences = mContext.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        editor.putString(KEY_TALENT_ID, talentId);
         editor.apply();
     }
 
@@ -123,11 +114,6 @@ public class SharedPrefManager {
     public String getUserId(){
         SharedPreferences sharedPreferences = mContext.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getString(KEY_USER_ID,null);
-    }
-
-    public String getTalentId(){
-        SharedPreferences sharedPreferences = mContext.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        return sharedPreferences.getString(KEY_TALENT_ID,null);
     }
 
     public String getUserRole(){

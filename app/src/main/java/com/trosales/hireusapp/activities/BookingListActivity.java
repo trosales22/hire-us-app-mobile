@@ -38,12 +38,9 @@ import butterknife.ButterKnife;
 import cz.kinst.jakub.view.SimpleStatefulLayout;
 
 public class BookingListActivity extends AppCompatActivity {
-    @BindView(R.id.stateful_layout)
-    SimpleStatefulLayout simpleStatefulLayout;
-    @BindView(R.id.swipeToRefresh_bookingList)
-    SwipeRefreshLayout swipeToRefresh_bookingList;
-    @BindView(R.id.recyclerView_bookingList)
-    RecyclerView recyclerView_bookingList;
+    @BindView(R.id.stateful_layout) SimpleStatefulLayout simpleStatefulLayout;
+    @BindView(R.id.swipeToRefresh_bookingList) SwipeRefreshLayout swipeToRefresh_bookingList;
+    @BindView(R.id.recyclerView_bookingList) RecyclerView recyclerView_bookingList;
 
     private List<ClientBookingsDO> clientBookingsDOList;
     private BookingsAdapter bookingsAdapter;
@@ -101,11 +98,8 @@ public class BookingListActivity extends AppCompatActivity {
     }
 
     private void showAllBookings() {
-        StringBuilder sbParams = new StringBuilder();
-        sbParams.append("?client_id={client_id}");
-
         AndroidNetworking
-                .get(EndPoints.GET_BOOKING_LIST_BY_CLIENT_ID_URL.concat(sbParams.toString()))
+                .get(EndPoints.GET_BOOKING_LIST_BY_CLIENT_ID_URL.concat("?client_id={client_id}"))
                 .addPathParameter("client_id", SharedPrefManager.getInstance(getApplicationContext()).getUserId())
                 .setTag(Tags.BOOKING_LIST_ACTIVITY)
                 .setPriority(Priority.MEDIUM)
@@ -143,17 +137,13 @@ public class BookingListActivity extends AppCompatActivity {
                             object.getJSONObject("talent_id").getString("zip_code")
                     );
 
-                    StringBuilder sbTalentDisplayPhoto = new StringBuilder();
-                    sbTalentDisplayPhoto
-                            .append(object.getJSONObject("talent_id").getString("talent_display_photo"));
-
                     TalentsDO talentsDO = new TalentsDO(
                             object.getJSONObject("talent_id").getString("talent_id"),
                             object.getJSONObject("talent_id").getString("screen_name"),
                             object.getJSONObject("talent_id").getString("height"),
                             object.getJSONObject("talent_id").getString("hourly_rate"),
                             object.getJSONObject("talent_id").getString("gender"),
-                            sbTalentDisplayPhoto.toString(),
+                            object.getJSONObject("talent_id").getString("talent_display_photo"),
                             object.getJSONObject("talent_id").getString("category_names"),
                             Integer.parseInt(object.getJSONObject("talent_id").getString("age")),
                             location
@@ -161,12 +151,18 @@ public class BookingListActivity extends AppCompatActivity {
 
                     ClientBookingsDO clientBookingsDO = new ClientBookingsDO(
                             Integer.parseInt(object.getString("booking_id")),
-                            object.getString("preferred_date"),
-                            object.getString("preferred_time"),
-                            object.getString("preferred_venue"),
-                            object.getString("payment_option"),
-                            object.getString("total_amount"),
-                            object.getString("date_paid"),
+                            object.getString("booking_generated_id"),
+                            object.getString("booking_event_title"),
+                            object.getString("booking_talent_fee"),
+                            object.getString("booking_venue_location"),
+                            object.getString("booking_payment_option"),
+                            object.getString("booking_date"),
+                            object.getString("booking_time"),
+                            object.getString("booking_other_details"),
+                            object.getString("booking_offer_status"),
+                            object.getString("booking_created_date"),
+                            object.getString("booking_decline_reason"),
+                            object.getString("booking_approved_or_declined_date"),
                             talentsDO
                     );
 

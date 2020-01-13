@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity
     @BindView(R.id.btnSearchTalent) ImageView btnSearchTalent;
     @BindView(R.id.btnFilterCategory) ImageView btnFilterCategory;
 
-    private String selectedCategory, reservedDate, reservedTime;
+    private String selectedCategory;
     private HashMap<String, String> extraFiltering;
 
     private List<TalentsDO> talentsDOList;
@@ -218,7 +218,12 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            startActivity(new Intent(this, SettingsActivity.class));
+            //startActivity(new Intent(this, SettingsActivity.class));
+            new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                    .setTitleText("Oops! We're sorry!")
+                    .setContentText("Ongoing development. Thank you for your patience.")
+                    .setConfirmText("Ok, I understand!")
+                    .show();
         }else if(id == R.id.action_filtering_option){
             startActivity(new Intent(this, FilteringActivity.class));
         }
@@ -331,44 +336,6 @@ public class MainActivity extends AppCompatActivity
         return sbParams;
     }
 
-    private void getAllReservedScheduleOfTalent(String talent_id){
-        StringBuilder sbUrl = new StringBuilder();
-        sbUrl.append(EndPoints.GET_RESERVED_SCHEDULE_OF_TALENT);
-        sbUrl.append("?talent_id={talent_id}");
-
-        AndroidNetworking
-                .get(sbUrl.toString())
-                .addPathParameter("talent_id", talent_id)
-                .setTag(Tags.MAIN_ACTIVITY)
-                .setPriority(Priority.MEDIUM)
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            JSONArray array = response.getJSONArray("reserved_schedule_list");
-
-                            if(response.has("flag") && response.has("msg")){
-                                Log.d("debug", response.getString("msg"));
-                            }else{
-                                for (int i = 0; i < array.length(); i++) {
-                                    JSONObject object = array.getJSONObject(i);
-                                    reservedDate = object.getString("reserved_date");
-                                    reservedTime = object.getString("reserved_time");
-                                }
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onError(ANError anError) {
-                        Log.e(Tags.MAIN_ACTIVITY, anError.getErrorDetail());
-                    }
-                });
-    }
-
     private void getAllTalents(HashMap<String, String> extraFiltering){
         talentsDOList.clear();
         HashMap<String, String> filteringOption = SharedPrefManager.getInstance(this).getFilteringOption();
@@ -424,10 +391,6 @@ public class MainActivity extends AppCompatActivity
             }else{
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject object = array.getJSONObject(i);
-                    getAllReservedScheduleOfTalent(object.getString("talent_id"));
-
-                    Log.d("debug", "reservedDate: " + reservedDate);
-                    Log.d("debug", "reservedTime: " + reservedTime);
 
                     TalentsDO talentsDO = new TalentsDO(
                             object.getString("talent_id"),

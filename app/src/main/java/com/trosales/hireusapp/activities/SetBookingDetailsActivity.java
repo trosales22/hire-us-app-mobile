@@ -3,16 +3,32 @@ package com.trosales.hireusapp.activities;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.graphics.Color;
 import android.os.Bundle;
 import androidx.appcompat.widget.AppCompatButton;
+
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.bumptech.glide.Glide;
 import com.trosales.hireusapp.R;
 import com.trosales.hireusapp.classes.commons.AppSecurity;
+import com.trosales.hireusapp.classes.constants.EndPoints;
+import com.trosales.hireusapp.classes.constants.Messages;
+import com.trosales.hireusapp.classes.constants.Tags;
 
+import org.apache.commons.lang3.RandomStringUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -22,13 +38,16 @@ import customfonts.MyTextView;
 
 public class SetBookingDetailsActivity extends AppCompatActivity{
     @BindView(R.id.imgTalentDisplayPhoto) ImageView imgTalentDisplayPhoto;
-    @BindView(R.id.lblTalentFullname) MyTextView lblTalentFullname;
+    @BindView(R.id.lblTalentFullname) MyTextView lblTalentFullName;
     @BindView(R.id.lblTalentCategories) MyTextView lblTalentCategories;
     @BindView(R.id.lblSelectedSchedule) MyTextView lblSelectedSchedule;
     @BindView(R.id.txtBookingEventTitle) EditText txtBookingEventTitle;
     @BindView(R.id.txtBookingVenueOrLocation) EditText txtBookingVenueOrLocation;
     @BindView(R.id.txtBookingTalentFee) EditText txtBookingTalentFee;
+    @BindView(R.id.txtBookingOtherDetails) EditText txtBookingOtherDetails;
     @BindView(R.id.btnProceed) AppCompatButton btnProceed;
+
+    private String selectedDate, selectedTime, selectedClientId, selectedTalentId;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -48,15 +67,20 @@ public class SetBookingDetailsActivity extends AppCompatActivity{
                 .placeholder(R.drawable.no_profile_pic)
                 .into(imgTalentDisplayPhoto);
 
-        lblTalentFullname.setText(bookingBundleArgs.getString("talent_fullname"));
+        lblTalentFullName.setText(bookingBundleArgs.getString("talent_fullname"));
         lblTalentCategories.setText(bookingBundleArgs.getString("talent_category"));
+
+        selectedClientId = bookingBundleArgs.getString("client_id");
+        selectedTalentId = bookingBundleArgs.getString("talent_id");
+        selectedDate = bookingBundleArgs.getString("selected_date");
+        selectedTime = bookingBundleArgs.getString("selected_time");
 
         StringBuilder sbBookingDetails = new StringBuilder();
         sbBookingDetails
                 .append("Selected Date: \n")
-                .append(bookingBundleArgs.getString("selected_date")).append("\n\n")
+                .append(selectedDate).append("\n\n")
                 .append("Selected Time: \n")
-                .append(bookingBundleArgs.getString("selected_time")).append("\n");
+                .append(selectedTime).append("\n");
 
         lblSelectedSchedule.setText(sbBookingDetails.toString());
 
@@ -75,30 +99,13 @@ public class SetBookingDetailsActivity extends AppCompatActivity{
                 txtBookingTalentFee.setError("Please enter booking fee!");
                 return;
             }
-
-//                Intent intent = new Intent(this, CheckoutActivity.class);
-//                bundle.putString("temp_booking_date", bundle.getString("selected_date"));
-//                bundle.putString("temp_booking_time", bundle.getString("selected_time"));
-//                bundle.putString("temp_talent_id", SharedPrefManager.getInstance(getApplicationContext()).getTalentId());
-//                bundle.putString("talent_fullname", bundle.getString("talent_fullname"));
-//                bundle.putString("talent_profile_pic", bundle.getString("talent_profile_pic"));
-//                bundle.putString("talent_category", bundle.getString("talent_category"));
-//                bundle.putString("booking_event_title", txtBookingEventTitle.getText().toString().trim());
-//                bundle.putString("booking_preferred_venue", txtBookingVenueOrLocation.getText().toString().trim());
-//                bundle.putString("booking_talent_fee", txtBookingTalentFee.getText().toString().trim());
-//                intent.putExtras(bundle);
-//                startActivity(intent);
-
                 new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
                         .setTitleText("Are you sure?")
                         .setContentText("Please check inputted details before proceeding.")
                         .setConfirmText("Yes")
                         .setConfirmClickListener(sDialog -> {
-                            new SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
-                                    .setTitleText("Congratulations!")
-                                    .setContentText("Booking successful! Please check your email for more info. Thank you.")
-                                    .setConfirmClickListener(sweetAlertDialog -> startActivity(new Intent(this, MainActivity.class)))
-                                    .show();
+                            sDialog.dismissWithAnimation();
+                            addToBookingList(getBookingParams());
                         })
                         .setCancelText("No")
                         .setCancelClickListener(SweetAlertDialog::dismissWithAnimation)
@@ -114,5 +121,91 @@ public class SetBookingDetailsActivity extends AppCompatActivity{
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private HashMap<String, String> getBookingParams(){
+        HashMap<String, String> params = new HashMap<>();
+        params.put("talent_id", selectedTalentId);
+        params.put("client_id", selectedClientId);
+        params.put("booking_event_title", txtBookingEventTitle.getText().toString().trim());
+        params.put("booking_talent_fee", txtBookingTalentFee.getText().toString().trim());
+        params.put("booking_venue_location", txtBookingVenueOrLocation.getText().toString().trim());
+        params.put("booking_date", selectedDate);
+        params.put("booking_time", selectedTime);
+        params.put("booking_other_details", txtBookingOtherDetails.getText().toString().trim());
+
+        return params;
+    }
+
+    private void addToBookingList(HashMap<String, String> params){
+        SweetAlertDialog pDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
+        pDialog.getProgressHelper().setBarColor(Color.parseColor("#48b1bf"));
+        pDialog.setTitleText(Messages.PLEASE_WAIT_WHILE_ADDING_TO_BOOKING_LIST_MSG);
+        pDialog.setCancelable(false);
+        pDialog.show();
+
+        AndroidNetworking.post(EndPoints.ADD_TO_BOOKING_LIST_URL)
+                .addBodyParameter("booking_generated_id", RandomStringUtils.randomAlphanumeric(30).toUpperCase())
+                .addBodyParameter("talent_id", params.get("talent_id"))
+                .addBodyParameter("client_id", params.get("client_id"))
+                .addBodyParameter("booking_event_title", params.get("booking_event_title"))
+                .addBodyParameter("booking_talent_fee", params.get("booking_talent_fee"))
+                .addBodyParameter("booking_venue_location", params.get("booking_venue_location"))
+                .addBodyParameter("booking_date", params.get("booking_date"))
+                .addBodyParameter("booking_time", params.get("booking_time"))
+                .addBodyParameter("booking_other_details", params.get("booking_other_details"))
+                .setTag(Tags.SET_BOOKING_DATE_AND_TIME_ACTIVITY)
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        pDialog.dismiss();
+                        getClientBookingResponse(response);
+                    }
+
+                    @SuppressLint("LongLogTag")
+                    @Override
+                    public void onError(ANError anError) {
+                        pDialog.dismiss();
+                        String errorResponse = "\n\nCode: " +
+                                anError.getErrorCode() +
+                                "\nDetail: " +
+                                anError.getErrorDetail() +
+                                "\nBody: " +
+                                anError.getErrorBody() +
+                                "\nResponse: " +
+                                anError.getResponse() +
+                                "\nMessage: " +
+                                anError.getMessage();
+
+                        Log.e(Tags.SET_BOOKING_DATE_AND_TIME_ACTIVITY, errorResponse);
+                    }
+                });
+    }
+
+    private void getClientBookingResponse(JSONObject response){
+        try {
+            String status = response.getString("status");
+            String msg = response.has("msg") ? response.getString("msg") : "";
+
+            if(status.equals("OK")){
+                new SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
+                        .setTitleText("Congratulations!")
+                        .setContentText(msg)
+                        .setConfirmClickListener(sweetAlertDialog -> {
+                            finish();
+                            startActivity(new Intent(this, BookingListActivity.class));
+                        })
+                        .show();
+            }else{
+                new SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Oops..")
+                        .setContentText(msg)
+                        .show();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }
