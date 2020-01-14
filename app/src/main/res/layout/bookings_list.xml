@@ -21,7 +21,7 @@
             android:id="@+id/relativeLayoutTalentDetails"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp">
+            android:padding="8dp">
 
             <ImageView
                 android:id="@+id/imgTalentDisplayPhoto"
@@ -41,15 +41,15 @@
                 android:layout_toEndOf="@id/imgTalentDisplayPhoto"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 android:gravity="start"
-                android:text="Talent Fullname"
+                android:text="Talent Full Name"
                 card_view:ignore="HardcodedText" />
 
             <customfonts.MyTextView
-                android:id="@+id/lblTalentCategories"
+                android:id="@+id/lblBookingGeneratedId"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@id/imgTalentDisplayPhoto"
@@ -59,42 +59,10 @@
                 android:layout_marginBottom="5dp"
                 android:background="@drawable/textview_border_style_color_primary"
                 android:textStyle="bold"
-                android:textSize="17sp"
+                android:textSize="14sp"
                 android:padding="8dp"
                 android:textColor="@color/colorPrimaryDarker"
-                android:text="Categories"
-                card_view:ignore="HardcodedText" />
-
-            <customfonts.MyTextView
-                android:id="@+id/lblBookingGeneratedId"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/lblTalentCategories"
-                android:layout_marginTop="10dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="5dp"
-                android:textSize="16sp"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                android:gravity="start"
-                android:text="Booking Generated ID"
-                card_view:ignore="HardcodedText" />
-
-            <customfonts.MyTextView
-                android:id="@+id/lblBookingOfferStatus"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/lblBookingGeneratedId"
-                android:layout_marginTop="10dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="5dp"
-                android:textSize="16sp"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                android:gravity="start"
-                android:text="Booking Offer Status"
+                android:text="Booking Details"
                 card_view:ignore="HardcodedText" />
 
         </RelativeLayout>

@@ -158,7 +158,7 @@ public class BookingListActivity extends AppCompatActivity {
                             object.getString("booking_payment_option"),
                             object.getString("booking_date"),
                             object.getString("booking_time"),
-                            object.getString("booking_other_details"),
+                            object.getString("booking_other_details").isEmpty() ? "N/A" : object.getString("booking_other_details"),
                             object.getString("booking_offer_status"),
                             object.getString("booking_created_date"),
                             object.getString("booking_decline_reason"),

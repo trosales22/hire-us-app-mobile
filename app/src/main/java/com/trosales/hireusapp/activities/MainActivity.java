@@ -32,7 +32,6 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.ethanhua.skeleton.Skeleton;
 import com.ethanhua.skeleton.SkeletonScreen;
 import com.michaldrabik.tapbarmenulib.TapBarMenu;
-import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 import com.trosales.hireusapp.R;
 import com.trosales.hireusapp.classes.adapters.TalentsAdapter;
 import com.trosales.hireusapp.classes.beans.Location;
@@ -58,6 +57,7 @@ import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import cz.kinst.jakub.view.SimpleStatefulLayout;
 import spencerstudios.com.ezdialoglib.EZDialog;
 import spencerstudios.com.ezdialoglib.Font;

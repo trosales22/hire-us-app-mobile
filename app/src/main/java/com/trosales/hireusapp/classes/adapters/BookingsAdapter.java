@@ -7,7 +7,6 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,9 +74,7 @@ public class BookingsAdapter extends RecyclerView.Adapter<BookingsAdapter.ViewHo
         });
 
         viewHolder.lblTalentFullName.setText(clientBookingsDO.getTalentDetails().getFullname());
-        viewHolder.lblTalentCategories.setText(clientBookingsDO.getTalentDetails().getCategoryNames());
-        viewHolder.lblBookingGeneratedId.setText(Html.fromHtml("<b>Booking ID:</b>") + "\n" + clientBookingsDO.getBookingGeneratedId());
-        viewHolder.lblBookingOfferStatus.setText(Html.fromHtml("<b>Booking Offer Status:</b>") + "\n" + clientBookingsDO.getBookingOfferStatus());
+        viewHolder.lblBookingGeneratedId.setText(clientBookingsDO.getBookingGeneratedId());
     }
 
     @Override
@@ -89,9 +86,7 @@ public class BookingsAdapter extends RecyclerView.Adapter<BookingsAdapter.ViewHo
         @BindView(R.id.cardView_bookings) CardView cardView_bookings;
         @BindView(R.id.imgTalentDisplayPhoto) ImageView imgTalentDisplayPhoto;
         @BindView(R.id.lblTalentFullName) MyTextView lblTalentFullName;
-        @BindView(R.id.lblTalentCategories) MyTextView lblTalentCategories;
         @BindView(R.id.lblBookingGeneratedId) MyTextView lblBookingGeneratedId;
-        @BindView(R.id.lblBookingOfferStatus) MyTextView lblBookingOfferStatus;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
