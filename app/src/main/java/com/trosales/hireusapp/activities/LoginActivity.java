@@ -31,8 +31,7 @@ import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import spencerstudios.com.ezdialoglib.EZDialog;
-import spencerstudios.com.ezdialoglib.Font;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.frmLoginAccount_txtEmailOrUsername) EditText frmLoginAccount_txtEmailOrUsername;
@@ -120,20 +119,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onLoginFailed(String message) {
-        new EZDialog.Builder(this)
-                .setTitle(Messages.WARNING_MSG)
-                .setMessage(message)
-                .setPositiveBtnText(Messages.OKAY_MSG)
-                .setHeaderColor(R.color.white)
-                .setButtonTextColor(R.color.colorPrimary)
-                .setTitleTextColor(R.color.white)
-                .setMessageTextColor(R.color.black)
-                .setFont(Font.COMFORTAA)
-                .setCancelableOnTouchOutside(false)
-                .OnPositiveClicked(() -> {
-                    //todo
-                })
-                .build();
+        new SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+                .setTitleText(Messages.WARNING_MSG)
+                .setContentText(message)
+                .setConfirmClickListener(SweetAlertDialog::dismissWithAnimation)
+                .show();
     }
 
     public boolean validateInputs(String emailOrUsername, String password) {

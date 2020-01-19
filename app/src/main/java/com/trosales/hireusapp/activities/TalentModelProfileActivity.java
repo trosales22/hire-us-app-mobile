@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -26,19 +25,13 @@ import com.trosales.hireusapp.classes.constants.CategoriesConstants;
 import com.trosales.hireusapp.classes.constants.EndPoints;
 import com.trosales.hireusapp.classes.constants.Tags;
 import com.trosales.hireusapp.classes.constants.Variables;
-import com.yarolegovich.lovelydialog.LovelyChoiceDialog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -76,8 +69,7 @@ public class TalentModelProfileActivity extends AppCompatActivity implements Bas
     @BindView(R.id.talentGallerySlider) SliderLayout talentGallerySlider;
 
     private ArrayList<Reviews> reviewsArrayList;
-    private String talentFullName, talentProfilePic, selectedDate = "", selectedTime = "", selectedTalentId = "";
-    private List<String> availableDateScheduleItems, availableTimeScheduleItems;
+    private String talentFullName, talentProfilePic, selectedTalentId = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,12 +83,6 @@ public class TalentModelProfileActivity extends AppCompatActivity implements Bas
         selectedTalentId = Objects.requireNonNull(talentProfileBundleArgs).getString("talent_id");
 
         reviewsArrayList = new ArrayList<>();
-        availableDateScheduleItems = new ArrayList<>();
-        availableTimeScheduleItems = new ArrayList<>();
-
-        availableDateScheduleItems = getDatesUpToSpecificMonths(1);
-        setMorningSchedule();
-        setAfternoonSchedule();
 
         getTalentDetails();
         getTalentReviews();
@@ -114,103 +100,20 @@ public class TalentModelProfileActivity extends AppCompatActivity implements Bas
         });
 
         btnAddToBookingList.setOnClickListener(v -> {
-            new LovelyChoiceDialog(this, R.style.TintTheme)
-                    .setTopColorRes(R.color.colorPrimary)
-                    .setTitle("Choose Preferred Date")
-                    .setIcon(R.drawable.ic_date_range_white)
-                    .setItemsMultiChoice(availableDateScheduleItems, (datePositions, dateItems) -> {
-                                selectedDate = TextUtils.join(",", dateItems);
-
-                                new LovelyChoiceDialog(TalentModelProfileActivity.this, R.style.TintTheme)
-                                        .setTopColorRes(R.color.colorPrimary)
-                                        .setTitle("Choose Preferred Time")
-                                        .setMessage("Selected date: " + selectedDate)
-                                        .setIcon(R.drawable.ic_access_time_white)
-                                        .setItemsMultiChoice(availableTimeScheduleItems, (timePositions, timeItems) -> {
-                                                    selectedTime = TextUtils.join(",", timeItems);
-
-                                                    Intent intent = new Intent(this, SetBookingDetailsActivity.class);
-                                                    Bundle bundle = new Bundle();
-                                                    bundle.putString("talent_id", selectedTalentId);
-                                                    bundle.putString("client_id", SharedPrefManager.getInstance(this).getUserId());
-                                                    bundle.putString("talent_fullname", talentFullName);
-                                                    bundle.putString("talent_profile_pic", talentProfilePic);
-                                                    bundle.putString("talent_category", lblTalentCategory.getText().toString().trim());
-                                                    bundle.putString("selected_date", selectedDate);
-                                                    bundle.putString("selected_time", selectedTime);
-                                                    intent.putExtras(bundle);
-                                                    startActivity(intent);
-                                                }
-                                        )
-                                        .setConfirmButtonText("Done")
-                                        .show();
-                            }
-                    )
-                    .setConfirmButtonText("Next")
-                    .show();
+            Intent intent = new Intent(this, SetBookingDetailsActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("talent_id", selectedTalentId);
+            bundle.putString("client_id", SharedPrefManager.getInstance(this).getUserId());
+            bundle.putString("talent_full_name", talentFullName);
+            bundle.putString("talent_profile_pic", talentProfilePic);
+            bundle.putString("talent_category", lblTalentCategory.getText().toString().trim());
+            intent.putExtras(bundle);
+            startActivity(intent);
         });
     }
 
     @Override
     public void onSliderClick(BaseSliderView baseSliderView) {
-    }
-
-    private List<String> getDatesUpToSpecificMonths(int months){
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-        Calendar c = Calendar.getInstance();
-        List<String> availableDatesList = new ArrayList<>();
-
-        try {
-            c.setTime(Objects.requireNonNull(sdf.parse(sdf.format(new Date()))));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        int maxDay = c.getActualMaximum(Calendar.DAY_OF_MONTH) * months;
-        for(int co=0; co<=maxDay; co++){
-            c.add(Calendar.DATE, 1);
-            availableDatesList.add(sdf.format(c.getTime()));
-        }
-
-        return availableDatesList;
-    }
-
-    private void setMorningSchedule(){
-        int initialValue = 1;
-        String meridian;
-
-        availableTimeScheduleItems.add("12-1 AM");
-
-        for(int i = 1; i <= 11; i++){
-            initialValue++;
-
-            if(initialValue >= 12){
-                meridian = " PM";
-            }else{
-                meridian = " AM";
-            }
-
-            availableTimeScheduleItems.add(i + "-" + initialValue + meridian);
-        }
-    }
-
-    private void setAfternoonSchedule(){
-        int initialValue = 1;
-        String meridian;
-
-        availableTimeScheduleItems.add("12-1 PM");
-
-        for(int i = 1; i <= 11; i++){
-            initialValue++;
-
-            if(initialValue >= 12){
-                meridian = " AM";
-            }else{
-                meridian = " PM";
-            }
-
-            availableTimeScheduleItems.add(i + "-" + initialValue + meridian);
-        }
     }
 
     private void getTalentDetails(){

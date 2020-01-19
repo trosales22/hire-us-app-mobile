@@ -2,9 +2,11 @@ package com.trosales.hireusapp.fragments;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
@@ -13,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +28,8 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.trosales.hireusapp.R;
 import com.trosales.hireusapp.activities.TalentModelProfileActivity;
@@ -34,6 +39,7 @@ import com.trosales.hireusapp.classes.constants.EndPoints;
 import com.trosales.hireusapp.classes.constants.Messages;
 import com.trosales.hireusapp.classes.constants.Tags;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -41,9 +47,8 @@ import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
-import spencerstudios.com.ezdialoglib.EZDialog;
-import spencerstudios.com.ezdialoglib.Font;
 
 public class BookingDetailsBottomSheetFragment extends BottomSheetDialogFragment {
     @BindView(R.id.linearLayoutBookingDeclineReason) LinearLayout linearLayoutBookingDeclineReason;
@@ -60,6 +65,7 @@ public class BookingDetailsBottomSheetFragment extends BottomSheetDialogFragment
     @BindView(R.id.lblBookingCreatedDate) TextView lblBookingCreatedDate;
     @BindView(R.id.lblBookingDeclineReason) TextView lblBookingDeclineReason;
     @BindView(R.id.lblBookingApprovedOrDeclinedDate) TextView lblBookingApprovedOrDeclinedDate;
+    @BindView(R.id.btnCloseBookingDetailsDialog) Button btnCloseBookingDetailsDialog;
     @BindView(R.id.btnShowTalentDetails) Button btnShowTalentDetails;
     @BindView(R.id.btnAddTalentReviews) Button btnAddTalentReviews;
 
@@ -69,6 +75,21 @@ public class BookingDetailsBottomSheetFragment extends BottomSheetDialogFragment
     public BookingDetailsBottomSheetFragment(Bundle bookingDetailsBundleArgs, Context context) {
         this.bookingDetailsBundleArgs = bookingDetailsBundleArgs;
         this.context = context;
+    }
+
+    @NotNull
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        BottomSheetDialog bottomSheetDialog=(BottomSheetDialog)super.onCreateDialog(savedInstanceState);
+        bottomSheetDialog.setOnShowListener(dialog -> {
+            BottomSheetDialog bottomSheetDialog1 = (BottomSheetDialog) dialog;
+            FrameLayout bottomSheet = bottomSheetDialog1.findViewById(R.id.design_bottom_sheet);
+
+            BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+            bottomSheetBehavior.setPeekHeight(Resources.getSystem().getDisplayMetrics().heightPixels);
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        });
+        return bottomSheetDialog;
     }
 
     @SuppressLint("SetTextI18n")
@@ -111,6 +132,10 @@ public class BookingDetailsBottomSheetFragment extends BottomSheetDialogFragment
                 break;
         }
 
+        btnCloseBookingDetailsDialog.setOnClickListener(view -> {
+            this.dismiss();
+        });
+
         btnShowTalentDetails.setOnClickListener(view -> {
             Intent intent = new Intent(context, TalentModelProfileActivity.class);
             Bundle bundle = new Bundle();
@@ -135,17 +160,11 @@ public class BookingDetailsBottomSheetFragment extends BottomSheetDialogFragment
                         if(txtReviewsDescription.getText().toString().trim().isEmpty()){
                             txtReviewsDescription.setError("Please write some reviews..");
                         }else{
-                            new EZDialog.Builder(context)
-                                    .setTitle("Review Confirmation")
-                                    .setMessage("Are you sure you want to submit this review?")
-                                    .setPositiveBtnText("Yes")
-                                    .setNegativeBtnText("No")
-                                    .setButtonTextColor(R.color.colorPrimaryDarker)
-                                    .setTitleTextColor(R.color.white)
-                                    .setMessageTextColor(R.color.black)
-                                    .setFont(Font.COMFORTAA)
-                                    .setCancelableOnTouchOutside(false)
-                                    .OnPositiveClicked(() -> {
+                            new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
+                                    .setTitleText("Review Confirmation")
+                                    .setContentText("Are you sure you want to submit this review?")
+                                    .setConfirmText("Yes")
+                                    .setConfirmClickListener(sDialog -> {
                                         final ProgressDialog progressDialog = new ProgressDialog(context);
                                         progressDialog.setMessage(Messages.PLEASE_WAIT_MSG);
                                         progressDialog.setCancelable(false);
@@ -197,10 +216,9 @@ public class BookingDetailsBottomSheetFragment extends BottomSheetDialogFragment
                                                     }
                                                 });
                                     })
-                                    .OnNegativeClicked(() -> {
-                                        //todo
-                                    })
-                                    .build();
+                                    .setCancelText("No")
+                                    .setCancelClickListener(SweetAlertDialog::dismissWithAnimation)
+                                    .show();
                         }
 
 

@@ -59,8 +59,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import cz.kinst.jakub.view.SimpleStatefulLayout;
-import spencerstudios.com.ezdialoglib.EZDialog;
-import spencerstudios.com.ezdialoglib.Font;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
@@ -428,25 +426,18 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void showLogoutPrompt(String title, String message) {
-        new EZDialog.Builder(this)
-                .setTitle(title)
-                .setMessage(message)
-                .setPositiveBtnText("Yes")
-                .setNegativeBtnText("No")
-                .setButtonTextColor(R.color.colorPrimaryDarker)
-                .setTitleTextColor(R.color.white)
-                .setMessageTextColor(R.color.black)
-                .setFont(Font.COMFORTAA)
-                .setCancelableOnTouchOutside(false)
-                .OnPositiveClicked(() -> {
+        new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                .setTitleText(title)
+                .setContentText(message)
+                .setConfirmText("Yes")
+                .setConfirmClickListener(sDialog -> {
                     SharedPrefManager.getInstance(getApplicationContext()).logoutUser();
-                    finish();
                     startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                    finish();
                 })
-                .OnNegativeClicked(() -> {
-                    //todo
-                })
-                .build();
+                .setCancelText("No")
+                .setCancelClickListener(SweetAlertDialog::dismissWithAnimation)
+                .show();
     }
 
     public void showInfoOfLoggedInUser(NavigationView navigationView){
@@ -461,10 +452,12 @@ public class MainActivity extends AppCompatActivity
             finalUrl = EndPoints.GET_TALENT_PERSONAL_INFO_URL;
         }
 
+        Log.d("username_email", SharedPrefManager.getInstance(MainActivity.this).getEmailOrUsername());
+
         AndroidNetworking.get(finalUrl.concat("?username_email={username_email}"))
                 .addPathParameter("username_email", SharedPrefManager.getInstance(MainActivity.this).getEmailOrUsername())
                 .setTag(Tags.MAIN_ACTIVITY)
-                .setPriority(Priority.LOW)
+                .setPriority(Priority.HIGH)
                 .build()
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
@@ -483,7 +476,12 @@ public class MainActivity extends AppCompatActivity
 
     @SuppressLint("SetTextI18n")
     private void getPersonalInfoResponse(JSONObject response, NavigationView navigationView){
+        String errorMsg = null;
         try{
+            if (response.has("flag") && response.has("msg")) {
+                errorMsg = response.getString("msg");
+            }
+
             if(SharedPrefManager.getInstance(this).getUserRole().equals("TALENT_MODEL")){
                 SharedPrefManager.getInstance(this).saveUserIdSession(response.getString("talent_id"));
                 checkUserRole(navigationView, response.getString("role_name"));
@@ -496,6 +494,16 @@ public class MainActivity extends AppCompatActivity
             lblLoggedInRole.setText(response.getString("role_name"));
         }catch (JSONException e) {
             Log.e(Tags.MAIN_ACTIVITY, e.toString());
+
+            new SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+                    .setTitleText("Oops! We're sorry!")
+                    .setContentText(errorMsg)
+                    .setConfirmClickListener(sweetAlertDialog -> {
+                        SharedPrefManager.getInstance(getApplicationContext()).logoutUser();
+                        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                        finish();
+                    })
+                    .show();
         }
     }
 

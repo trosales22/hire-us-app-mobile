@@ -6,10 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import androidx.appcompat.widget.AppCompatButton;
 
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -23,6 +23,7 @@ import com.trosales.hireusapp.classes.commons.AppSecurity;
 import com.trosales.hireusapp.classes.constants.EndPoints;
 import com.trosales.hireusapp.classes.constants.Messages;
 import com.trosales.hireusapp.classes.constants.Tags;
+import com.trosales.hireusapp.fragments.SetWorkingDatesBottomSheetFragment;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.json.JSONException;
@@ -40,14 +41,17 @@ public class SetBookingDetailsActivity extends AppCompatActivity{
     @BindView(R.id.imgTalentDisplayPhoto) ImageView imgTalentDisplayPhoto;
     @BindView(R.id.lblTalentFullname) MyTextView lblTalentFullName;
     @BindView(R.id.lblTalentCategories) MyTextView lblTalentCategories;
-    @BindView(R.id.lblSelectedSchedule) MyTextView lblSelectedSchedule;
+    public static MyTextView lblSelectedDate;
+    public static String selectedDates;
+    @BindView(R.id.btnSetWorkingDates) Button btnSetWorkingDates;
+    @BindView(R.id.txtBookingWorkingHours) EditText txtBookingWorkingHours;
     @BindView(R.id.txtBookingEventTitle) EditText txtBookingEventTitle;
     @BindView(R.id.txtBookingVenueOrLocation) EditText txtBookingVenueOrLocation;
     @BindView(R.id.txtBookingTalentFee) EditText txtBookingTalentFee;
     @BindView(R.id.txtBookingOtherDetails) EditText txtBookingOtherDetails;
-    @BindView(R.id.btnProceed) AppCompatButton btnProceed;
+    @BindView(R.id.btnProceed) Button btnProceed;
 
-    private String selectedDate, selectedTime, selectedClientId, selectedTalentId;
+    private String selectedClientId, selectedTalentId;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -67,22 +71,19 @@ public class SetBookingDetailsActivity extends AppCompatActivity{
                 .placeholder(R.drawable.no_profile_pic)
                 .into(imgTalentDisplayPhoto);
 
-        lblTalentFullName.setText(bookingBundleArgs.getString("talent_fullname"));
+        lblSelectedDate = findViewById(R.id.lblSelectedDate);
+
+        lblTalentFullName.setText(bookingBundleArgs.getString("talent_full_name"));
         lblTalentCategories.setText(bookingBundleArgs.getString("talent_category"));
 
         selectedClientId = bookingBundleArgs.getString("client_id");
         selectedTalentId = bookingBundleArgs.getString("talent_id");
-        selectedDate = bookingBundleArgs.getString("selected_date");
-        selectedTime = bookingBundleArgs.getString("selected_time");
 
-        StringBuilder sbBookingDetails = new StringBuilder();
-        sbBookingDetails
-                .append("Selected Date: \n")
-                .append(selectedDate).append("\n\n")
-                .append("Selected Time: \n")
-                .append(selectedTime).append("\n");
-
-        lblSelectedSchedule.setText(sbBookingDetails.toString());
+        btnSetWorkingDates.setOnClickListener(view -> {
+            SetWorkingDatesBottomSheetFragment setWorkingDatesBottomSheetFragment = new SetWorkingDatesBottomSheetFragment();
+            setWorkingDatesBottomSheetFragment.setCancelable(false);
+            setWorkingDatesBottomSheetFragment.show(((SetBookingDetailsActivity) view.getContext()).getSupportFragmentManager(), "SetWorkingDatesBottomSheetFragment");
+        });
 
         btnProceed.setOnClickListener(v -> {
             if(txtBookingEventTitle.getText().toString().trim().isEmpty()){
@@ -130,8 +131,8 @@ public class SetBookingDetailsActivity extends AppCompatActivity{
         params.put("booking_event_title", txtBookingEventTitle.getText().toString().trim());
         params.put("booking_talent_fee", txtBookingTalentFee.getText().toString().trim());
         params.put("booking_venue_location", txtBookingVenueOrLocation.getText().toString().trim());
-        params.put("booking_date", selectedDate);
-        params.put("booking_time", selectedTime);
+        params.put("booking_date", selectedDates.trim());
+        params.put("booking_time", txtBookingWorkingHours.getText().toString().trim());
         params.put("booking_other_details", txtBookingOtherDetails.getText().toString().trim());
 
         return params;
@@ -145,7 +146,7 @@ public class SetBookingDetailsActivity extends AppCompatActivity{
         pDialog.show();
 
         AndroidNetworking.post(EndPoints.ADD_TO_BOOKING_LIST_URL)
-                .addBodyParameter("booking_generated_id", RandomStringUtils.randomAlphanumeric(30).toUpperCase())
+                .addBodyParameter("booking_generated_id", RandomStringUtils.randomAlphanumeric(8).toUpperCase())
                 .addBodyParameter("talent_id", params.get("talent_id"))
                 .addBodyParameter("client_id", params.get("client_id"))
                 .addBodyParameter("booking_event_title", params.get("booking_event_title"))

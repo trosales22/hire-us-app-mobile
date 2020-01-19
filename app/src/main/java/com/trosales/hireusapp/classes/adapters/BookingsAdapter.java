@@ -70,6 +70,7 @@ public class BookingsAdapter extends RecyclerView.Adapter<BookingsAdapter.ViewHo
             bookingsBundleArgs.putString("booking_approved_or_declined_date", clientBookingsDO.getBookingApprovedOrDeclinedDate());
 
             BookingDetailsBottomSheetFragment bookingDetailsBottomSheetFragment = new BookingDetailsBottomSheetFragment(bookingsBundleArgs, view.getContext());
+            bookingDetailsBottomSheetFragment.setCancelable(false);
             bookingDetailsBottomSheetFragment.show(((BookingListActivity) context).getSupportFragmentManager(), "BookingDetailsBottomSheetFragment");
         });
 

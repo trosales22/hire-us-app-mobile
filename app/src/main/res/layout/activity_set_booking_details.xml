@@ -1,187 +1,207 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".activities.SetBookingDetailsActivity"
-    android:descendantFocusability="beforeDescendants"
-    android:focusableInTouchMode="true">
+    tools:context=".activities.SetBookingDetailsActivity">
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
-            <ScrollView
+            <ImageView
+                android:id="@+id/imgTalentDisplayPhoto"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="15dp"
+                android:clickable="true"
+                android:src="@drawable/no_profile_pic"
+                android:focusable="true"/>
+
+            <customfonts.MyTextView
+                android:id="@+id/lblTalentFullname"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/imgTalentDisplayPhoto"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="5dp"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:gravity="start"
+                android:text="Talent Fullname"
+                tools:ignore="HardcodedText" />
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+            <customfonts.MyTextView
+                android:id="@+id/lblTalentCategories"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/imgTalentDisplayPhoto"
+                android:layout_below="@id/lblTalentFullname"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/textview_border_style_color_primary"
+                android:textStyle="bold"
+                android:textSize="13sp"
+                android:padding="8dp"
+                android:textColor="@color/colorPrimaryDarker"
+                android:text="Categories"
+                tools:ignore="HardcodedText" />
 
-                    <ImageView
-                        android:id="@+id/imgTalentDisplayPhoto"
-                        android:layout_width="90dp"
-                        android:layout_height="90dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginBottom="15dp"
-                        android:clickable="true"
-                        android:src="@drawable/no_profile_pic"
-                        android:focusable="true"/>
+            <customfonts.MyTextView
+                android:id="@+id/lblSelectedDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/imgTalentDisplayPhoto"
+                android:text="Working Dates: N/A"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:padding="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                tools:ignore="HardcodedText,InefficientWeight" />
 
-                    <customfonts.MyTextView
-                        android:id="@+id/lblTalentFullname"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_toEndOf="@id/imgTalentDisplayPhoto"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginBottom="5dp"
-                        android:textSize="16sp"
-                        android:textColor="@color/black"
-                        android:textStyle="bold"
-                        android:gravity="start"
-                        android:text="Talent Fullname"
-                        tools:ignore="HardcodedText" />
+            <Button
+                android:id="@+id/btnSetWorkingDates"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lblSelectedDate"
+                android:background="@color/colorPrimary"
+                android:text="Set Working Date(s)"
+                android:textColor="#fff"
+                android:padding="15dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                tools:ignore="HardcodedText" />
 
-                    <customfonts.MyTextView
-                        android:id="@+id/lblTalentCategories"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_toEndOf="@id/imgTalentDisplayPhoto"
-                        android:layout_below="@id/lblTalentFullname"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginBottom="5dp"
-                        android:background="@drawable/textview_border_style_color_primary"
-                        android:textStyle="bold"
-                        android:textSize="13sp"
-                        android:padding="8dp"
-                        android:textColor="@color/colorPrimaryDarker"
-                        android:text="Categories"
-                        tools:ignore="HardcodedText" />
+            <EditText
+                android:id="@+id/txtBookingWorkingHours"
+                android:layout_width="match_parent"
+                android:layout_height="45sp"
+                android:background="#d1d1d1"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:hint="Enter working hours.."
+                android:inputType="textFilter"
+                android:layout_below="@id/btnSetWorkingDates"
+                android:maxLength="50"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:singleLine="true"
+                android:padding="10dp"
+                android:gravity="top"
+                android:layout_marginBottom="10dp"
+                android:textColorHint="@color/black"
+                tools:ignore="HardcodedText" />
 
-                    <customfonts.MyTextView
-                        android:id="@+id/lblSelectedSchedule"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/imgTalentDisplayPhoto"
-                        android:text="Selected Schedule: N/A"
-                        android:textSize="16sp"
-                        android:textColor="@color/black"
-                        android:padding="10dp"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
-                        tools:ignore="HardcodedText,InefficientWeight" />
+            <EditText
+                android:id="@+id/txtBookingEventTitle"
+                android:layout_width="match_parent"
+                android:layout_height="45sp"
+                android:background="#d1d1d1"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:hint="Enter event title.."
+                android:inputType="textFilter"
+                android:layout_below="@id/txtBookingWorkingHours"
+                android:maxLength="50"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:singleLine="true"
+                android:padding="10dp"
+                android:gravity="top"
+                android:layout_marginBottom="10dp"
+                android:textColorHint="@color/black"
+                tools:ignore="HardcodedText" />
 
-                    <EditText
-                        android:id="@+id/txtBookingEventTitle"
-                        android:layout_width="match_parent"
-                        android:layout_height="45sp"
-                        android:background="#d1d1d1"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
-                        android:hint="Enter event title.."
-                        android:inputType="textFilter"
-                        android:layout_below="@id/lblSelectedSchedule"
-                        android:maxLength="50"
-                        android:textColor="@color/black"
-                        android:textSize="16sp"
-                        android:singleLine="true"
-                        android:padding="10dp"
-                        android:gravity="top"
-                        android:layout_marginBottom="10dp"
-                        android:textColorHint="@color/black"
-                        tools:ignore="HardcodedText" />
+            <EditText
+                android:id="@+id/txtBookingVenueOrLocation"
+                android:layout_width="match_parent"
+                android:layout_height="100sp"
+                android:background="#d1d1d1"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:hint="Enter venue/location.."
+                android:inputType="textFilter"
+                android:singleLine="true"
+                android:layout_below="@id/txtBookingEventTitle"
+                android:maxLength="100"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:padding="10dp"
+                android:gravity="top"
+                android:layout_marginBottom="10dp"
+                android:textColorHint="@color/black"
+                tools:ignore="HardcodedText" />
 
-                    <EditText
-                        android:id="@+id/txtBookingVenueOrLocation"
-                        android:layout_width="match_parent"
-                        android:layout_height="100sp"
-                        android:background="#d1d1d1"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
-                        android:hint="Enter venue/location.."
-                        android:inputType="textFilter"
-                        android:singleLine="true"
-                        android:layout_below="@id/txtBookingEventTitle"
-                        android:maxLength="100"
-                        android:textColor="@color/black"
-                        android:textSize="16sp"
-                        android:padding="10dp"
-                        android:gravity="top"
-                        android:layout_marginBottom="10dp"
-                        android:textColorHint="@color/black"
-                        tools:ignore="HardcodedText" />
+            <me.abhinay.input.CurrencyEditText
+                android:id="@+id/txtBookingTalentFee"
+                android:layout_width="match_parent"
+                android:layout_height="45sp"
+                android:background="#d1d1d1"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_below="@id/txtBookingVenueOrLocation"
+                android:hint="Enter talent fee.."
+                android:inputType="number"
+                android:textSize="16sp"
+                android:padding="10dp"
+                android:layout_gravity="top"
+                android:textColorHint="@color/black"
+                android:layout_marginBottom="10dp"
+                tools:ignore="HardcodedText" />
 
-                    <me.abhinay.input.CurrencyEditText
-                        android:id="@+id/txtBookingTalentFee"
-                        android:layout_width="match_parent"
-                        android:layout_height="45sp"
-                        android:background="#d1d1d1"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_below="@id/txtBookingVenueOrLocation"
-                        android:hint="Enter talent fee.."
-                        android:inputType="number"
-                        android:textSize="16sp"
-                        android:padding="10dp"
-                        android:layout_gravity="top"
-                        android:textColorHint="@color/black"
-                        android:layout_marginBottom="10dp"
-                        tools:ignore="HardcodedText" />
+            <EditText
+                android:id="@+id/txtBookingOtherDetails"
+                android:layout_width="match_parent"
+                android:layout_height="100sp"
+                android:background="#d1d1d1"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:hint="Enter other booking details.."
+                android:inputType="textFilter"
+                android:singleLine="true"
+                android:layout_below="@id/txtBookingTalentFee"
+                android:maxLength="100"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textColorHint="@color/black"
+                android:padding="10dp"
+                android:gravity="top"
+                android:layout_marginBottom="15dp"
+                tools:ignore="HardcodedText" />
 
-                    <EditText
-                        android:id="@+id/txtBookingOtherDetails"
-                        android:layout_width="match_parent"
-                        android:layout_height="100sp"
-                        android:background="#d1d1d1"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
-                        android:hint="Enter other booking details.."
-                        android:inputType="textFilter"
-                        android:singleLine="true"
-                        android:layout_below="@id/txtBookingTalentFee"
-                        android:maxLength="100"
-                        android:textColor="@color/black"
-                        android:textSize="16sp"
-                        android:textColorHint="@color/black"
-                        android:padding="10dp"
-                        android:gravity="top"
-                        android:layout_marginBottom="15dp"
-                        tools:ignore="HardcodedText" />
+            <Button
+                android:id="@+id/btnProceed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txtBookingOtherDetails"
+                android:background="@color/colorPrimary"
+                android:text="Book Now"
+                android:textColor="#fff"
+                android:padding="15dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                tools:ignore="HardcodedText" />
 
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/btnProceed"
-                        android:layout_width="match_parent"
-                        android:layout_height="45dp"
-                        android:layout_below="@id/txtBookingOtherDetails"
-                        android:background="@color/colorPrimary"
-                        android:padding="15dp"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:text="Proceed"
-                        android:textColor="@color/white"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        tools:ignore="HardcodedText" />
+        </RelativeLayout>
 
-                </RelativeLayout>
+    </ScrollView>
 
-            </ScrollView>
-
-        </LinearLayout>
-
-    </RelativeLayout>
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</RelativeLayout>
