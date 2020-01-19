@@ -8,5 +8,5 @@ public class Tags {
     public static final String BOOKING_LIST_ACTIVITY = "BookingListActivity";
     public static final String FILTERING_ACTIVITY = "FilteringActivity";
     public static final String CHECKOUT_ACTIVITY = "CheckoutActivity";
-    public static final String CLIENTS_ACTIVITY = "ClientsActivity";
+    public static final String CLIENTS_ACTIVITY = "PotentialClientsActivity";
 }

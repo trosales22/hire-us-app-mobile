@@ -16,7 +16,7 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.ethanhua.skeleton.Skeleton;
 import com.ethanhua.skeleton.SkeletonScreen;
 import com.trosales.hireusapp.R;
-import com.trosales.hireusapp.classes.adapters.BookingsAdapter;
+import com.trosales.hireusapp.classes.adapters.BookedTalentsAdapter;
 import com.trosales.hireusapp.classes.beans.Location;
 import com.trosales.hireusapp.classes.commons.AppSecurity;
 import com.trosales.hireusapp.classes.commons.SharedPrefManager;
@@ -43,7 +43,7 @@ public class BookingListActivity extends AppCompatActivity {
     @BindView(R.id.recyclerView_bookingList) RecyclerView recyclerView_bookingList;
 
     private List<ClientBookingsDO> clientBookingsDOList;
-    private BookingsAdapter bookingsAdapter;
+    private BookedTalentsAdapter bookedTalentsAdapter;
     protected Handler handler;
     private SkeletonScreen skeletonScreen;
 
@@ -65,7 +65,7 @@ public class BookingListActivity extends AppCompatActivity {
         recyclerView_bookingList.setHasFixedSize(true);
 
         skeletonScreen = Skeleton.bind(recyclerView_bookingList)
-                .adapter(bookingsAdapter)
+                .adapter(bookedTalentsAdapter)
                 .color(R.color.shimmer_color)
                 .load(R.layout.talents_placeholder_layout)
                 .show();
@@ -176,8 +176,8 @@ public class BookingListActivity extends AppCompatActivity {
                 simpleStatefulLayout.showContent();
             }
 
-            bookingsAdapter = new BookingsAdapter(clientBookingsDOList, this);
-            recyclerView_bookingList.setAdapter(bookingsAdapter);
+            bookedTalentsAdapter = new BookedTalentsAdapter(clientBookingsDOList, this);
+            recyclerView_bookingList.setAdapter(bookedTalentsAdapter);
         } catch (JSONException e) {
             e.printStackTrace();
         }

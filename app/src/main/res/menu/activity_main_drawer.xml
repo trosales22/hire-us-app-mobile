@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
@@ -8,24 +9,21 @@
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_home_black_24dp"
             android:title="@string/menu_home" />
+
         <item
             android:id="@+id/nav_booking_list"
             android:icon="@drawable/ic_booked_list_black"
             android:title="Booking List"
             android:visible="false"
             tools:ignore="HardcodedText" />
+
         <item
             android:id="@+id/nav_clients_booked"
             android:icon="@drawable/ic_person_black"
             android:title="Clients Booked"
             android:visible="false"
             tools:ignore="HardcodedText" />
-        <item
-            android:id="@+id/nav_check_availability"
-            android:icon="@drawable/ic_schedule_black"
-            android:title="Check Availability"
-            android:visible="false"
-            tools:ignore="HardcodedText" />
+
         <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_exit_to_app_black"

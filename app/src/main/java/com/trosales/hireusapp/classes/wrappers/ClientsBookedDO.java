@@ -4,46 +4,19 @@ import org.jetbrains.annotations.NotNull;
 
 public class ClientsBookedDO {
     private ClientDetailsDO clientDetailsDO;
-    private String bookingId, selectedDate, selectedTime,
-            selectedPaymentOption, totalAmount, datePaid;
+    private ClientBookingsDO clientBookingsDO;
 
-
-    public ClientsBookedDO(ClientDetailsDO clientDetailsDO, String bookingId, String selectedDate, String selectedTime, String selectedPaymentOption, String totalAmount, String datePaid) {
+    public ClientsBookedDO(ClientDetailsDO clientDetailsDO, ClientBookingsDO clientBookingsDO) {
         this.clientDetailsDO = clientDetailsDO;
-        this.bookingId = bookingId;
-        this.selectedDate = selectedDate;
-        this.selectedTime = selectedTime;
-        this.selectedPaymentOption = selectedPaymentOption;
-        this.totalAmount = totalAmount;
-        this.datePaid = datePaid;
+        this.clientBookingsDO = clientBookingsDO;
     }
 
     public ClientDetailsDO getClientDetailsDO() {
         return clientDetailsDO;
     }
 
-    public String getBookingId() {
-        return bookingId;
-    }
-
-    public String getSelectedDate() {
-        return selectedDate;
-    }
-
-    public String getSelectedTime() {
-        return selectedTime;
-    }
-
-    public String getSelectedPaymentOption() {
-        return selectedPaymentOption;
-    }
-
-    public String getTotalAmount() {
-        return totalAmount;
-    }
-
-    public String getDatePaid() {
-        return datePaid;
+    public ClientBookingsDO getClientBookingsDO() {
+        return clientBookingsDO;
     }
 
     @NotNull
@@ -51,12 +24,7 @@ public class ClientsBookedDO {
     public String toString() {
         return "ClientsBookedDO{" +
                 "clientDetailsDO=" + clientDetailsDO +
-                ", bookingId='" + bookingId + '\'' +
-                ", selectedDate='" + selectedDate + '\'' +
-                ", selectedTime='" + selectedTime + '\'' +
-                ", selectedPaymentOption='" + selectedPaymentOption + '\'' +
-                ", totalAmount='" + totalAmount + '\'' +
-                ", datePaid='" + datePaid + '\'' +
+                ", clientBookingsDO=" + clientBookingsDO +
                 '}';
     }
 }

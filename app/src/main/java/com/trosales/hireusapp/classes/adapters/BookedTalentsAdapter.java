@@ -16,7 +16,7 @@ import com.bumptech.glide.Glide;
 import com.trosales.hireusapp.R;
 import com.trosales.hireusapp.activities.BookingListActivity;
 import com.trosales.hireusapp.classes.wrappers.ClientBookingsDO;
-import com.trosales.hireusapp.fragments.BookingDetailsBottomSheetFragment;
+import com.trosales.hireusapp.fragments.BookingAndTalentDetailsBottomSheetFragment;
 
 import java.util.List;
 
@@ -24,18 +24,18 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import customfonts.MyTextView;
 
-public class BookingsAdapter extends RecyclerView.Adapter<BookingsAdapter.ViewHolder>{
+public class BookedTalentsAdapter extends RecyclerView.Adapter<BookedTalentsAdapter.ViewHolder>{
     private List<ClientBookingsDO> clientBookingsDOList;
     private Context context;
 
-    public BookingsAdapter(List<ClientBookingsDO> clientBookingsDOList, Context context) {
+    public BookedTalentsAdapter(List<ClientBookingsDO> clientBookingsDOList, Context context) {
         this.clientBookingsDOList = clientBookingsDOList;
         this.context = context;
     }
 
     @NonNull
     @Override
-    public BookingsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public BookedTalentsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.bookings_list, viewGroup, false);
 
@@ -44,7 +44,7 @@ public class BookingsAdapter extends RecyclerView.Adapter<BookingsAdapter.ViewHo
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull BookingsAdapter.ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull BookedTalentsAdapter.ViewHolder viewHolder, int i) {
         final ClientBookingsDO clientBookingsDO = clientBookingsDOList.get(i);
 
         Glide
@@ -69,9 +69,9 @@ public class BookingsAdapter extends RecyclerView.Adapter<BookingsAdapter.ViewHo
             bookingsBundleArgs.putString("booking_decline_reason", clientBookingsDO.getBookingDeclineReason());
             bookingsBundleArgs.putString("booking_approved_or_declined_date", clientBookingsDO.getBookingApprovedOrDeclinedDate());
 
-            BookingDetailsBottomSheetFragment bookingDetailsBottomSheetFragment = new BookingDetailsBottomSheetFragment(bookingsBundleArgs, view.getContext());
-            bookingDetailsBottomSheetFragment.setCancelable(false);
-            bookingDetailsBottomSheetFragment.show(((BookingListActivity) context).getSupportFragmentManager(), "BookingDetailsBottomSheetFragment");
+            BookingAndTalentDetailsBottomSheetFragment bookingAndTalentDetailsBottomSheetFragment = new BookingAndTalentDetailsBottomSheetFragment(bookingsBundleArgs, view.getContext());
+            bookingAndTalentDetailsBottomSheetFragment.setCancelable(false);
+            bookingAndTalentDetailsBottomSheetFragment.show(((BookingListActivity) context).getSupportFragmentManager(), "BookingAndTalentDetailsBottomSheetFragment");
         });
 
         viewHolder.lblTalentFullName.setText(clientBookingsDO.getTalentDetails().getFullname());

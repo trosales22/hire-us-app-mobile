@@ -240,9 +240,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_booking_list) {
             startActivity(new Intent(this, BookingListActivity.class));
         } else if (id == R.id.nav_clients_booked) {
-            startActivity(new Intent(this, ClientsActivity.class));
-        } else if (id == R.id.nav_check_availability) {
-            //go to talent schedule page
+            startActivity(new Intent(this, PotentialClientsActivity.class));
         } else if (id == R.id.nav_logout) {
             showLogoutPrompt(Messages.CONFIRMATION_CAPTION, Messages.LOGOUT_PROMPT);
         } else if (id == R.id.nav_about_app) {
@@ -516,7 +514,6 @@ public class MainActivity extends AppCompatActivity
                 break;
             default:
                 navigationViewMenu.findItem(R.id.nav_clients_booked).setVisible(true);
-                navigationViewMenu.findItem(R.id.nav_check_availability).setVisible(true);
                 break;
         }
     }

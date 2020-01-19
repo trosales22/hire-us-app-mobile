@@ -50,7 +50,7 @@ import butterknife.ButterKnife;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
-public class BookingDetailsBottomSheetFragment extends BottomSheetDialogFragment {
+public class BookingAndTalentDetailsBottomSheetFragment extends BottomSheetDialogFragment {
     @BindView(R.id.linearLayoutBookingDeclineReason) LinearLayout linearLayoutBookingDeclineReason;
     @BindView(R.id.linearLayoutBookingApprovedOrDeclinedDate) LinearLayout linearLayoutBookingApprovedOrDeclinedDate;
     @BindView(R.id.lblBookingGeneratedId) TextView lblBookingGeneratedId;
@@ -72,7 +72,7 @@ public class BookingDetailsBottomSheetFragment extends BottomSheetDialogFragment
     private Bundle bookingDetailsBundleArgs;
     private Context context;
 
-    public BookingDetailsBottomSheetFragment(Bundle bookingDetailsBundleArgs, Context context) {
+    public BookingAndTalentDetailsBottomSheetFragment(Bundle bookingDetailsBundleArgs, Context context) {
         this.bookingDetailsBundleArgs = bookingDetailsBundleArgs;
         this.context = context;
     }
@@ -96,7 +96,7 @@ public class BookingDetailsBottomSheetFragment extends BottomSheetDialogFragment
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View itemView = inflater.inflate(R.layout.booking_details_bottom_sheet, container, false);
+        final View itemView = inflater.inflate(R.layout.booking_and_talent_details_bottom_sheet, container, false);
         ButterKnife.bind(this, itemView);
 
         AppSecurity.disableScreenshotRecording(((AppCompatActivity) context));
