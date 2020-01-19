@@ -93,7 +93,7 @@ public class PotentialClientsActivity extends AppCompatActivity {
         AndroidNetworking
                 .get(EndPoints.GET_ALL_CLIENT_BOOKED_URL.concat("?talent_id={talent_id}"))
                 .addPathParameter("talent_id", SharedPrefManager.getInstance(getApplicationContext()).getUserId())
-                .setTag(Tags.CLIENTS_ACTIVITY)
+                .setTag(Tags.POTENTIAL_CLIENTS_ACTIVITY)
                 .setPriority(Priority.MEDIUM)
                 .build()
                 .getAsJSONObject(new JSONObjectRequestListener() {
@@ -107,7 +107,7 @@ public class PotentialClientsActivity extends AppCompatActivity {
                     @Override
                     public void onError(ANError anError) {
                         skeletonScreen.hide();
-                        Log.e(Tags.CLIENTS_ACTIVITY, anError.getErrorDetail());
+                        Log.e(Tags.POTENTIAL_CLIENTS_ACTIVITY, anError.getErrorDetail());
                     }
                 });
     }
@@ -188,7 +188,7 @@ public class PotentialClientsActivity extends AppCompatActivity {
             potentialClientsAdapter = new PotentialClientsAdapter(clientsBookedDOList, this);
             recyclerView_clientsBooked.setAdapter(potentialClientsAdapter);
         } catch (JSONException e) {
-            Log.e(Tags.CLIENTS_ACTIVITY, e.toString());
+            Log.e(Tags.POTENTIAL_CLIENTS_ACTIVITY, e.toString());
         }
     }
 }

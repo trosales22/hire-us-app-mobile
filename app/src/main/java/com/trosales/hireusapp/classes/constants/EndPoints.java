@@ -2,10 +2,10 @@ package com.trosales.hireusapp.classes.constants;
 
 public class EndPoints {
     //local
-    public static final String BASE_URL = "http://192.168.1.20/hire-us/";
+    //public static final String BASE_URL = "http://192.168.1.20/hire-us/";
 
     //development
-    //public static final String BASE_URL = "https://hireusph-dev.tristanrosales.com/";
+    public static final String BASE_URL = "https://hireusph-dev.tristanrosales.com/";
 
     //production
     //private static final String BASE_URL = "https://hireusph.com/";
@@ -27,4 +27,6 @@ public class EndPoints {
     public static final String START_PAYMENT_URL = API_URL + "payment/start_payment";
     public static final String ADD_TALENT_REVIEWS_URL = API_URL + "talents/add_talent_reviews";
     public static final String GET_TALENT_REVIEWS_URL = API_URL + "talents/get_talent_reviews";
+    public static final String APPROVE_BOOKING_URL = API_URL + "talents/approve_booking";
+    public static final String DECLINE_BOOKING_URL = API_URL + "talents/decline_booking";
 }

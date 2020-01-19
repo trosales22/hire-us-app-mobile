@@ -3,40 +3,54 @@ package com.trosales.hireusapp.fragments;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.trosales.hireusapp.R;
+import com.trosales.hireusapp.activities.PotentialClientsActivity;
 import com.trosales.hireusapp.classes.commons.AppSecurity;
+import com.trosales.hireusapp.classes.constants.EndPoints;
+import com.trosales.hireusapp.classes.constants.Messages;
+import com.trosales.hireusapp.classes.constants.Tags;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class BookingAndClientDetailsBottomSheetFragment extends BottomSheetDialogFragment {
-    @BindView(R.id.linearLayoutBookingDeclineReason)
-    LinearLayout linearLayoutBookingDeclineReason;
+    @BindView(R.id.linearLayoutBookingDeclineReason) LinearLayout linearLayoutBookingDeclineReason;
     @BindView(R.id.linearLayoutBookingApprovedOrDeclinedDate) LinearLayout linearLayoutBookingApprovedOrDeclinedDate;
-    @BindView(R.id.lblBookingGeneratedId)
-    TextView lblBookingGeneratedId;
+    @BindView(R.id.lblBookingGeneratedId) TextView lblBookingGeneratedId;
     @BindView(R.id.lblBookingEventTitle) TextView lblBookingEventTitle;
     @BindView(R.id.lblBookingTalentFee) TextView lblBookingTalentFee;
     @BindView(R.id.lblBookingVenueOrLocation) TextView lblBookingVenueOrLocation;
@@ -57,10 +71,19 @@ public class BookingAndClientDetailsBottomSheetFragment extends BottomSheetDialo
 
     @BindView(R.id.btnCloseBookingAndClientDetailsDialog) Button btnCloseBookingAndClientDetailsDialog;
     @BindView(R.id.btnApproveBooking) Button btnApproveBooking;
+
+    @BindView(R.id.linearLayoutChooseDeclineReasonCaption) LinearLayout linearLayoutChooseDeclineReasonCaption;
+    @BindView(R.id.rgDeclineReason) RadioGroup rgDeclineReason;
+    @BindView(R.id.rbTalentFee) RadioButton rbTalentFee;
+    @BindView(R.id.rbDateUnavailability) RadioButton rbDateUnavailability;
+    @BindView(R.id.rbLocation) RadioButton rbLocation;
+
     @BindView(R.id.btnDeclineBooking) Button btnDeclineBooking;
 
     private Bundle bookingAndClientDetailsBundleArgs;
     private Context context;
+
+    private String selectedDeclineReason;
 
     public BookingAndClientDetailsBottomSheetFragment(Bundle bookingAndClientDetailsBundleArgs, Context context) {
         this.bookingAndClientDetailsBundleArgs = bookingAndClientDetailsBundleArgs;
@@ -111,14 +134,35 @@ public class BookingAndClientDetailsBottomSheetFragment extends BottomSheetDialo
             case "WAITING":
                 linearLayoutBookingDeclineReason.setVisibility(View.GONE);
                 linearLayoutBookingApprovedOrDeclinedDate.setVisibility(View.GONE);
+
+                btnApproveBooking.setVisibility(View.VISIBLE);
+                btnDeclineBooking.setVisibility(View.VISIBLE);
+
+                linearLayoutChooseDeclineReasonCaption.setVisibility(View.VISIBLE);
+                rgDeclineReason.setVisibility(View.VISIBLE);
+
                 break;
             case "APPROVED":
                 linearLayoutBookingDeclineReason.setVisibility(View.GONE);
                 linearLayoutBookingApprovedOrDeclinedDate.setVisibility(View.VISIBLE);
+
+                btnApproveBooking.setVisibility(View.GONE);
+                btnDeclineBooking.setVisibility(View.GONE);
+
+                linearLayoutChooseDeclineReasonCaption.setVisibility(View.GONE);
+                rgDeclineReason.setVisibility(View.GONE);
+
                 break;
             case "DECLINED":
                 linearLayoutBookingDeclineReason.setVisibility(View.VISIBLE);
                 linearLayoutBookingApprovedOrDeclinedDate.setVisibility(View.VISIBLE);
+
+                btnApproveBooking.setVisibility(View.GONE);
+                btnDeclineBooking.setVisibility(View.GONE);
+
+                linearLayoutChooseDeclineReasonCaption.setVisibility(View.GONE);
+                rgDeclineReason.setVisibility(View.GONE);
+
                 break;
         }
 
@@ -128,18 +172,165 @@ public class BookingAndClientDetailsBottomSheetFragment extends BottomSheetDialo
         lblClientGender.setText(bookingAndClientDetailsBundleArgs.getString("client_gender"));
         lblClientType.setText(bookingAndClientDetailsBundleArgs.getString("client_type"));
 
+        rbTalentFee.setOnClickListener(view -> {
+            chooseDeclineReason(rbTalentFee);
+            selectedDeclineReason = "TALENT_FEE";
+        });
+
+        rbDateUnavailability.setOnClickListener(view -> {
+            chooseDeclineReason(rbDateUnavailability);
+            selectedDeclineReason = "DATE_UNAVAILABILITY";
+        });
+
+        rbLocation.setOnClickListener(view -> {
+            chooseDeclineReason(rbLocation);
+            selectedDeclineReason = "LOCATION";
+        });
+
         btnCloseBookingAndClientDetailsDialog.setOnClickListener(view -> {
             this.dismiss();
         });
 
         btnApproveBooking.setOnClickListener(view -> {
-
+            new SweetAlertDialog(view.getContext(), SweetAlertDialog.WARNING_TYPE)
+                    .setTitleText("Confirmation")
+                    .setContentText("Are you sure you want to approve this booking?")
+                    .setConfirmText("Yes")
+                    .setConfirmClickListener(sDialog -> {
+                        sDialog.dismissWithAnimation();
+                        approveBooking(bookingAndClientDetailsBundleArgs.getString("booking_generated_id"));
+                    })
+                    .setCancelText("No")
+                    .setCancelClickListener(SweetAlertDialog::dismissWithAnimation)
+                    .show();
         });
 
         btnDeclineBooking.setOnClickListener(view -> {
-
+            new SweetAlertDialog(view.getContext(), SweetAlertDialog.WARNING_TYPE)
+                    .setTitleText("Confirmation")
+                    .setContentText("Are you sure you want to decline this booking?")
+                    .setConfirmText("Yes")
+                    .setConfirmClickListener(sDialog -> {
+                        sDialog.dismissWithAnimation();
+                        declineBooking(bookingAndClientDetailsBundleArgs.getString("booking_generated_id"), selectedDeclineReason);
+                    })
+                    .setCancelText("No")
+                    .setCancelClickListener(SweetAlertDialog::dismissWithAnimation)
+                    .show();
         });
 
         return itemView;
+    }
+
+    private void chooseDeclineReason(RadioButton radioButton){
+        rbTalentFee.setChecked(false);
+        rbDateUnavailability.setChecked(false);
+        rbLocation.setChecked(false);
+
+        radioButton.setChecked(true);
+    }
+
+    private void approveBooking(String bookingGeneratedId){
+        SweetAlertDialog pDialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
+        pDialog.getProgressHelper().setBarColor(Color.parseColor("#48b1bf"));
+        pDialog.setTitleText(Messages.PLEASE_WAIT_WHILE_APPROVING_BOOKING_MSG);
+        pDialog.setCancelable(false);
+        pDialog.show();
+
+        AndroidNetworking.post(EndPoints.APPROVE_BOOKING_URL)
+                .addBodyParameter("booking_generated_id", bookingGeneratedId)
+                .setTag(Tags.POTENTIAL_CLIENTS_ACTIVITY)
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        pDialog.dismiss();
+                        getResponse(response);
+                    }
+
+                    @SuppressLint("LongLogTag")
+                    @Override
+                    public void onError(ANError anError) {
+                        pDialog.dismiss();
+                        String errorResponse = "\n\nCode: " +
+                                anError.getErrorCode() +
+                                "\nDetail: " +
+                                anError.getErrorDetail() +
+                                "\nBody: " +
+                                anError.getErrorBody() +
+                                "\nResponse: " +
+                                anError.getResponse() +
+                                "\nMessage: " +
+                                anError.getMessage();
+
+                        Log.e(Tags.POTENTIAL_CLIENTS_ACTIVITY, errorResponse);
+                    }
+                });
+    }
+
+    private void declineBooking(String bookingGeneratedId, String bookingDeclineReason){
+        SweetAlertDialog pDialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
+        pDialog.getProgressHelper().setBarColor(Color.parseColor("#48b1bf"));
+        pDialog.setTitleText(Messages.PLEASE_WAIT_WHILE_DECLINING_BOOKING_MSG);
+        pDialog.setCancelable(false);
+        pDialog.show();
+
+        AndroidNetworking.post(EndPoints.DECLINE_BOOKING_URL)
+                .addBodyParameter("booking_generated_id", bookingGeneratedId)
+                .addBodyParameter("booking_decline_reason", bookingDeclineReason)
+                .setTag(Tags.POTENTIAL_CLIENTS_ACTIVITY)
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        pDialog.dismiss();
+                        getResponse(response);
+                    }
+
+                    @SuppressLint("LongLogTag")
+                    @Override
+                    public void onError(ANError anError) {
+                        pDialog.dismiss();
+                        String errorResponse = "\n\nCode: " +
+                                anError.getErrorCode() +
+                                "\nDetail: " +
+                                anError.getErrorDetail() +
+                                "\nBody: " +
+                                anError.getErrorBody() +
+                                "\nResponse: " +
+                                anError.getResponse() +
+                                "\nMessage: " +
+                                anError.getMessage();
+
+                        Log.e(Tags.POTENTIAL_CLIENTS_ACTIVITY, errorResponse);
+                    }
+                });
+    }
+
+    @SuppressLint("LongLogTag")
+    private void getResponse(JSONObject response){
+        try {
+            int flag = response.getInt("flag");
+            String msg = response.has("msg") ? response.getString("msg") : "";
+
+            if(flag == 1){
+                new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE)
+                        .setTitleText("Congratulations!")
+                        .setContentText(msg)
+                        .setConfirmClickListener(sweetAlertDialog -> {
+                            startActivity(new Intent(context, PotentialClientsActivity.class));
+                        })
+                        .show();
+            }else{
+                new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Oops..")
+                        .setContentText(msg)
+                        .show();
+            }
+        } catch (JSONException e) {
+            Log.d(Tags.POTENTIAL_CLIENTS_ACTIVITY, Objects.requireNonNull(e.getMessage()));
+        }
     }
 }

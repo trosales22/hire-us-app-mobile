@@ -450,8 +450,6 @@ public class MainActivity extends AppCompatActivity
             finalUrl = EndPoints.GET_TALENT_PERSONAL_INFO_URL;
         }
 
-        Log.d("username_email", SharedPrefManager.getInstance(MainActivity.this).getEmailOrUsername());
-
         AndroidNetworking.get(finalUrl.concat("?username_email={username_email}"))
                 .addPathParameter("username_email", SharedPrefManager.getInstance(MainActivity.this).getEmailOrUsername())
                 .setTag(Tags.MAIN_ACTIVITY)
