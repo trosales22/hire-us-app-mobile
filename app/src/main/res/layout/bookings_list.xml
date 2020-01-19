@@ -65,6 +65,21 @@
                 android:text="Booking Details"
                 card_view:ignore="HardcodedText" />
 
+            <customfonts.MyTextView
+                android:id="@+id/lblBookingOfferStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/lblBookingGeneratedId"
+                android:layout_below="@id/lblTalentFullName"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/textview_border_style_color_orange"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:padding="8dp"
+                android:textColor="#f4a261"
+                android:text="Booking Offer Status"
+                card_view:ignore="HardcodedText" />
+
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>

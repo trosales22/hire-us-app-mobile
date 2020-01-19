@@ -76,6 +76,7 @@ public class BookedTalentsAdapter extends RecyclerView.Adapter<BookedTalentsAdap
 
         viewHolder.lblTalentFullName.setText(clientBookingsDO.getTalentDetails().getFullname());
         viewHolder.lblBookingGeneratedId.setText(clientBookingsDO.getBookingGeneratedId());
+        viewHolder.lblBookingOfferStatus.setText(clientBookingsDO.getBookingOfferStatus());
     }
 
     @Override
@@ -88,6 +89,7 @@ public class BookedTalentsAdapter extends RecyclerView.Adapter<BookedTalentsAdap
         @BindView(R.id.imgTalentDisplayPhoto) ImageView imgTalentDisplayPhoto;
         @BindView(R.id.lblTalentFullName) MyTextView lblTalentFullName;
         @BindView(R.id.lblBookingGeneratedId) MyTextView lblBookingGeneratedId;
+        @BindView(R.id.lblBookingOfferStatus) MyTextView lblBookingOfferStatus;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
