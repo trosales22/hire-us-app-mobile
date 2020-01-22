@@ -2,6 +2,7 @@ package com.trosales.hireusapp.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Color;
@@ -37,19 +38,29 @@ import butterknife.ButterKnife;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import customfonts.MyTextView;
 
-public class SetBookingDetailsActivity extends AppCompatActivity{
-    @BindView(R.id.imgTalentDisplayPhoto) ImageView imgTalentDisplayPhoto;
-    @BindView(R.id.lblTalentFullname) MyTextView lblTalentFullName;
-    @BindView(R.id.lblTalentCategories) MyTextView lblTalentCategories;
+public class SetBookingDetailsActivity extends AppCompatActivity {
+    @BindView(R.id.imgTalentDisplayPhoto)
+    ImageView imgTalentDisplayPhoto;
+    @BindView(R.id.lblTalentFullname)
+    MyTextView lblTalentFullName;
+    @BindView(R.id.lblTalentCategories)
+    MyTextView lblTalentCategories;
     public static MyTextView lblSelectedDate;
     public static String selectedDates;
-    @BindView(R.id.btnSetWorkingDates) Button btnSetWorkingDates;
-    @BindView(R.id.txtBookingWorkingHours) EditText txtBookingWorkingHours;
-    @BindView(R.id.txtBookingEventTitle) EditText txtBookingEventTitle;
-    @BindView(R.id.txtBookingVenueOrLocation) EditText txtBookingVenueOrLocation;
-    @BindView(R.id.txtBookingTalentFee) EditText txtBookingTalentFee;
-    @BindView(R.id.txtBookingOtherDetails) EditText txtBookingOtherDetails;
-    @BindView(R.id.btnProceed) Button btnProceed;
+    @BindView(R.id.btnSetWorkingDates)
+    Button btnSetWorkingDates;
+    @BindView(R.id.txtBookingWorkingHours)
+    EditText txtBookingWorkingHours;
+    @BindView(R.id.txtBookingEventTitle)
+    EditText txtBookingEventTitle;
+    @BindView(R.id.txtBookingVenueOrLocation)
+    EditText txtBookingVenueOrLocation;
+    @BindView(R.id.txtBookingTalentFee)
+    EditText txtBookingTalentFee;
+    @BindView(R.id.txtBookingOtherDetails)
+    EditText txtBookingOtherDetails;
+    @BindView(R.id.btnSendOffer)
+    Button btnSendOffer;
 
     private String selectedClientId, selectedTalentId;
 
@@ -85,32 +96,39 @@ public class SetBookingDetailsActivity extends AppCompatActivity{
             setWorkingDatesBottomSheetFragment.show(((SetBookingDetailsActivity) view.getContext()).getSupportFragmentManager(), "SetWorkingDatesBottomSheetFragment");
         });
 
-        btnProceed.setOnClickListener(v -> {
-            if(txtBookingEventTitle.getText().toString().trim().isEmpty()){
+        btnSendOffer.setOnClickListener(v -> {
+            if (txtBookingWorkingHours.getText().toString().trim().isEmpty()) {
+                txtBookingWorkingHours.setError("Please enter booking working hours!");
+                return;
+            }
+
+            if (txtBookingEventTitle.getText().toString().trim().isEmpty()) {
                 txtBookingEventTitle.setError("Please enter booking event title!");
                 return;
             }
 
-            if(txtBookingVenueOrLocation.getText().toString().trim().isEmpty()){
+            if (txtBookingVenueOrLocation.getText().toString().trim().isEmpty()) {
                 txtBookingVenueOrLocation.setError("Please enter booking venue/location!");
                 return;
             }
 
-            if(txtBookingTalentFee.getText().toString().trim().isEmpty()){
+            if (txtBookingTalentFee.getText().toString().trim().isEmpty()) {
                 txtBookingTalentFee.setError("Please enter booking fee!");
                 return;
             }
-                new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
-                        .setTitleText("Are you sure?")
-                        .setContentText("Please check inputted details before proceeding.")
-                        .setConfirmText("Yes")
-                        .setConfirmClickListener(sDialog -> {
-                            sDialog.dismissWithAnimation();
-                            addToBookingList(getBookingParams());
-                        })
-                        .setCancelText("No")
-                        .setCancelClickListener(SweetAlertDialog::dismissWithAnimation)
-                        .show();
+
+
+            new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                    .setTitleText("Are you sure?")
+                    .setContentText("Please check inputted details before proceeding.")
+                    .setConfirmText("Yes")
+                    .setConfirmClickListener(sDialog -> {
+                        sDialog.dismissWithAnimation();
+                        addToBookingList(getBookingParams());
+                    })
+                    .setCancelText("No")
+                    .setCancelClickListener(SweetAlertDialog::dismissWithAnimation)
+                    .show();
         });
     }
 
@@ -124,7 +142,7 @@ public class SetBookingDetailsActivity extends AppCompatActivity{
         return super.onOptionsItemSelected(item);
     }
 
-    private HashMap<String, String> getBookingParams(){
+    private HashMap<String, String> getBookingParams() {
         HashMap<String, String> params = new HashMap<>();
         params.put("talent_id", selectedTalentId);
         params.put("client_id", selectedClientId);
@@ -138,7 +156,7 @@ public class SetBookingDetailsActivity extends AppCompatActivity{
         return params;
     }
 
-    private void addToBookingList(HashMap<String, String> params){
+    private void addToBookingList(HashMap<String, String> params) {
         SweetAlertDialog pDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
         pDialog.getProgressHelper().setBarColor(Color.parseColor("#48b1bf"));
         pDialog.setTitleText(Messages.PLEASE_WAIT_WHILE_ADDING_TO_BOOKING_LIST_MSG);
@@ -185,21 +203,21 @@ public class SetBookingDetailsActivity extends AppCompatActivity{
                 });
     }
 
-    private void getClientBookingResponse(JSONObject response){
+    private void getClientBookingResponse(JSONObject response) {
         try {
             String status = response.getString("status");
             String msg = response.has("msg") ? response.getString("msg") : "";
 
-            if(status.equals("OK")){
+            if (status.equals("OK")) {
                 new SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
-                        .setTitleText("Congratulations!")
+                        .setTitleText("Congratulations! Your offer was successfully send to the chosen talent/s.")
                         .setContentText(msg)
                         .setConfirmClickListener(sweetAlertDialog -> {
                             finish();
                             startActivity(new Intent(this, BookingListActivity.class));
                         })
                         .show();
-            }else{
+            } else {
                 new SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
                         .setTitleText("Oops..")
                         .setContentText(msg)

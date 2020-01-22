@@ -21,8 +21,6 @@ public class EndPoints {
     public static final String GET_BOOKING_LIST_BY_CLIENT_ID_URL = API_URL + "client/get_booking_list_by_client_id";
     public static final String ADD_TO_BOOKING_LIST_URL = API_URL + "client/add_to_booking_list";
     public static final String GET_ALL_REGIONS_URL = API_URL + "client/get_all_regions";
-    public static final String GET_ALL_PROVINCES_BY_REGION_CODE_URL = API_URL + "client/get_all_provinces_by_region_code";
-    public static final String GET_ALL_CITY_MUNI_BY_PROVINCE_CODE_URL = API_URL + "client/get_city_muni_by_province_code";
     public static final String GET_ALL_CLIENT_BOOKED_URL = API_URL + "talents/get_all_client_booked";
     public static final String START_PAYMENT_URL = API_URL + "payment/start_payment";
     public static final String ADD_TALENT_REVIEWS_URL = API_URL + "talents/add_talent_reviews";

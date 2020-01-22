@@ -130,6 +130,7 @@ public class BookingListActivity extends AppCompatActivity {
                     JSONObject object = array.getJSONObject(i);
 
                     Location location = new Location(
+                            object.getJSONObject("talent_id").getString("region"),
                             object.getJSONObject("talent_id").getString("province"),
                             object.getJSONObject("talent_id").getString("city_muni"),
                             object.getJSONObject("talent_id").getString("barangay"),

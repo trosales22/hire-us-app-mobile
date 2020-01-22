@@ -11,6 +11,13 @@
             android:title="@string/menu_home" />
 
         <item
+            android:id="@+id/nav_search_a_talent"
+            android:icon="@drawable/ic_search_black"
+            android:title="Search a Talent"
+            android:visible="true"
+            tools:ignore="HardcodedText" />
+
+        <item
             android:id="@+id/nav_booking_list"
             android:icon="@drawable/ic_booked_list_black"
             android:title="Booking List"
@@ -37,9 +44,6 @@
             <item
                 android:id="@+id/nav_about_app"
                 android:title="Hire Us" />
-            <item
-                android:id="@+id/nav_about_dev"
-                android:title="Developer" />
         </menu>
     </item>
 

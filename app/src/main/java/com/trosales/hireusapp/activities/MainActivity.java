@@ -3,7 +3,6 @@ package com.trosales.hireusapp.activities;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import com.google.android.material.snackbar.Snackbar;
@@ -22,7 +21,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.androidnetworking.AndroidNetworking;
@@ -31,7 +29,6 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.ethanhua.skeleton.Skeleton;
 import com.ethanhua.skeleton.SkeletonScreen;
-import com.michaldrabik.tapbarmenulib.TapBarMenu;
 import com.trosales.hireusapp.R;
 import com.trosales.hireusapp.classes.adapters.TalentsAdapter;
 import com.trosales.hireusapp.classes.beans.Location;
@@ -66,9 +63,6 @@ public class MainActivity extends AppCompatActivity
     @BindView(R.id.stateful_layout) SimpleStatefulLayout simpleStatefulLayout;
     @BindView(R.id.swipeToRefresh_talents) SwipeRefreshLayout swipeToRefresh_talents;
     @BindView(R.id.recyclerView_talents) RecyclerView recyclerView_talents;
-    @BindView(R.id.tapBarMenu) TapBarMenu tapBarMenu;
-    @BindView(R.id.btnSearchTalent) ImageView btnSearchTalent;
-    @BindView(R.id.btnFilterCategory) ImageView btnFilterCategory;
 
     private String selectedCategory;
     private HashMap<String, String> extraFiltering;
@@ -94,33 +88,6 @@ public class MainActivity extends AppCompatActivity
         }
 
         extraFiltering = new HashMap<>();
-
-        tapBarMenu.setOnClickListener(v -> tapBarMenu.toggle());
-
-        btnSearchTalent.setOnClickListener(view -> {
-            new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
-                    .setTitleText("Oops! We're sorry!")
-                    .setContentText("Ongoing development. Thank you for your patience.")
-                    .setConfirmText("Ok, I understand!")
-                    .show();
-        });
-
-
-        btnFilterCategory.setOnClickListener(v -> {
-            String[] items = getResources().getStringArray(R.array.categories);
-            new LovelyChoiceDialog(this, R.style.TintTheme)
-                    .setTopColorRes(R.color.colorPrimary)
-                    .setTitle("Choose Categories")
-                    .setIcon(R.drawable.ic_account_circle_white)
-                    .setItemsMultiChoice(items, (categoryPositions, categoryItems) -> {
-                        selectedCategory = TextUtils.join(",", categoryItems);
-                        extraFiltering.put("selectedCategory", selectedCategory);
-                        getAllTalents(extraFiltering);
-                    }
-                    )
-                    .setConfirmButtonText("Done")
-                    .show();
-        });
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -237,6 +204,20 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_home) {
             startActivity(new Intent(this, MainActivity.class));
+        } else if(id == R.id.nav_search_a_talent){
+            String[] items = getResources().getStringArray(R.array.categories);
+            new LovelyChoiceDialog(this, R.style.TintTheme)
+                    .setTopColorRes(R.color.colorPrimary)
+                    .setTitle("Choose Categories")
+                    .setIcon(R.drawable.ic_account_circle_white)
+                    .setItemsMultiChoice(items, (categoryPositions, categoryItems) -> {
+                                selectedCategory = TextUtils.join(",", categoryItems);
+                                extraFiltering.put("selectedCategory", selectedCategory);
+                                getAllTalents(extraFiltering);
+                            }
+                    )
+                    .setConfirmButtonText("Done")
+                    .show();
         } else if (id == R.id.nav_booking_list) {
             startActivity(new Intent(this, BookingListActivity.class));
         } else if (id == R.id.nav_clients_booked) {
@@ -249,16 +230,8 @@ public class MainActivity extends AppCompatActivity
                     .setIcon(R.drawable.ic_info_outline_white)
                     .setTitle("About Hire Us PH")
                     .setMessage("A mobile app/web based booking application that will cater market in entertainment and events industry. " +
-                            "To have own payment system that allows customers/client to pay online in order to book using debit/credit card.\n\n" +
-                            "Founder:\n1. Josh Saratan\n2. Albert Boholano\n\nDeveloper: Tristan Jules B. Rosales\n")
+                            "To have own payment system that allows customers/client to pay online in order to book using debit/credit card.\n")
                     .show();
-        } else if (id == R.id.nav_about_dev) {
-            Uri uri = Uri.parse("https://tristanrosales.com/");
-            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-            // Verify that the intent will resolve to an activity
-            if (intent.resolveActivity(getPackageManager()) != null) {
-                startActivity(intent);
-            }
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -398,6 +371,7 @@ public class MainActivity extends AppCompatActivity
                             object.getString("category_names"),
                             Integer.parseInt(object.getString("age")),
                             new Location(
+                                    object.getString("region"),
                                     object.getString("province"),
                                     object.getString("city_muni"),
                                     object.getString("barangay"),

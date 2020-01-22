@@ -15,7 +15,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/gainsboro">
+            android:background="@drawable/background_home">
 
             <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                 android:id="@+id/swipeToRefresh_talents"
@@ -44,37 +44,5 @@
         </FrameLayout>
 
     </RelativeLayout>
-
-    <com.michaldrabik.tapbarmenulib.TapBarMenu
-        android:id="@+id/tapBarMenu"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="24dp"
-        app:tbm_backgroundColor="@color/colorPrimary">
-
-        <ImageView
-            android:id="@+id/btnSearchTalent"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:src="@drawable/search_talent" />
-
-        <Space
-            android:layout_width="56dp"
-            android:layout_height="match_parent" />
-
-        <ImageView
-            android:id="@+id/btnFilterCategory"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:src="@drawable/filter_category" />
-
-    </com.michaldrabik.tapbarmenulib.TapBarMenu>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

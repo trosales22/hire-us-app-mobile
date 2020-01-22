@@ -41,39 +41,6 @@
                     android:textAlignment="textStart"
                     tools:ignore="HardcodedText" />
 
-                <LinearLayout
-                    android:id="@+id/linearLayoutLocation"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <org.angmarch.views.NiceSpinner
-                        android:id="@+id/cmbProvince"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginBottom="10dp"
-                        android:hint="Choose Province"
-                        android:textColor="@color/black"
-                        android:textColorHint="@color/black"
-                        android:textSize="15sp"
-                        android:textAlignment="textStart"
-                        tools:ignore="HardcodedText" />
-
-                    <org.angmarch.views.NiceSpinner
-                        android:id="@+id/cmbCity"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginBottom="10dp"
-                        android:hint="Choose City"
-                        android:textColor="@color/black"
-                        android:textColorHint="@color/black"
-                        android:textSize="15sp"
-                        tools:ignore="HardcodedText" />
-
-                </LinearLayout>
-
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -145,49 +112,6 @@
 
                     <me.abhinay.input.CurrencyEditText
                         android:id="@+id/txtHeightTo"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:layout_weight="1"
-                        android:hint="To"
-                        android:inputType="number"
-                        android:textSize="18sp"
-                        android:background="@color/white"
-                        android:padding="12dp"
-                        tools:ignore="HardcodedText" />
-
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:text="Rate Per Hour"
-                    android:textColor="@color/white"
-                    android:textSize="18sp"
-                    tools:ignore="HardcodedText" />
-
-                <LinearLayout
-                    android:id="@+id/linearLayoutRatePerHour"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <me.abhinay.input.CurrencyEditText
-                        android:id="@+id/txtRatePerHourFrom"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:layout_weight="1"
-                        android:hint="From"
-                        android:inputType="number"
-                        android:textSize="18sp"
-                        android:background="@color/white"
-                        android:padding="12dp"
-                        tools:ignore="HardcodedText" />
-
-                    <me.abhinay.input.CurrencyEditText
-                        android:id="@+id/txtRatePerHourTo"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"

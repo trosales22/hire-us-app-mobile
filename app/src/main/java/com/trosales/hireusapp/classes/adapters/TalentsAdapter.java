@@ -57,7 +57,7 @@ public class TalentsAdapter extends RecyclerView.Adapter<TalentsAdapter.ViewHold
                 .into(viewHolder.imgTalentDisplayPhoto);
 
         viewHolder.lblTalentFullname.setText(talentsDO.getFullname());
-        viewHolder.lblTalentLocation.setText(talentsDO.getLocation().getCityMuni() + ", " + talentsDO.getLocation().getProvince());
+        viewHolder.lblTalentAgeAndRegion.setText(talentsDO.getTalentAge() + " yrs old from " + talentsDO.getLocation().getRegion());
 
         CategoryDetector categoryDetector = new CategoryDetector(
                 talentsDO.getCategoryNames().contains(CategoriesConstants.CELEBRITY),
@@ -92,12 +92,6 @@ public class TalentsAdapter extends RecyclerView.Adapter<TalentsAdapter.ViewHold
             intent.putExtras(bundle);
             v.getContext().startActivity(intent);
         });
-
-        /*
-        UnavailableDatesFragment unavailableDatesFragment = UnavailableDatesFragment.getInstance();
-        unavailableDatesFragment.show(((AppCompatActivity) context).getSupportFragmentManager(), "Unavailable Dates");
-
-         */
     }
 
     @Override
@@ -109,7 +103,7 @@ public class TalentsAdapter extends RecyclerView.Adapter<TalentsAdapter.ViewHold
         @BindView(R.id.cardView_talents) CardView cardView_talents;
         @BindView(R.id.imgTalentDisplayPhoto) ImageView imgTalentDisplayPhoto;
         @BindView(R.id.lblTalentFullname) TextView lblTalentFullname;
-        @BindView(R.id.lblTalentLocation) TextView lblTalentLocation;
+        @BindView(R.id.lblTalentAgeAndRegion) TextView lblTalentAgeAndRegion;
         @BindView(R.id.lblTalentCategories) TextView lblTalentCategories;
 
         public ViewHolder(@NonNull View itemView) {

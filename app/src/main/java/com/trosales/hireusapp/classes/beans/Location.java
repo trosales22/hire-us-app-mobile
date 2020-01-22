@@ -3,14 +3,19 @@ package com.trosales.hireusapp.classes.beans;
 import org.jetbrains.annotations.NotNull;
 
 public class Location {
-    String province,cityMuni,barangay,bldgVillage,zipCode;
+    private String region, province, cityMuni, barangay, bldgVillage, zipCode;
 
-    public Location(String province, String cityMuni, String barangay, String bldgVillage, String zipCode) {
+    public Location(String region, String province, String cityMuni, String barangay, String bldgVillage, String zipCode) {
+        this.region = region;
         this.province = province;
         this.cityMuni = cityMuni;
         this.barangay = barangay;
         this.bldgVillage = bldgVillage;
         this.zipCode = zipCode;
+    }
+
+    public String getRegion() {
+        return region;
     }
 
     public String getProvince() {
@@ -37,7 +42,8 @@ public class Location {
     @Override
     public String toString() {
         return "Location{" +
-                "province='" + province + '\'' +
+                "region='" + region + '\'' +
+                ", province='" + province + '\'' +
                 ", cityMuni='" + cityMuni + '\'' +
                 ", barangay='" + barangay + '\'' +
                 ", bldgVillage='" + bldgVillage + '\'' +

@@ -68,7 +68,7 @@ public class SetWorkingDatesBottomSheetFragment extends BottomSheetDialogFragmen
         sbSelectedDates = new StringBuilder();
 
         Calendar maxDate = Calendar.getInstance();
-        maxDate.add(Calendar.MONTH, 3);
+        maxDate.add(Calendar.YEAR, 12);
 
         Date dateToday = new Date();
 

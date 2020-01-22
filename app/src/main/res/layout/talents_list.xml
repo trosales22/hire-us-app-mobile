@@ -65,7 +65,7 @@
                 card_view:ignore="HardcodedText" />
 
             <TextView
-                android:id="@+id/lblTalentLocation"
+                android:id="@+id/lblTalentAgeAndRegion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/lblTalentCategories"
@@ -76,7 +76,7 @@
                 android:textStyle="bold"
                 android:textColor="@color/black"
                 android:gravity="start"
-                android:text="Talent Location"
+                android:text="Talent Age &amp; Region"
                 card_view:ignore="HardcodedText,RtlSymmetry" />
 
         </RelativeLayout>

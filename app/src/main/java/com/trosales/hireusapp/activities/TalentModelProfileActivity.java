@@ -59,8 +59,6 @@ public class TalentModelProfileActivity extends AppCompatActivity implements Bas
     @BindView(R.id.lblExperiencesOrPreviousClients) MyTextView lblExperiencesOrPreviousClients;
     @BindView(R.id.btnAddToBookingList) MyTextView btnAddToBookingList;
     @BindView(R.id.btnInquireNow) MyTextView btnInquireNow;
-    @BindView(R.id.linearLayoutShowMore) LinearLayout linearLayoutShowMore;
-    @BindView(R.id.linearLayoutShowLess) LinearLayout linearLayoutShowLess;
     @BindView(R.id.linearLayoutShowMoreDetails) LinearLayout linearLayoutShowMoreDetails;
     @BindView(R.id.linearLayoutTalentDescription) LinearLayout linearLayoutTalentDescription;
     @BindView(R.id.linearLayoutTalentHeight) LinearLayout linearLayoutTalentHeight;
@@ -86,18 +84,6 @@ public class TalentModelProfileActivity extends AppCompatActivity implements Bas
 
         getTalentDetails();
         getTalentReviews();
-
-        linearLayoutShowMore.setOnClickListener(v -> {
-            linearLayoutShowMoreDetails.setVisibility(View.VISIBLE);
-            linearLayoutShowLess.setVisibility(View.VISIBLE);
-            linearLayoutShowMore.setVisibility(View.GONE);
-        });
-
-        linearLayoutShowLess.setOnClickListener(v -> {
-            linearLayoutShowMoreDetails.setVisibility(View.GONE);
-            linearLayoutShowLess.setVisibility(View.GONE);
-            linearLayoutShowMore.setVisibility(View.VISIBLE);
-        });
 
         btnAddToBookingList.setOnClickListener(v -> {
             Intent intent = new Intent(this, SetBookingDetailsActivity.class);
@@ -211,14 +197,7 @@ public class TalentModelProfileActivity extends AppCompatActivity implements Bas
                                 lblTalentHeight.setText(response.getString("height") + " ft.\n");
                                 lblTalentDescription.setText((response.getString("talent_description").isEmpty() ? "No description as of the moment." : response.getString("talent_description")));
 
-                                StringBuilder sbLocation = new StringBuilder();
-                                sbLocation
-                                        .append(response.getString("city_muni"))
-                                        .append(", ")
-                                        .append(response.getString("province"))
-                                        .append("\n");
-
-                                lblTalentLocation.setText(sbLocation.toString());
+                                lblTalentLocation.setText(response.getString("region"));
                                 lblExperiencesOrPreviousClients.setText(response.getString("talent_experiences") + "\n");
                             }
                         } catch (JSONException e) {

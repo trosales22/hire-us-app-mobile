@@ -169,7 +169,7 @@
                         android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Followers"
+                        android:text="Social Media Followers"
                         android:textColor="@color/colorSub"
                         tools:ignore="HardcodedText" />
 
@@ -219,32 +219,9 @@
                         tools:ignore="HardcodedText" />
                 </LinearLayout>
 
-                <!-- Show More -->
-
-                <LinearLayout
-                    android:id="@+id/linearLayoutShowMore"
-                    android:gravity="center"
-                    android:layout_marginTop="16dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <customfonts.MyTextView
-                        android:id="@+id/lblShowMoreCaption"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="SHOW MORE"
-                        android:textColor="#4c71f5"
-                        android:textSize="11sp"
-                        android:gravity="center"
-                        android:drawableEnd="@drawable/arrow"
-                        android:drawablePadding="8dp"
-                        tools:ignore="HardcodedText,SmallSp" />
-                </LinearLayout>
-
                 <LinearLayout
                     android:id="@+id/linearLayoutShowMoreDetails"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -345,28 +322,6 @@
                             tools:ignore="HardcodedText" />
                     </LinearLayout>
 
-                    <!-- Show Less -->
-
-                    <LinearLayout
-                        android:id="@+id/linearLayoutShowLess"
-                        android:gravity="center"
-                        android:layout_marginTop="16dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <customfonts.MyTextView
-                            android:id="@+id/lblShowLessCaption"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="SHOW LESS"
-                            android:textColor="#4c71f5"
-                            android:textSize="11sp"
-                            android:gravity="center"
-                            android:drawableEnd="@drawable/arrow1"
-                            android:drawablePadding="8dp"
-                            tools:ignore="HardcodedText,SmallSp" />
-                    </LinearLayout>
                 </LinearLayout>
 
                 <View

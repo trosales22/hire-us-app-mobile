@@ -115,6 +115,7 @@ public class PotentialClientsAdapter extends RecyclerView.Adapter<PotentialClien
             bookingAndClientDetailsBundleArgs.putString("client_email", clientsBookedDO.getClientDetailsDO().getClientEmail());
             bookingAndClientDetailsBundleArgs.putString("client_contact_number", clientsBookedDO.getClientDetailsDO().getClientContactNumber());
             bookingAndClientDetailsBundleArgs.putString("client_gender", clientsBookedDO.getClientDetailsDO().getClientGender());
+            bookingAndClientDetailsBundleArgs.putString("role_code", clientsBookedDO.getClientDetailsDO().getClientRoleCode());
             bookingAndClientDetailsBundleArgs.putString("client_type", clientsBookedDO.getClientDetailsDO().getClientRoleName());
 
             BookingAndClientDetailsBottomSheetFragment bookingAndClientDetailsBottomSheetFragment = new BookingAndClientDetailsBottomSheetFragment(bookingAndClientDetailsBundleArgs, view.getContext());

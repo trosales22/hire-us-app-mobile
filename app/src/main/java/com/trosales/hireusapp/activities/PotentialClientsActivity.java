@@ -134,6 +134,7 @@ public class PotentialClientsActivity extends AppCompatActivity {
                     );
 
                     Location location = new Location(
+                            object.getJSONObject("talent_id").getString("region"),
                             object.getJSONObject("talent_id").getString("province"),
                             object.getJSONObject("talent_id").getString("city_muni"),
                             object.getJSONObject("talent_id").getString("barangay"),

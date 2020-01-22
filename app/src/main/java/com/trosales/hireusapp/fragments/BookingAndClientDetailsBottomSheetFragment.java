@@ -64,8 +64,6 @@ public class BookingAndClientDetailsBottomSheetFragment extends BottomSheetDialo
     @BindView(R.id.lblBookingApprovedOrDeclinedDate) TextView lblBookingApprovedOrDeclinedDate;
 
     @BindView(R.id.lblClientFullName) TextView lblClientFullName;
-    @BindView(R.id.lblClientEmail) TextView lblClientEmail;
-    @BindView(R.id.lblClientContactNumber) TextView lblClientContactNumber;
     @BindView(R.id.lblClientGender) TextView lblClientGender;
     @BindView(R.id.lblClientType) TextView lblClientType;
 
@@ -167,10 +165,17 @@ public class BookingAndClientDetailsBottomSheetFragment extends BottomSheetDialo
         }
 
         lblClientFullName.setText(bookingAndClientDetailsBundleArgs.getString("client_full_name"));
-        lblClientEmail.setText(bookingAndClientDetailsBundleArgs.getString("client_email"));
-        lblClientContactNumber.setText(bookingAndClientDetailsBundleArgs.getString("client_contact_number"));
         lblClientGender.setText(bookingAndClientDetailsBundleArgs.getString("client_gender"));
-        lblClientType.setText(bookingAndClientDetailsBundleArgs.getString("client_type"));
+
+        switch (Objects.requireNonNull(bookingAndClientDetailsBundleArgs.getString("role_code"))){
+            case "CLIENT_INDIVIDUAL":
+                lblClientType.setText(bookingAndClientDetailsBundleArgs.getString("client_type"));
+                break;
+            case "CLIENT_COMPANY":
+                lblClientType.setText(bookingAndClientDetailsBundleArgs.getString("client_type") +
+                        "\nCompany Name: " + bookingAndClientDetailsBundleArgs.getString("client_full_name"));
+                break;
+        }
 
         rbTalentFee.setOnClickListener(view -> {
             chooseDeclineReason(rbTalentFee);

@@ -157,7 +157,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_below="@id/txtBookingVenueOrLocation"
-                android:hint="Enter talent fee.."
+                android:hint="Enter Talent Fee Offer.."
                 android:inputType="number"
                 android:textSize="16sp"
                 android:padding="10dp"
@@ -187,12 +187,12 @@
                 tools:ignore="HardcodedText" />
 
             <Button
-                android:id="@+id/btnProceed"
+                android:id="@+id/btnSendOffer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/txtBookingOtherDetails"
                 android:background="@color/colorPrimary"
-                android:text="Book Now"
+                android:text="Send Offer"
                 android:textColor="#fff"
                 android:padding="15dp"
                 android:layout_marginStart="10dp"
