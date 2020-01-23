@@ -5,15 +5,14 @@ import com.trosales.hireusapp.classes.beans.Location;
 import org.jetbrains.annotations.NotNull;
 
 public class TalentsDO {
-    private String talent_id,fullname,height,hourlyRate,gender,talentDisplayPhoto,categoryNames;
+    private String talent_id, fullname, height, gender, talentDisplayPhoto, categoryNames;
     private int talentAge;
     private Location location;
 
-    public TalentsDO(String talent_id, String fullname, String height, String hourlyRate, String gender, String talentDisplayPhoto, String categoryNames, int talentAge, Location location) {
+    public TalentsDO(String talent_id, String fullname, String height, String gender, String talentDisplayPhoto, String categoryNames, int talentAge, Location location) {
         this.talent_id = talent_id;
         this.fullname = fullname;
         this.height = height;
-        this.hourlyRate = hourlyRate;
         this.gender = gender;
         this.talentDisplayPhoto = talentDisplayPhoto;
         this.categoryNames = categoryNames;
@@ -31,10 +30,6 @@ public class TalentsDO {
 
     public String getHeight() {
         return height;
-    }
-
-    public String getHourlyRate() {
-        return hourlyRate;
     }
 
     public String getGender() {
@@ -64,7 +59,6 @@ public class TalentsDO {
                 "talent_id='" + talent_id + '\'' +
                 ", fullname='" + fullname + '\'' +
                 ", height='" + height + '\'' +
-                ", hourlyRate='" + hourlyRate + '\'' +
                 ", gender='" + gender + '\'' +
                 ", talentDisplayPhoto='" + talentDisplayPhoto + '\'' +
                 ", categoryNames='" + categoryNames + '\'' +

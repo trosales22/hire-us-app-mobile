@@ -365,7 +365,6 @@ public class MainActivity extends AppCompatActivity
                             object.getString("talent_id"),
                             object.getString("screen_name").isEmpty() ? object.getString("fullname") : object.getString("screen_name"),
                             object.getString("height"),
-                            object.getString("hourly_rate"),
                             object.getString("gender"),
                             object.getString("talent_display_photo"),
                             object.getString("category_names"),
@@ -455,13 +454,17 @@ public class MainActivity extends AppCompatActivity
             if(SharedPrefManager.getInstance(this).getUserRole().equals("TALENT_MODEL")){
                 SharedPrefManager.getInstance(this).saveUserIdSession(response.getString("talent_id"));
                 checkUserRole(navigationView, response.getString("role_name"));
+
+                lblLoggedInRole.setText("Talent / Model");
             }else{
                 SharedPrefManager.getInstance(this).saveUserIdSession(response.getString("user_id"));
                 checkUserRole(navigationView, response.getString("role_code"));
+
+                lblLoggedInRole.setText(response.getString("role_name"));
             }
 
             lblLoggedInFullname.setText(response.getString("firstname") + " " + response.getString("lastname"));
-            lblLoggedInRole.setText(response.getString("role_name"));
+
         }catch (JSONException e) {
             Log.e(Tags.MAIN_ACTIVITY, e.toString());
 
