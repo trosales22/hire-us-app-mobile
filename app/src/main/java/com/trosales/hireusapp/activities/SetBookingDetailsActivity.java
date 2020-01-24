@@ -97,38 +97,48 @@ public class SetBookingDetailsActivity extends AppCompatActivity {
         });
 
         btnSendOffer.setOnClickListener(v -> {
-            if (txtBookingWorkingHours.getText().toString().trim().isEmpty()) {
-                txtBookingWorkingHours.setError("Please enter booking working hours!");
-                return;
+
+            if(txtBookingWorkingHours.getText().toString().trim().isEmpty() ||
+                    txtBookingEventTitle.getText().toString().trim().isEmpty() ||
+                    txtBookingVenueOrLocation.getText().toString().trim().isEmpty() ||
+                    txtBookingTalentFee.getText().toString().trim().isEmpty()){
+
+                new SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText(Messages.WARNING_MSG)
+                        .setContentText("Please fill out all required fields.")
+                        .setConfirmClickListener(sweetAlertDialog -> {
+                            if (txtBookingWorkingHours.getText().toString().trim().isEmpty()) {
+                                txtBookingWorkingHours.setError("Please enter booking working hours!");
+                            }
+
+                            if (txtBookingEventTitle.getText().toString().trim().isEmpty()) {
+                                txtBookingEventTitle.setError("Please enter booking event title!");
+                            }
+
+                            if (txtBookingVenueOrLocation.getText().toString().trim().isEmpty()) {
+                                txtBookingVenueOrLocation.setError("Please enter booking venue/location!");
+                            }
+
+                            if (txtBookingTalentFee.getText().toString().trim().isEmpty()) {
+                                txtBookingTalentFee.setError("Please enter booking fee!");
+                            }
+
+                            sweetAlertDialog.dismissWithAnimation();
+                        })
+                        .show();
+            }else{
+                new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("Are you sure?")
+                        .setContentText("Please check inputted details before proceeding.")
+                        .setConfirmText("Yes")
+                        .setConfirmClickListener(sDialog -> {
+                            sDialog.dismissWithAnimation();
+                            addToBookingList(getBookingParams());
+                        })
+                        .setCancelText("No")
+                        .setCancelClickListener(SweetAlertDialog::dismissWithAnimation)
+                        .show();
             }
-
-            if (txtBookingEventTitle.getText().toString().trim().isEmpty()) {
-                txtBookingEventTitle.setError("Please enter booking event title!");
-                return;
-            }
-
-            if (txtBookingVenueOrLocation.getText().toString().trim().isEmpty()) {
-                txtBookingVenueOrLocation.setError("Please enter booking venue/location!");
-                return;
-            }
-
-            if (txtBookingTalentFee.getText().toString().trim().isEmpty()) {
-                txtBookingTalentFee.setError("Please enter booking fee!");
-                return;
-            }
-
-
-            new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
-                    .setTitleText("Are you sure?")
-                    .setContentText("Please check inputted details before proceeding.")
-                    .setConfirmText("Yes")
-                    .setConfirmClickListener(sDialog -> {
-                        sDialog.dismissWithAnimation();
-                        addToBookingList(getBookingParams());
-                    })
-                    .setCancelText("No")
-                    .setCancelClickListener(SweetAlertDialog::dismissWithAnimation)
-                    .show();
         });
     }
 
