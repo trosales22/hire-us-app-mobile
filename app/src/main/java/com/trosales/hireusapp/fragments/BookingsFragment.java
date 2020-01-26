@@ -195,7 +195,7 @@ public class BookingsFragment extends Fragment {
                 .addPathParameter("city_muni_code", filteringOption.get("city_muni_code"))
                 .addPathParameter("gender", filteringOption.get("gender"))
                 .addPathParameter("selected_categories", selectedCategory)
-                .setTag(Tags.MAIN_ACTIVITY)
+                .setTag(Tags.BOOKINGS_FRAGMENT)
                 .setPriority(Priority.MEDIUM)
                 .build()
                 .getAsJSONObject(new JSONObjectRequestListener() {
@@ -208,7 +208,7 @@ public class BookingsFragment extends Fragment {
                     @Override
                     public void onError(ANError anError) {
                         skeletonScreen.hide();
-                        Log.e(Tags.MAIN_ACTIVITY, anError.getErrorDetail());
+                        Log.e(Tags.BOOKINGS_FRAGMENT, anError.getErrorDetail());
                     }
                 });
     }
