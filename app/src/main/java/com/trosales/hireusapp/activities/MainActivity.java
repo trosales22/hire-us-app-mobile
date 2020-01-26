@@ -4,13 +4,12 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import com.google.android.material.snackbar.Snackbar;
 import androidx.core.view.GravityCompat;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
@@ -27,50 +26,41 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
-import com.ethanhua.skeleton.Skeleton;
-import com.ethanhua.skeleton.SkeletonScreen;
+import com.google.android.material.tabs.TabLayout;
 import com.trosales.hireusapp.R;
-import com.trosales.hireusapp.classes.adapters.TalentsAdapter;
-import com.trosales.hireusapp.classes.beans.Location;
 import com.trosales.hireusapp.classes.commons.AndroidNetworkingShortcuts;
 import com.trosales.hireusapp.classes.commons.AppSecurity;
 import com.trosales.hireusapp.classes.commons.SharedPrefManager;
 import com.trosales.hireusapp.classes.constants.EndPoints;
 import com.trosales.hireusapp.classes.constants.Messages;
 import com.trosales.hireusapp.classes.constants.Tags;
-import com.trosales.hireusapp.classes.wrappers.TalentsDO;
+import com.trosales.hireusapp.classes.constants.Variables;
+import com.trosales.hireusapp.fragments.AnnouncementsFragment;
+import com.trosales.hireusapp.fragments.BookingsFragment;
+import com.trosales.hireusapp.fragments.NewsFragment;
 import com.yarolegovich.lovelydialog.LovelyChoiceDialog;
 import com.yarolegovich.lovelydialog.LovelyInfoDialog;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.pedant.SweetAlert.SweetAlertDialog;
-import cz.kinst.jakub.view.SimpleStatefulLayout;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
     private TextView lblLoggedInFullname, lblLoggedInRole;
-    @BindView(R.id.stateful_layout) SimpleStatefulLayout simpleStatefulLayout;
-    @BindView(R.id.swipeToRefresh_talents) SwipeRefreshLayout swipeToRefresh_talents;
-    @BindView(R.id.recyclerView_talents) RecyclerView recyclerView_talents;
+    @BindView(R.id.tab_layout) TabLayout tabLayout;
 
     private String selectedCategory;
-    private HashMap<String, String> extraFiltering;
 
-    private List<TalentsDO> talentsDOList;
-    private TalentsAdapter talentsAdapter;
-    protected Handler handler;
-    private SkeletonScreen skeletonScreen;
+    Fragment fragment = null;
+    FragmentManager fragmentManager;
+    FragmentTransaction fragmentTransaction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,14 +70,12 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         ButterKnife.bind(this);
 
-        AppSecurity.disableScreenshotRecording(this);
+        //AppSecurity.disableScreenshotRecording(this);
 
         if (!SharedPrefManager.getInstance(this).isLoggedIn()) {
             finish();
             startActivity(new Intent(this, LoginActivity.class));
         }
-
-        extraFiltering = new HashMap<>();
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -102,38 +90,12 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-        talentsDOList = new ArrayList<>();
-        handler = new Handler();
+        tabLayout.removeAllTabs();
+        //tabLayout.addTab(tabLayout.newTab().setText(Variables.NEWS_TAB_NAME));
+        //tabLayout.addTab(tabLayout.newTab().setText(Variables.ANNOUNCEMENTS_TAB_NAME));
+        //tabLayout.addTab(tabLayout.newTab().setText(Variables.BOOKINGS_TAB_NAME));
 
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
-        recyclerView_talents.setLayoutManager(gridLayoutManager);
-
-        skeletonScreen = Skeleton.bind(recyclerView_talents)
-                .adapter(talentsAdapter)
-                .color(R.color.shimmer_color)
-                .load(R.layout.talents_placeholder_layout)
-                .show();
-
-        skeletonScreen.show();
-
-        //bundle = getIntent().getExtras();
-
-        handler.postDelayed(() -> {
-            getAllTalents(extraFiltering);
-        }, 500);
-
-        swipeToRefresh_talents.setOnRefreshListener(() -> {
-            skeletonScreen.show();
-
-            if(talentsDOList != null){
-                talentsDOList.clear();
-            }
-
-            handler.postDelayed(() -> {
-                getAllTalents(extraFiltering);
-            }, 500);
-            swipeToRefresh_talents.setRefreshing(false);
-        });
+        setupTabLayout(tabLayout);
 
         if(SharedPrefManager.getInstance(this).getUserRole().equals("TALENT_MODEL")){
             AndroidNetworkingShortcuts.prefetchPersonalInfo(
@@ -212,8 +174,13 @@ public class MainActivity extends AppCompatActivity
                     .setIcon(R.drawable.ic_account_circle_white)
                     .setItemsMultiChoice(items, (categoryPositions, categoryItems) -> {
                                 selectedCategory = TextUtils.join(",", categoryItems);
-                                extraFiltering.put("selectedCategory", selectedCategory);
-                                getAllTalents(extraFiltering);
+
+                                Bundle bookingsBundleArgs = new Bundle();
+                                bookingsBundleArgs.putString("selectedCategory", selectedCategory);
+
+                                Fragment selectedFragment = BookingsFragment.newInstance();
+                                selectedFragment.setArguments(bookingsBundleArgs);
+                                setFragment(selectedFragment);
                             }
                     )
                     .setConfirmButtonText("Done")
@@ -239,161 +206,57 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private StringBuilder getParams(HashMap<String, String> filteringOption){
-        StringBuilder sbParams = new StringBuilder();
-
-        if(!filteringOption.isEmpty()){
-            sbParams.append("?");
-
-            Log.d("debug", "filteringOption: " + filteringOption.toString());
-
-            if(filteringOption.get("height_from") != null){
-                if(!Objects.requireNonNull(filteringOption.get("height_from")).isEmpty()){
-                    sbParams.append("&height_from={height_from}");
-                }
-            }
-
-            if(filteringOption.get("height_to") != null) {
-                if (!Objects.requireNonNull(filteringOption.get("height_to")).isEmpty()) {
-                    sbParams.append("&height_to={height_to}");
-                }
-            }
-
-            if(filteringOption.get("age_from") != null) {
-                if (!Objects.requireNonNull(filteringOption.get("age_from")).isEmpty()) {
-                    sbParams.append("&age_from={age_from}");
-                }
-            }
-
-            if(filteringOption.get("age_to") != null) {
-                if (!Objects.requireNonNull(filteringOption.get("age_to")).isEmpty()) {
-                    sbParams.append("&age_to={age_to}");
-                }
-            }
-
-            if(filteringOption.get("rate_per_hour_from") != null) {
-                if (!Objects.requireNonNull(filteringOption.get("rate_per_hour_from")).isEmpty()) {
-                    sbParams.append("&rate_per_hour_from={rate_per_hour_from}");
-                }
-            }
-
-            if(filteringOption.get("rate_per_hour_to") != null) {
-                if (!Objects.requireNonNull(filteringOption.get("rate_per_hour_to")).isEmpty()) {
-                    sbParams.append("&rate_per_hour_to={rate_per_hour_to}");
-                }
-            }
-
-            if(filteringOption.get("province_code") != null) {
-                if (filteringOption.get("province_code") != null) {
-                    sbParams.append("&province_code={province_code}");
-                }
-            }
-
-            if(filteringOption.get("city_muni_code") != null) {
-                if (filteringOption.get("city_muni_code") != null) {
-                    sbParams.append("&city_muni_code={city_muni_code}");
-                }
-            }
-
-            if(filteringOption.get("gender") != null) {
-                if (!Objects.requireNonNull(filteringOption.get("gender")).isEmpty()) {
-                    sbParams.append("&gender={gender}");
-                }
-            }
-        }
-
-        return sbParams;
+    private void setFragment(Fragment selectedFragment) {
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, Objects.requireNonNull(selectedFragment), Tags.MAIN_ACTIVITY).commit();
     }
 
-    private void getAllTalents(HashMap<String, String> extraFiltering){
-        talentsDOList.clear();
-        HashMap<String, String> filteringOption = SharedPrefManager.getInstance(this).getFilteringOption();
-        Log.d("debug", EndPoints.GET_ALL_TALENTS_URL.concat(getParams(filteringOption).toString()));
+    private void setupTabLayout(TabLayout tabLayout){
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        StringBuilder sbExtraFilteringParams = new StringBuilder();
+        fragment = new NewsFragment();
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frame_layout, fragment);
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        fragmentTransaction.commit();
 
-        if(!extraFiltering.isEmpty()) {
-            Log.d("debug", "extraFiltering: " + extraFiltering.toString());
-            if(extraFiltering.get("selectedCategory") != null) {
-                if (!Objects.requireNonNull(extraFiltering.get("selectedCategory")).isEmpty()) {
-                    sbExtraFilteringParams.append("&selected_categories={selected_categories}");
-                }
-            }
-        }
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                Fragment selectedFragment;
+                String tabName = Objects.requireNonNull(tab.getText()).toString();
 
-        AndroidNetworking
-                .get(EndPoints.GET_ALL_TALENTS_URL.concat(getParams(filteringOption).toString()).concat(sbExtraFilteringParams.toString()))
-                .addPathParameter("height_from", filteringOption.get("height_from"))
-                .addPathParameter("height_to", filteringOption.get("height_to"))
-                .addPathParameter("age_from", filteringOption.get("age_from"))
-                .addPathParameter("age_to", filteringOption.get("age_to"))
-                .addPathParameter("rate_per_hour_from", filteringOption.get("rate_per_hour_from"))
-                .addPathParameter("rate_per_hour_to", filteringOption.get("rate_per_hour_to"))
-                .addPathParameter("province_code", filteringOption.get("province_code"))
-                .addPathParameter("city_muni_code", filteringOption.get("city_muni_code"))
-                .addPathParameter("gender", filteringOption.get("gender"))
-                .addPathParameter("selected_categories", extraFiltering.get("selectedCategory"))
-                .setTag(Tags.MAIN_ACTIVITY)
-                .setPriority(Priority.MEDIUM)
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        skeletonScreen.hide();
-                        getTalentsResponse(response);
-                    }
+                switch (tabName){
+                    case Variables.NEWS_TAB_NAME:
+                        Log.d("debug", Variables.NEWS_TAB_NAME);
+                        selectedFragment = NewsFragment.newInstance();
+                        setFragment(selectedFragment);
+                        break;
+                    case Variables.ANNOUNCEMENTS_TAB_NAME:
+                        Log.d("debug", Variables.ANNOUNCEMENTS_TAB_NAME);
+                        selectedFragment = AnnouncementsFragment.newInstance();
+                        setFragment(selectedFragment);
 
-                    @Override
-                    public void onError(ANError anError) {
-                        skeletonScreen.hide();
-                        Log.e(Tags.MAIN_ACTIVITY, anError.getErrorDetail());
-                    }
-                });
-    }
+                        break;
+                    case Variables.BOOKINGS_TAB_NAME:
+                        Log.d("debug", Variables.BOOKINGS_TAB_NAME);
+                        selectedFragment = BookingsFragment.newInstance();
+                        setFragment(selectedFragment);
 
-    private void getTalentsResponse(JSONObject response){
-        try {
-            JSONArray array = response.getJSONArray("talents_list");
-
-            if(response.has("flag") && response.has("msg")){
-                Log.d("debug", response.getString("msg"));
-            }else{
-                for (int i = 0; i < array.length(); i++) {
-                    JSONObject object = array.getJSONObject(i);
-
-                    TalentsDO talentsDO = new TalentsDO(
-                            object.getString("talent_id"),
-                            object.getString("screen_name").isEmpty() ? object.getString("fullname") : object.getString("screen_name"),
-                            object.getString("height"),
-                            object.getString("gender"),
-                            object.getString("talent_display_photo"),
-                            object.getString("category_names"),
-                            Integer.parseInt(object.getString("age")),
-                            new Location(
-                                    object.getString("region"),
-                                    object.getString("province"),
-                                    object.getString("city_muni"),
-                                    object.getString("barangay"),
-                                    object.getString("bldg_village"),
-                                    object.getString("zip_code")
-                            )
-                    );
-
-                    talentsDOList.add(talentsDO);
+                        break;
                 }
             }
 
-            if(talentsDOList.isEmpty()){
-                simpleStatefulLayout.showEmpty();
-            }else{
-                simpleStatefulLayout.showContent();
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
             }
 
-            talentsAdapter = new TalentsAdapter(talentsDOList, this);
-            recyclerView_talents.setAdapter(talentsAdapter);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 
     public void showLogoutPrompt(String title, String message) {
@@ -482,12 +345,17 @@ public class MainActivity extends AppCompatActivity
 
     private void checkUserRole(NavigationView navigationView, String userRole) {
         Menu navigationViewMenu = navigationView.getMenu();
+        tabLayout.removeAllTabs();
 
         switch (userRole){
             case "CLIENT_COMPANY": case "CLIENT_INDIVIDUAL":
+                tabLayout.addTab(tabLayout.newTab().setText(Variables.NEWS_TAB_NAME));
+                tabLayout.addTab(tabLayout.newTab().setText(Variables.BOOKINGS_TAB_NAME));
                 navigationViewMenu.findItem(R.id.nav_booking_list).setVisible(true);
                 break;
             default:
+                tabLayout.addTab(tabLayout.newTab().setText(Variables.NEWS_TAB_NAME));
+                tabLayout.addTab(tabLayout.newTab().setText(Variables.ANNOUNCEMENTS_TAB_NAME));
                 navigationViewMenu.findItem(R.id.nav_clients_booked).setVisible(true);
                 break;
         }
