@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/newsCardView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="5dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:alpha="0.9"
+        card_view:cardCornerRadius="4dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp">
+
+            <ImageView
+                android:id="@+id/imgNewsDisplayPhoto"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
+                android:clickable="true"
+                android:src="@drawable/ic_no_image"
+                android:focusable="true"
+                card_view:ignore="ContentDescription" />
+
+            <customfonts.MyTextView
+                android:id="@+id/lblNewsCaption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/imgNewsDisplayPhoto"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:textSize="15sp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:gravity="start"
+                android:text="Caption"
+                card_view:ignore="HardcodedText" />
+
+            <customfonts.MyTextView
+                android:id="@+id/lblNewsCreator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/imgNewsDisplayPhoto"
+                android:layout_below="@id/lblNewsCaption"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/textview_border_style_color_primary"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:padding="8dp"
+                android:textColor="@color/colorPrimaryDarker"
+                android:text="Creator"
+                card_view:ignore="HardcodedText" />
+
+            <customfonts.MyTextView
+                android:id="@+id/lblNewsCreatedDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/lblNewsCreator"
+                android:layout_below="@id/lblNewsCaption"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/textview_border_style_color_orange"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:padding="8dp"
+                android:textColor="#f4a261"
+                android:text="Created Date"
+                card_view:ignore="HardcodedText" />
+
+            <customfonts.MyTextView
+                android:id="@+id/lblNewsDetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/imgNewsDisplayPhoto"
+                android:layout_marginTop="3sp"
+                android:layout_marginBottom="3dp"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:padding="8dp"
+                android:textColor="@color/black"
+                android:text="Details"
+                card_view:ignore="HardcodedText" />
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>

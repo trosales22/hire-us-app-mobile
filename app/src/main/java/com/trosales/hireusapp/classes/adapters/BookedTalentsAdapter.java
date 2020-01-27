@@ -50,7 +50,7 @@ public class BookedTalentsAdapter extends RecyclerView.Adapter<BookedTalentsAdap
         Glide
                 .with(context)
                 .load(clientBookingsDO.getTalentDetails().getTalentDisplayPhoto())
-                .placeholder(R.drawable.no_profile_pic)
+                .placeholder(R.drawable.ic_no_image)
                 .into(viewHolder.imgTalentDisplayPhoto);
 
         viewHolder.cardView_bookings.setOnClickListener(view -> {

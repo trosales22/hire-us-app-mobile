@@ -53,7 +53,7 @@ public class TalentsAdapter extends RecyclerView.Adapter<TalentsAdapter.ViewHold
         Glide
                 .with(context)
                 .load(talentsDO.getTalentDisplayPhoto())
-                .placeholder(R.drawable.no_profile_pic)
+                .placeholder(R.drawable.ic_no_image)
                 .into(viewHolder.imgTalentDisplayPhoto);
 
         viewHolder.lblTalentFullname.setText(talentsDO.getFullname());

@@ -27,4 +27,6 @@ public class EndPoints {
     public static final String GET_TALENT_REVIEWS_URL = API_URL + "talents/get_talent_reviews";
     public static final String APPROVE_BOOKING_URL = API_URL + "talents/approve_booking";
     public static final String DECLINE_BOOKING_URL = API_URL + "talents/decline_booking";
+    public static final String GET_ALL_NEWS_URL = API_URL + "news/get_all_news";
+    public static final String GET_ALL_ANNOUNCEMENTS_URL = API_URL + "announcements/get_all_announcements";
 }
