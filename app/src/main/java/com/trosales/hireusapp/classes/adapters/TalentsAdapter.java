@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.trosales.hireusapp.R;
 import com.trosales.hireusapp.activities.TalentModelProfileActivity;
 import com.trosales.hireusapp.classes.beans.CategoryDetector;
@@ -53,6 +54,7 @@ public class TalentsAdapter extends RecyclerView.Adapter<TalentsAdapter.ViewHold
         Glide
                 .with(context)
                 .load(talentsDO.getTalentDisplayPhoto())
+                .apply(new RequestOptions().fitCenter())
                 .placeholder(R.drawable.ic_no_image)
                 .into(viewHolder.imgTalentDisplayPhoto);
 

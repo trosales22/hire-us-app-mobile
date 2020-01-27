@@ -63,7 +63,6 @@ public class BookingAndClientDetailsBottomSheetFragment extends BottomSheetDialo
     @BindView(R.id.lblBookingDeclineReason) TextView lblBookingDeclineReason;
     @BindView(R.id.lblBookingApprovedOrDeclinedDate) TextView lblBookingApprovedOrDeclinedDate;
 
-    @BindView(R.id.lblClientFullName) TextView lblClientFullName;
     @BindView(R.id.lblClientGender) TextView lblClientGender;
     @BindView(R.id.lblClientType) TextView lblClientType;
 
@@ -164,7 +163,6 @@ public class BookingAndClientDetailsBottomSheetFragment extends BottomSheetDialo
                 break;
         }
 
-        lblClientFullName.setText(bookingAndClientDetailsBundleArgs.getString("client_full_name"));
         lblClientGender.setText(bookingAndClientDetailsBundleArgs.getString("client_gender"));
 
         switch (Objects.requireNonNull(bookingAndClientDetailsBundleArgs.getString("role_code"))){

@@ -11,6 +11,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.trosales.hireusapp.R;
 import com.trosales.hireusapp.classes.wrappers.NewsDO;
 
@@ -45,6 +46,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
         Glide
                 .with(context)
                 .load(newsDO.getNewsDisplayPhoto())
+                .apply(new RequestOptions().fitCenter())
                 .placeholder(R.drawable.ic_no_image)
                 .into(holder.imgNewsDisplayPhoto);
 

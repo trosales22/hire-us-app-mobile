@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.trosales.hireusapp.R;
 import com.trosales.hireusapp.activities.BookingListActivity;
 import com.trosales.hireusapp.classes.wrappers.ClientBookingsDO;
@@ -50,6 +51,7 @@ public class BookedTalentsAdapter extends RecyclerView.Adapter<BookedTalentsAdap
         Glide
                 .with(context)
                 .load(clientBookingsDO.getTalentDetails().getTalentDisplayPhoto())
+                .apply(new RequestOptions().fitCenter())
                 .placeholder(R.drawable.ic_no_image)
                 .into(viewHolder.imgTalentDisplayPhoto);
 

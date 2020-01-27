@@ -10,9 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.trosales.hireusapp.R;
 import com.trosales.hireusapp.activities.PotentialClientsActivity;
 import com.trosales.hireusapp.classes.wrappers.ClientsBookedDO;
@@ -85,6 +85,7 @@ public class PotentialClientsAdapter extends RecyclerView.Adapter<PotentialClien
         Glide
                 .with(context)
                 .load(clientDisplayPhoto)
+                .apply(new RequestOptions().fitCenter())
                 .placeholder(R.drawable.customer_company)
                 .into(viewHolder.imgClientDisplayPhoto);
 
@@ -132,7 +133,7 @@ public class PotentialClientsAdapter extends RecyclerView.Adapter<PotentialClien
     public class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.clientsBookedCardView) CardView clientsBookedCardView;
         @BindView(R.id.imgClientDisplayPhoto) ImageView imgClientDisplayPhoto;
-        @BindView(R.id.lblClientFullName) TextView lblClientFullName;
+        @BindView(R.id.lblClientFullName) MyTextView lblClientFullName;
         @BindView(R.id.lblBookingGeneratedId) MyTextView lblBookingGeneratedId;
         @BindView(R.id.lblBookingOfferStatus) MyTextView lblBookingOfferStatus;
 

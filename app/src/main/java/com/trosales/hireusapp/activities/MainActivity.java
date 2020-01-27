@@ -352,11 +352,13 @@ public class MainActivity extends AppCompatActivity
                 tabLayout.addTab(tabLayout.newTab().setText(Variables.NEWS_TAB_NAME));
                 tabLayout.addTab(tabLayout.newTab().setText(Variables.BOOKINGS_TAB_NAME));
                 navigationViewMenu.findItem(R.id.nav_booking_list).setVisible(true);
+                navigationViewMenu.findItem(R.id.nav_search_a_talent).setVisible(true);
                 break;
             default:
                 tabLayout.addTab(tabLayout.newTab().setText(Variables.NEWS_TAB_NAME));
                 tabLayout.addTab(tabLayout.newTab().setText(Variables.ANNOUNCEMENTS_TAB_NAME));
                 navigationViewMenu.findItem(R.id.nav_clients_booked).setVisible(true);
+                navigationViewMenu.findItem(R.id.nav_search_a_talent).setVisible(false);
                 break;
         }
     }
