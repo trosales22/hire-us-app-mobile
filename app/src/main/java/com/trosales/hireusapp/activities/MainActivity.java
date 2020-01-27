@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         ButterKnife.bind(this);
 
-        //AppSecurity.disableScreenshotRecording(this);
+        AppSecurity.disableScreenshotRecording(this);
 
         if (!SharedPrefManager.getInstance(this).isLoggedIn()) {
             finish();

@@ -15,6 +15,7 @@ import com.trosales.hireusapp.classes.wrappers.AnnouncementsDO;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import customfonts.MyTextView;
 
 public class AnnouncementsAdapter extends RecyclerView.Adapter<AnnouncementsAdapter.ViewHolder>{
@@ -63,6 +64,7 @@ public class AnnouncementsAdapter extends RecyclerView.Adapter<AnnouncementsAdap
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            ButterKnife.bind(this, itemView);
         }
     }
 }
