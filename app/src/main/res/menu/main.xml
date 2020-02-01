@@ -6,10 +6,4 @@
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_filtering_option"
-        android:orderInCategory="100"
-        android:title="@string/action_filtering_option"
-        app:showAsAction="never" />
 </menu>

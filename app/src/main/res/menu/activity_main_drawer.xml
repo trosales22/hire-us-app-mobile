@@ -38,12 +38,21 @@
             tools:ignore="HardcodedText" />
     </group>
 
-    <item android:title="About"
+    <item
+        android:title="About"
         tools:ignore="HardcodedText">
         <menu>
             <item
                 android:id="@+id/nav_about_app"
                 android:title="Hire Us" />
+
+            <item
+                android:id="@+id/nav_terms_and_conditions"
+                android:title="Terms &amp; Conditions" />
+
+            <item
+                android:id="@+id/nav_privacy_policy"
+                android:title="Privacy Policy" />
         </menu>
     </item>
 

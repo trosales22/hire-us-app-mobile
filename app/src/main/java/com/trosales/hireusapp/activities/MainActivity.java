@@ -5,10 +5,10 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import com.google.android.material.snackbar.Snackbar;
+
+import androidx.cardview.widget.CardView;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -26,7 +26,6 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
-import com.google.android.material.tabs.TabLayout;
 import com.trosales.hireusapp.R;
 import com.trosales.hireusapp.classes.commons.AndroidNetworkingShortcuts;
 import com.trosales.hireusapp.classes.commons.AppSecurity;
@@ -34,18 +33,13 @@ import com.trosales.hireusapp.classes.commons.SharedPrefManager;
 import com.trosales.hireusapp.classes.constants.EndPoints;
 import com.trosales.hireusapp.classes.constants.Messages;
 import com.trosales.hireusapp.classes.constants.Tags;
-import com.trosales.hireusapp.classes.constants.Variables;
-import com.trosales.hireusapp.fragments.AnnouncementsFragment;
 import com.trosales.hireusapp.fragments.BookingsFragment;
-import com.trosales.hireusapp.fragments.NewsFragment;
 import com.yarolegovich.lovelydialog.LovelyChoiceDialog;
 import com.yarolegovich.lovelydialog.LovelyInfoDialog;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -54,13 +48,13 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
     private TextView lblLoggedInFullname, lblLoggedInRole;
-    @BindView(R.id.tab_layout) TabLayout tabLayout;
-
     private String selectedCategory;
 
-    Fragment fragment = null;
-    FragmentManager fragmentManager;
-    FragmentTransaction fragmentTransaction;
+    @BindView(R.id.card_view_bookings) CardView card_view_bookings;
+    @BindView(R.id.card_view_news) CardView card_view_news;
+    @BindView(R.id.card_view_announcements) CardView card_view_announcements;
+    @BindView(R.id.card_view_feedback) CardView card_view_feedback;
+    @BindView(R.id.card_view_faqs) CardView card_view_faqs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,13 +83,6 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
-
-        tabLayout.removeAllTabs();
-        //tabLayout.addTab(tabLayout.newTab().setText(Variables.NEWS_TAB_NAME));
-        //tabLayout.addTab(tabLayout.newTab().setText(Variables.ANNOUNCEMENTS_TAB_NAME));
-        //tabLayout.addTab(tabLayout.newTab().setText(Variables.BOOKINGS_TAB_NAME));
-
-        setupTabLayout(tabLayout);
 
         if(SharedPrefManager.getInstance(this).getUserRole().equals("TALENT_MODEL")){
             AndroidNetworkingShortcuts.prefetchPersonalInfo(
@@ -151,8 +138,6 @@ public class MainActivity extends AppCompatActivity
                     .setContentText("Ongoing development. Thank you for your patience.")
                     .setConfirmText("Ok, I understand!")
                     .show();
-        }else if(id == R.id.action_filtering_option){
-            startActivity(new Intent(this, FilteringActivity.class));
         }
 
         return super.onOptionsItemSelected(item);
@@ -180,7 +165,6 @@ public class MainActivity extends AppCompatActivity
 
                                 Fragment selectedFragment = BookingsFragment.newInstance();
                                 selectedFragment.setArguments(bookingsBundleArgs);
-                                setFragment(selectedFragment);
                             }
                     )
                     .setConfirmButtonText("Done")
@@ -204,59 +188,6 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    private void setFragment(Fragment selectedFragment) {
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, Objects.requireNonNull(selectedFragment), Tags.MAIN_ACTIVITY).commit();
-    }
-
-    private void setupTabLayout(TabLayout tabLayout){
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-
-        fragment = new NewsFragment();
-        fragmentManager = getSupportFragmentManager();
-        fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frame_layout, fragment);
-        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        fragmentTransaction.commit();
-
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                Fragment selectedFragment;
-                String tabName = Objects.requireNonNull(tab.getText()).toString();
-
-                switch (tabName){
-                    case Variables.NEWS_TAB_NAME:
-                        Log.d("debug", Variables.NEWS_TAB_NAME);
-                        selectedFragment = NewsFragment.newInstance();
-                        setFragment(selectedFragment);
-                        break;
-                    case Variables.ANNOUNCEMENTS_TAB_NAME:
-                        Log.d("debug", Variables.ANNOUNCEMENTS_TAB_NAME);
-                        selectedFragment = AnnouncementsFragment.newInstance();
-                        setFragment(selectedFragment);
-
-                        break;
-                    case Variables.BOOKINGS_TAB_NAME:
-                        Log.d("debug", Variables.BOOKINGS_TAB_NAME);
-                        selectedFragment = BookingsFragment.newInstance();
-                        setFragment(selectedFragment);
-
-                        break;
-                }
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
     }
 
     public void showLogoutPrompt(String title, String message) {
@@ -345,18 +276,15 @@ public class MainActivity extends AppCompatActivity
 
     private void checkUserRole(NavigationView navigationView, String userRole) {
         Menu navigationViewMenu = navigationView.getMenu();
-        tabLayout.removeAllTabs();
 
         switch (userRole){
             case "CLIENT_COMPANY": case "CLIENT_INDIVIDUAL":
-                tabLayout.addTab(tabLayout.newTab().setText(Variables.NEWS_TAB_NAME));
-                tabLayout.addTab(tabLayout.newTab().setText(Variables.BOOKINGS_TAB_NAME));
+                card_view_announcements.setVisibility(View.GONE);
                 navigationViewMenu.findItem(R.id.nav_booking_list).setVisible(true);
                 navigationViewMenu.findItem(R.id.nav_search_a_talent).setVisible(true);
                 break;
             default:
-                tabLayout.addTab(tabLayout.newTab().setText(Variables.NEWS_TAB_NAME));
-                tabLayout.addTab(tabLayout.newTab().setText(Variables.ANNOUNCEMENTS_TAB_NAME));
+                card_view_bookings.setVisibility(View.GONE);
                 navigationViewMenu.findItem(R.id.nav_clients_booked).setVisible(true);
                 navigationViewMenu.findItem(R.id.nav_search_a_talent).setVisible(false);
                 break;
