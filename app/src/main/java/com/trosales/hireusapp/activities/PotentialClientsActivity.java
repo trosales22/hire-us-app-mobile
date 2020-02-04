@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
+import android.view.MenuItem;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
@@ -56,7 +57,6 @@ public class PotentialClientsActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-
         AppSecurity.disableScreenshotRecording(this);
 
         clientsBookedDOList = new ArrayList<>();
@@ -87,6 +87,16 @@ public class PotentialClientsActivity extends AppCompatActivity {
             handler.postDelayed(this::showAllClientsBooked, 500);
             swipeToRefresh_clientsBooked.setRefreshing(false);
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void showAllClientsBooked(){

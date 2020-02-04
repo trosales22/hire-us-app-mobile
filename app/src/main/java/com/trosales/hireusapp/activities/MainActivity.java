@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity
     private TextView lblLoggedInFullname, lblLoggedInRole;
     private String selectedCategory;
 
-    @BindView(R.id.card_view_bookings) CardView card_view_bookings;
+    @BindView(R.id.card_view_talents) CardView card_view_talents;
     @BindView(R.id.card_view_news) CardView card_view_news;
     @BindView(R.id.card_view_announcements) CardView card_view_announcements;
     @BindView(R.id.card_view_feedback) CardView card_view_feedback;
@@ -99,6 +99,64 @@ public class MainActivity extends AppCompatActivity
         }
 
         showInfoOfLoggedInUser(navigationView);
+
+        card_view_talents.setOnClickListener(view -> {
+            new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                    .setTitleText("Confirmation")
+                    .setContentText("Are you sure you want to see talents section?")
+                    .setConfirmText("Yes")
+                    .setConfirmClickListener(sDialog -> {
+                        startActivity(new Intent(this, TalentsActivity.class));
+                        sDialog.dismissWithAnimation();
+                    })
+                    .setCancelText("No")
+                    .setCancelClickListener(SweetAlertDialog::dismissWithAnimation)
+                    .show();
+        });
+
+        card_view_announcements.setOnClickListener(view -> {
+            new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                    .setTitleText("Confirmation")
+                    .setContentText("Are you sure you want to see announcement section?")
+                    .setConfirmText("Yes")
+                    .setConfirmClickListener(sDialog -> {
+                        startActivity(new Intent(this, AnnouncementsActivity.class));
+                        sDialog.dismissWithAnimation();
+                    })
+                    .setCancelText("No")
+                    .setCancelClickListener(SweetAlertDialog::dismissWithAnimation)
+                    .show();
+        });
+
+        card_view_news.setOnClickListener(view -> {
+            new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                    .setTitleText("Confirmation")
+                    .setContentText("Are you sure you want to see news & updates section?")
+                    .setConfirmText("Yes")
+                    .setConfirmClickListener(sDialog -> {
+                        startActivity(new Intent(this, NewsActivity.class));
+                        sDialog.dismissWithAnimation();
+                    })
+                    .setCancelText("No")
+                    .setCancelClickListener(SweetAlertDialog::dismissWithAnimation)
+                    .show();
+        });
+
+        card_view_feedback.setOnClickListener(view -> {
+            new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                    .setTitleText("Oops! We're sorry!")
+                    .setContentText("Feedback section still an ongoing feature. Thank you.")
+                    .setConfirmText("Ok, I understand!")
+                    .show();
+        });
+
+        card_view_faqs.setOnClickListener(view -> {
+            new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                    .setTitleText("Oops! We're sorry!")
+                    .setContentText("FAQs section still an ongoing feature. Thank you.")
+                    .setConfirmText("Ok, I understand!")
+                    .show();
+        });
     }
 
     @Override
@@ -182,6 +240,18 @@ public class MainActivity extends AppCompatActivity
                     .setTitle("About Hire Us PH")
                     .setMessage("A mobile app/web based booking application that will cater market in entertainment and events industry. " +
                             "To have own payment system that allows customers/client to pay online in order to book using debit/credit card.\n")
+                    .show();
+        } else if (id == R.id.nav_terms_and_conditions){
+            new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                    .setTitleText("Oops! We're sorry!")
+                    .setContentText("Terms & Conditions section still an ongoing feature. Thank you.")
+                    .setConfirmText("Ok, I understand!")
+                    .show();
+        } else if (id == R.id.nav_privacy_policy){
+            new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                    .setTitleText("Oops! We're sorry!")
+                    .setContentText("Privacy Policy section still an ongoing feature. Thank you.")
+                    .setConfirmText("Ok, I understand!")
                     .show();
         }
 
@@ -284,7 +354,7 @@ public class MainActivity extends AppCompatActivity
                 navigationViewMenu.findItem(R.id.nav_search_a_talent).setVisible(true);
                 break;
             default:
-                card_view_bookings.setVisibility(View.GONE);
+                card_view_talents.setVisibility(View.GONE);
                 navigationViewMenu.findItem(R.id.nav_clients_booked).setVisible(true);
                 navigationViewMenu.findItem(R.id.nav_search_a_talent).setVisible(false);
                 break;
