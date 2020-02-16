@@ -55,9 +55,9 @@ public class FilteringActivity extends AppCompatActivity {
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         Objects.requireNonNull(getSupportActionBar()).setTitle("Filtering Option");
-        Objects.requireNonNull(getSupportActionBar()).setSubtitle("Filter by height,age,etc.");
+        //Objects.requireNonNull(getSupportActionBar()).setSubtitle("Filter by height,age,etc.");
 
-        AppSecurity.disableScreenshotRecording(this);
+        //AppSecurity.disableScreenshotRecording(this);
 
         regionsList = new ArrayList<>();
 
@@ -71,7 +71,7 @@ public class FilteringActivity extends AppCompatActivity {
         cmbGender.attachDataSource(genderList);
 
         btnFilterNow.setOnClickListener(v -> {
-            Intent intent = new Intent(this, MainActivity.class);
+            Intent intent = new Intent(this, TalentsActivity.class);
 
             HashMap<String, String> filteringOption = new HashMap<>();
             filteringOption.put("age_from", cmbAgeFrom.getText().toString().equals("From") ? "" : cmbAgeFrom.getText().toString());

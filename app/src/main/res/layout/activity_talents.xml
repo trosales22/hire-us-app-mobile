@@ -9,38 +9,43 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/background_home">
 
-        <FrameLayout
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeToRefresh_talents"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/background_home">
+            android:layout_height="wrap_content">
 
-            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                android:id="@+id/swipeToRefresh_talents"
+            <cz.kinst.jakub.view.SimpleStatefulLayout
+                android:id="@+id/stateful_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent"
+                app:emptyLayout="@layout/state_empty"
+                app:offlineLayout="@layout/state_offline"
+                app:progressLayout="@layout/state_progress">
 
-                <cz.kinst.jakub.view.SimpleStatefulLayout
-                    android:id="@+id/stateful_layout"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView_talents"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:emptyLayout="@layout/state_empty"
-                    app:offlineLayout="@layout/state_offline"
-                    app:progressLayout="@layout/state_progress">
+                    android:scrollbars="vertical" />
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recyclerView_talents"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scrollbars="vertical" />
+            </cz.kinst.jakub.view.SimpleStatefulLayout>
 
-                </cz.kinst.jakub.view.SimpleStatefulLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-        </FrameLayout>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnFilteringOption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/filter"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="10dp"/>
 
     </RelativeLayout>
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -221,8 +221,9 @@ public class MainActivity extends AppCompatActivity
                                 Bundle bookingsBundleArgs = new Bundle();
                                 bookingsBundleArgs.putString("selectedCategory", selectedCategory);
 
-                                Fragment selectedFragment = BookingsFragment.newInstance();
-                                selectedFragment.setArguments(bookingsBundleArgs);
+                                Intent intent = new Intent(MainActivity.this, TalentsActivity.class);
+                                intent.putExtras(bookingsBundleArgs);
+                                startActivity(intent);
                             }
                     )
                     .setConfirmButtonText("Done")
@@ -302,7 +303,14 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onError(ANError anError) {
                         progressDialog.dismiss();
+                        Log.d("anError", String.valueOf(anError.getErrorCode()));
                         Snackbar.make(findViewById(android.R.id.content), anError.getErrorDetail(), Snackbar.LENGTH_LONG).show();
+
+                        if(anError.getErrorCode() == 0){
+                            SharedPrefManager.getInstance(getApplicationContext()).logoutUser();
+                            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                            finish();
+                        }
                     }
                 });
     }

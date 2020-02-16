@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -16,9 +17,11 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.ethanhua.skeleton.Skeleton;
 import com.ethanhua.skeleton.SkeletonScreen;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.trosales.hireusapp.R;
 import com.trosales.hireusapp.classes.adapters.TalentsAdapter;
 import com.trosales.hireusapp.classes.beans.Location;
+import com.trosales.hireusapp.classes.commons.AppSecurity;
 import com.trosales.hireusapp.classes.commons.SharedPrefManager;
 import com.trosales.hireusapp.classes.constants.EndPoints;
 import com.trosales.hireusapp.classes.constants.Tags;
@@ -41,6 +44,7 @@ public class TalentsActivity extends AppCompatActivity {
     @BindView(R.id.stateful_layout) SimpleStatefulLayout simpleStatefulLayout;
     @BindView(R.id.swipeToRefresh_talents) SwipeRefreshLayout swipeToRefresh_talents;
     @BindView(R.id.recyclerView_talents) RecyclerView recyclerView_talents;
+    @BindView(R.id.btnFilteringOption) FloatingActionButton btnFilteringOption;
 
     private String selectedCategory = "";
     private List<TalentsDO> talentsDOList;
@@ -54,7 +58,10 @@ public class TalentsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_talents);
         ButterKnife.bind(this);
 
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         Bundle bookingsBundleArgs = getIntent().getExtras();
+
+        //AppSecurity.disableScreenshotRecording(this);
 
         if(bookingsBundleArgs != null){
             selectedCategory = bookingsBundleArgs.getString("selectedCategory");
@@ -90,6 +97,8 @@ public class TalentsActivity extends AppCompatActivity {
             }, 500);
             swipeToRefresh_talents.setRefreshing(false);
         });
+
+        btnFilteringOption.setOnClickListener(view -> startActivity(new Intent(TalentsActivity.this, FilteringActivity.class)));
     }
 
     @Override
