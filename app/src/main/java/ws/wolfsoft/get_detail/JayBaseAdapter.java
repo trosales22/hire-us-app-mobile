@@ -10,8 +10,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.trosales.hireusapp.R;
-import com.trosales.hireusapp.classes.beans.Reviews;
+import com.tjbr.hire_us_ph.R;
+import com.tjbr.hire_us_ph.classes.beans.Reviews;
 
 import java.util.ArrayList;
 

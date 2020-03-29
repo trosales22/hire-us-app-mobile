@@ -36,7 +36,7 @@ import com.daimajia.slider.library.Tricks.FixedSpeedScroller;
 import com.daimajia.slider.library.Tricks.InfinitePagerAdapter;
 import com.daimajia.slider.library.Tricks.InfiniteViewPager;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
-import com.trosales.hireusapp.activities.TalentModelProfileActivity;
+import com.tjbr.hire_us_ph.activities.TalentModelProfileActivity;
 
 import java.lang.reflect.Field;
 import java.util.Timer;
