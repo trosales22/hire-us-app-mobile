@@ -80,6 +80,35 @@
                 android:text="Booking Offer Status"
                 card_view:ignore="HardcodedText" />
 
+            <customfonts.MyTextView
+                android:id="@+id/lblBookingPaymentStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/imgTalentDisplayPhoto"
+                android:layout_below="@id/lblBookingGeneratedId"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/textview_border_style_color_red"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:padding="8dp"
+                android:textColor="@color/red"
+                android:text="PAYMENT STATUS"
+                card_view:ignore="HardcodedText" />
+
+            <Button
+                android:id="@+id/btnPayNow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10sp"
+                android:layout_below="@id/lblBookingPaymentStatus"
+                android:background="@color/colorPrimary"
+                android:text="Pay Now"
+                android:textColor="#fff"
+                android:visibility="gone"
+                card_view:ignore="HardcodedText" />
+
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>

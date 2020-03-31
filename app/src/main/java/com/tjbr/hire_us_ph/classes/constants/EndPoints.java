@@ -2,10 +2,10 @@ package com.tjbr.hire_us_ph.classes.constants;
 
 public class EndPoints {
     //local
-    //public static final String BASE_URL = "http://192.168.1.7/hire-us/";
+    public static final String BASE_URL = "http://192.168.1.9/hire-us/";
 
     //development
-    public static final String BASE_URL = "https://hireusph-dev.tristanrosales.com/";
+    //public static final String BASE_URL = "https://hireusph-dev.tristanrosales.com/";
 
     //production
     //private static final String BASE_URL = "https://hireusph.com/";

@@ -64,6 +64,7 @@ public class BookingAndTalentDetailsBottomSheetFragment extends BottomSheetDialo
     @BindView(R.id.lblBookingOfferStatus) TextView lblBookingOfferStatus;
     @BindView(R.id.lblBookingCreatedDate) TextView lblBookingCreatedDate;
     @BindView(R.id.lblBookingDeclineReason) TextView lblBookingDeclineReason;
+    @BindView(R.id.lblApprovedDeclinedDateCaption) TextView lblApprovedDeclinedDateCaption;
     @BindView(R.id.lblBookingApprovedOrDeclinedDate) TextView lblBookingApprovedOrDeclinedDate;
     @BindView(R.id.btnCloseBookingDetailsDialog) Button btnCloseBookingDetailsDialog;
     @BindView(R.id.btnShowTalentDetails) Button btnShowTalentDetails;
@@ -125,10 +126,12 @@ public class BookingAndTalentDetailsBottomSheetFragment extends BottomSheetDialo
             case "APPROVED":
                 linearLayoutBookingDeclineReason.setVisibility(View.GONE);
                 linearLayoutBookingApprovedOrDeclinedDate.setVisibility(View.VISIBLE);
+                lblApprovedDeclinedDateCaption.setText("Approved Date");
                 break;
             case "DECLINED":
                 linearLayoutBookingDeclineReason.setVisibility(View.VISIBLE);
                 linearLayoutBookingApprovedOrDeclinedDate.setVisibility(View.VISIBLE);
+                lblApprovedDeclinedDateCaption.setText("Declined Date");
                 break;
         }
 

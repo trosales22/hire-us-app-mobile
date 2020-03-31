@@ -144,7 +144,7 @@ public class BookingListActivity extends AppCompatActivity {
                             object.getJSONObject("talent_id").getString("height"),
                             object.getJSONObject("talent_id").getString("gender"),
                             object.getJSONObject("talent_id").getString("talent_display_photo"),
-                            object.getJSONObject("talent_id").getString("category_names"),
+                            object.getJSONObject("talent_id").getString("category_ids"),
                             Integer.parseInt(object.getJSONObject("talent_id").getString("age")),
                             location
                     );
@@ -163,6 +163,8 @@ public class BookingListActivity extends AppCompatActivity {
                             object.getString("booking_created_date"),
                             object.getString("booking_decline_reason"),
                             object.getString("booking_approved_or_declined_date"),
+                            object.getString("booking_date_paid"),
+                            object.getString("booking_pay_until"),
                             talentsDO
                     );
 

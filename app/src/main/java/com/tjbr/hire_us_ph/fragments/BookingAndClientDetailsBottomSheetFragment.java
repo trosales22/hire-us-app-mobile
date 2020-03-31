@@ -61,6 +61,7 @@ public class BookingAndClientDetailsBottomSheetFragment extends BottomSheetDialo
     @BindView(R.id.lblBookingOfferStatus) TextView lblBookingOfferStatus;
     @BindView(R.id.lblBookingCreatedDate) TextView lblBookingCreatedDate;
     @BindView(R.id.lblBookingDeclineReason) TextView lblBookingDeclineReason;
+    @BindView(R.id.lblApprovedDeclinedDateCaption) TextView lblApprovedDeclinedDateCaption;
     @BindView(R.id.lblBookingApprovedOrDeclinedDate) TextView lblBookingApprovedOrDeclinedDate;
 
     @BindView(R.id.lblClientGender) TextView lblClientGender;
@@ -81,6 +82,8 @@ public class BookingAndClientDetailsBottomSheetFragment extends BottomSheetDialo
     private Context context;
 
     private String selectedDeclineReason;
+
+    private SweetAlertDialog sweetAlertDialog;
 
     public BookingAndClientDetailsBottomSheetFragment(Bundle bookingAndClientDetailsBundleArgs, Context context) {
         this.bookingAndClientDetailsBundleArgs = bookingAndClientDetailsBundleArgs;
@@ -109,7 +112,7 @@ public class BookingAndClientDetailsBottomSheetFragment extends BottomSheetDialo
         final View itemView = inflater.inflate(R.layout.booking_and_client_details_bottom_sheet, container, false);
         ButterKnife.bind(this, itemView);
 
-        AppSecurity.disableScreenshotRecording(((AppCompatActivity) context));
+        //AppSecurity.disableScreenshotRecording(((AppCompatActivity) context));
 
         linearLayoutBookingDeclineReason.setVisibility(View.GONE);
         linearLayoutBookingApprovedOrDeclinedDate.setVisibility(View.GONE);
@@ -122,6 +125,12 @@ public class BookingAndClientDetailsBottomSheetFragment extends BottomSheetDialo
         lblBookingTime.setText(bookingAndClientDetailsBundleArgs.getString("booking_time"));
         lblBookingOtherDetails.setText(bookingAndClientDetailsBundleArgs.getString("booking_other_details"));
         lblBookingOfferStatus.setText(bookingAndClientDetailsBundleArgs.getString("booking_offer_status"));
+
+        switch (bookingAndClientDetailsBundleArgs.getString("booking_offer_status")){
+            case "APPROVED": lblApprovedDeclinedDateCaption.setText("Approved Date"); break;
+            case "DECLINED": lblApprovedDeclinedDateCaption.setText("Declined Date"); break;
+        }
+
         lblBookingCreatedDate.setText(bookingAndClientDetailsBundleArgs.getString("booking_created_date"));
         lblBookingDeclineReason.setText(bookingAndClientDetailsBundleArgs.getString("booking_decline_reason"));
         lblBookingApprovedOrDeclinedDate.setText(bookingAndClientDetailsBundleArgs.getString("booking_approved_or_declined_date"));
@@ -195,7 +204,11 @@ public class BookingAndClientDetailsBottomSheetFragment extends BottomSheetDialo
         });
 
         btnApproveBooking.setOnClickListener(view -> {
-            new SweetAlertDialog(view.getContext(), SweetAlertDialog.WARNING_TYPE)
+            if(sweetAlertDialog != null){
+                sweetAlertDialog.dismissWithAnimation();
+            }
+
+            sweetAlertDialog = new SweetAlertDialog(view.getContext(), SweetAlertDialog.WARNING_TYPE)
                     .setTitleText("Confirmation")
                     .setContentText("Are you sure you want to approve this booking?")
                     .setConfirmText("Yes")
@@ -204,12 +217,17 @@ public class BookingAndClientDetailsBottomSheetFragment extends BottomSheetDialo
                         approveBooking(bookingAndClientDetailsBundleArgs.getString("booking_generated_id"));
                     })
                     .setCancelText("No")
-                    .setCancelClickListener(SweetAlertDialog::dismissWithAnimation)
-                    .show();
+                    .setCancelClickListener(SweetAlertDialog::dismissWithAnimation);
+
+            sweetAlertDialog.show();
         });
 
         btnDeclineBooking.setOnClickListener(view -> {
-            new SweetAlertDialog(view.getContext(), SweetAlertDialog.WARNING_TYPE)
+            if(sweetAlertDialog != null){
+                sweetAlertDialog.dismissWithAnimation();
+            }
+
+            sweetAlertDialog = new SweetAlertDialog(view.getContext(), SweetAlertDialog.WARNING_TYPE)
                     .setTitleText("Confirmation")
                     .setContentText("Are you sure you want to decline this booking?")
                     .setConfirmText("Yes")
@@ -218,8 +236,9 @@ public class BookingAndClientDetailsBottomSheetFragment extends BottomSheetDialo
                         declineBooking(bookingAndClientDetailsBundleArgs.getString("booking_generated_id"), selectedDeclineReason);
                     })
                     .setCancelText("No")
-                    .setCancelClickListener(SweetAlertDialog::dismissWithAnimation)
-                    .show();
+                    .setCancelClickListener(SweetAlertDialog::dismissWithAnimation);
+
+            sweetAlertDialog.show();
         });
 
         return itemView;
@@ -319,18 +338,29 @@ public class BookingAndClientDetailsBottomSheetFragment extends BottomSheetDialo
             String msg = response.has("msg") ? response.getString("msg") : "";
 
             if(flag == 1){
-                new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE)
+                if(sweetAlertDialog != null){
+                    sweetAlertDialog.dismissWithAnimation();
+                }
+
+                sweetAlertDialog = new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE)
                         .setTitleText("Congratulations!")
                         .setContentText(msg)
                         .setConfirmClickListener(sweetAlertDialog -> {
+                            sweetAlertDialog.dismissWithAnimation();
                             startActivity(new Intent(context, PotentialClientsActivity.class));
-                        })
-                        .show();
+                        });
+
+                sweetAlertDialog.show();
             }else{
-                new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+                if(sweetAlertDialog != null){
+                    sweetAlertDialog.dismissWithAnimation();
+                }
+
+                sweetAlertDialog = new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
                         .setTitleText("Oops..")
-                        .setContentText(msg)
-                        .show();
+                        .setContentText(msg);
+
+                sweetAlertDialog.show();
             }
         } catch (JSONException e) {
             Log.d(Tags.POTENTIAL_CLIENTS_ACTIVITY, Objects.requireNonNull(e.getMessage()));

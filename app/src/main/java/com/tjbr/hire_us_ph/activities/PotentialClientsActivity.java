@@ -177,6 +177,8 @@ public class PotentialClientsActivity extends AppCompatActivity {
                             object.getString("booking_created_date"),
                             object.getString("booking_decline_reason"),
                             object.getString("booking_approved_or_declined_date"),
+                            object.getString("booking_date_paid"),
+                            object.getString("booking_pay_until"),
                             talentsDO
                     );
 

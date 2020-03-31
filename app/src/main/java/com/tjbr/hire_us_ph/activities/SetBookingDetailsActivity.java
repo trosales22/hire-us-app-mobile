@@ -64,6 +64,8 @@ public class SetBookingDetailsActivity extends AppCompatActivity {
 
     private String selectedClientId, selectedTalentId;
 
+    private SweetAlertDialog sweetAlertDialog;
+
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +105,11 @@ public class SetBookingDetailsActivity extends AppCompatActivity {
                     txtBookingVenueOrLocation.getText().toString().trim().isEmpty() ||
                     txtBookingTalentFee.getText().toString().trim().isEmpty()){
 
-                new SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+                if(sweetAlertDialog != null){
+                    sweetAlertDialog.dismissWithAnimation();
+                }
+
+                sweetAlertDialog = new SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
                         .setTitleText(Messages.WARNING_MSG)
                         .setContentText("Please fill out all required fields.")
                         .setConfirmClickListener(sweetAlertDialog -> {
@@ -124,10 +130,15 @@ public class SetBookingDetailsActivity extends AppCompatActivity {
                             }
 
                             sweetAlertDialog.dismissWithAnimation();
-                        })
-                        .show();
+                        });
+
+                sweetAlertDialog.show();
             }else{
-                new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                if(sweetAlertDialog != null){
+                    sweetAlertDialog.dismissWithAnimation();
+                }
+
+                sweetAlertDialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
                         .setTitleText("Are you sure?")
                         .setContentText("Please check inputted details before proceeding.")
                         .setConfirmText("Yes")
@@ -136,8 +147,9 @@ public class SetBookingDetailsActivity extends AppCompatActivity {
                             addToBookingList(getBookingParams());
                         })
                         .setCancelText("No")
-                        .setCancelClickListener(SweetAlertDialog::dismissWithAnimation)
-                        .show();
+                        .setCancelClickListener(SweetAlertDialog::dismissWithAnimation);
+
+                sweetAlertDialog.show();
             }
         });
     }
@@ -167,11 +179,15 @@ public class SetBookingDetailsActivity extends AppCompatActivity {
     }
 
     private void addToBookingList(HashMap<String, String> params) {
-        SweetAlertDialog pDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
-        pDialog.getProgressHelper().setBarColor(Color.parseColor("#48b1bf"));
-        pDialog.setTitleText(Messages.PLEASE_WAIT_WHILE_ADDING_TO_BOOKING_LIST_MSG);
-        pDialog.setCancelable(false);
-        pDialog.show();
+        if(sweetAlertDialog != null){
+            sweetAlertDialog.dismissWithAnimation();
+        }
+
+        sweetAlertDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
+        sweetAlertDialog.getProgressHelper().setBarColor(Color.parseColor("#48b1bf"));
+        sweetAlertDialog.setTitleText(Messages.PLEASE_WAIT_WHILE_ADDING_TO_BOOKING_LIST_MSG);
+        sweetAlertDialog.setCancelable(false);
+        sweetAlertDialog.show();
 
         AndroidNetworking.post(EndPoints.ADD_TO_BOOKING_LIST_URL)
                 .addBodyParameter("booking_generated_id", RandomStringUtils.randomAlphanumeric(8).toUpperCase())
@@ -189,14 +205,14 @@ public class SetBookingDetailsActivity extends AppCompatActivity {
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        pDialog.dismiss();
+                        sweetAlertDialog.dismissWithAnimation();
                         getClientBookingResponse(response);
                     }
 
                     @SuppressLint("LongLogTag")
                     @Override
                     public void onError(ANError anError) {
-                        pDialog.dismiss();
+                        sweetAlertDialog.dismissWithAnimation();
                         String errorResponse = "\n\nCode: " +
                                 anError.getErrorCode() +
                                 "\nDetail: " +
@@ -219,19 +235,30 @@ public class SetBookingDetailsActivity extends AppCompatActivity {
             String msg = response.has("msg") ? response.getString("msg") : "";
 
             if (status.equals("OK")) {
-                new SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
+                if(sweetAlertDialog != null){
+                    sweetAlertDialog.dismissWithAnimation();
+                }
+
+                sweetAlertDialog = new SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
                         .setTitleText("Congratulations! Your offer was successfully send to the chosen talent/s.")
                         .setContentText(msg)
                         .setConfirmClickListener(sweetAlertDialog -> {
+                            sweetAlertDialog.dismissWithAnimation();
                             finish();
                             startActivity(new Intent(this, BookingListActivity.class));
-                        })
-                        .show();
+                        });
+
+                sweetAlertDialog.show();
             } else {
-                new SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+                if(sweetAlertDialog != null){
+                    sweetAlertDialog.dismissWithAnimation();
+                }
+
+                sweetAlertDialog = new SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
                         .setTitleText("Oops..")
-                        .setContentText(msg)
-                        .show();
+                        .setContentText(msg);
+
+                sweetAlertDialog.show();
             }
         } catch (JSONException e) {
             e.printStackTrace();

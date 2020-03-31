@@ -6,14 +6,17 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.crowdfire.cfalertdialog.CFAlertDialog;
 import com.tjbr.hire_us_ph.R;
 import com.tjbr.hire_us_ph.activities.BookingListActivity;
 import com.tjbr.hire_us_ph.classes.wrappers.ClientBookingsDO;
@@ -55,6 +58,28 @@ public class BookedTalentsAdapter extends RecyclerView.Adapter<BookedTalentsAdap
                 .placeholder(R.drawable.ic_no_image)
                 .into(viewHolder.imgTalentDisplayPhoto);
 
+        if(clientBookingsDO.getBookingDatePaid().equalsIgnoreCase("PENDING")){
+            viewHolder.lblBookingPaymentStatus.setText("Pay on or before " + clientBookingsDO.getBookingPayUntil());
+            viewHolder.btnPayNow.setVisibility(View.VISIBLE);
+        }else{
+            viewHolder.lblBookingPaymentStatus.setText("Paid on " + clientBookingsDO.getBookingDatePaid());
+            viewHolder.btnPayNow.setVisibility(View.GONE);
+        }
+
+        viewHolder.btnPayNow.setOnClickListener(v -> {
+            CFAlertDialog.Builder builder = new CFAlertDialog.Builder(context)
+                    .setDialogStyle(CFAlertDialog.CFAlertStyle.BOTTOM_SHEET)
+                    .setTitle("Pay Via")
+                    .addButton("DEBIT/CREDIT CARD", Color.parseColor("#FFFFFF"), Color.parseColor("#48b1bf"), CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (dialog, which) -> {
+                        dialog.dismiss();
+                    })
+                    .addButton("BANK TRANSFER", Color.parseColor("#FFFFFF"), Color.parseColor("#003f3f"), CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (dialog, which) -> {
+                        dialog.dismiss();
+                    });
+
+            builder.show();
+        });
+
         viewHolder.cardView_bookings.setOnClickListener(view -> {
             Bundle bookingsBundleArgs = new Bundle();
             bookingsBundleArgs.putString("talent_id", clientBookingsDO.getTalentDetails().getTalent_id());
@@ -92,6 +117,8 @@ public class BookedTalentsAdapter extends RecyclerView.Adapter<BookedTalentsAdap
         @BindView(R.id.lblTalentFullName) MyTextView lblTalentFullName;
         @BindView(R.id.lblBookingGeneratedId) MyTextView lblBookingGeneratedId;
         @BindView(R.id.lblBookingOfferStatus) MyTextView lblBookingOfferStatus;
+        @BindView(R.id.lblBookingPaymentStatus) MyTextView lblBookingPaymentStatus;
+        @BindView(R.id.btnPayNow) Button btnPayNow;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

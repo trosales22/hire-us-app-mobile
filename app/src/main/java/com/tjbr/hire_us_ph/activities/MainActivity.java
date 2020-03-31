@@ -54,6 +54,8 @@ public class MainActivity extends AppCompatActivity
     @BindView(R.id.card_view_feedback) CardView card_view_feedback;
     @BindView(R.id.card_view_faqs) CardView card_view_faqs;
 
+    private SweetAlertDialog sweetAlertDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,7 +101,11 @@ public class MainActivity extends AppCompatActivity
         showInfoOfLoggedInUser(navigationView);
 
         card_view_talents.setOnClickListener(view -> {
-            new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+            if(sweetAlertDialog != null){
+                sweetAlertDialog.dismissWithAnimation();
+            }
+
+            sweetAlertDialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
                     .setTitleText("Confirmation")
                     .setContentText("Are you sure you want to see talents section?")
                     .setConfirmText("Yes")
@@ -108,12 +114,17 @@ public class MainActivity extends AppCompatActivity
                         sDialog.dismissWithAnimation();
                     })
                     .setCancelText("No")
-                    .setCancelClickListener(SweetAlertDialog::dismissWithAnimation)
-                    .show();
+                    .setCancelClickListener(SweetAlertDialog::dismissWithAnimation);
+
+            sweetAlertDialog.show();
         });
 
         card_view_announcements.setOnClickListener(view -> {
-            new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+            if(sweetAlertDialog != null){
+                sweetAlertDialog.dismissWithAnimation();
+            }
+
+            sweetAlertDialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
                     .setTitleText("Confirmation")
                     .setContentText("Are you sure you want to see announcement section?")
                     .setConfirmText("Yes")
@@ -122,12 +133,17 @@ public class MainActivity extends AppCompatActivity
                         sDialog.dismissWithAnimation();
                     })
                     .setCancelText("No")
-                    .setCancelClickListener(SweetAlertDialog::dismissWithAnimation)
-                    .show();
+                    .setCancelClickListener(SweetAlertDialog::dismissWithAnimation);
+
+            sweetAlertDialog.show();
         });
 
         card_view_news.setOnClickListener(view -> {
-            new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+            if(sweetAlertDialog != null){
+                sweetAlertDialog.dismissWithAnimation();
+            }
+
+            sweetAlertDialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
                     .setTitleText("Confirmation")
                     .setContentText("Are you sure you want to see news & updates section?")
                     .setConfirmText("Yes")
@@ -136,24 +152,35 @@ public class MainActivity extends AppCompatActivity
                         sDialog.dismissWithAnimation();
                     })
                     .setCancelText("No")
-                    .setCancelClickListener(SweetAlertDialog::dismissWithAnimation)
-                    .show();
+                    .setCancelClickListener(SweetAlertDialog::dismissWithAnimation);
+
+            sweetAlertDialog.show();
         });
 
         card_view_feedback.setOnClickListener(view -> {
-            new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+            if(sweetAlertDialog != null){
+                sweetAlertDialog.dismissWithAnimation();
+            }
+
+            sweetAlertDialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
                     .setTitleText("Oops! We're sorry!")
                     .setContentText("Feedback section still an ongoing feature. Thank you.")
-                    .setConfirmText("Ok, I understand!")
-                    .show();
+                    .setConfirmText("Ok, I understand!");
+
+            sweetAlertDialog.show();
         });
 
         card_view_faqs.setOnClickListener(view -> {
-            new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+            if(sweetAlertDialog != null){
+                sweetAlertDialog.dismissWithAnimation();
+            }
+
+            sweetAlertDialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
                     .setTitleText("Oops! We're sorry!")
                     .setContentText("FAQs section still an ongoing feature. Thank you.")
-                    .setConfirmText("Ok, I understand!")
-                    .show();
+                    .setConfirmText("Ok, I understand!");
+
+            sweetAlertDialog.show();
         });
     }
 
@@ -241,17 +268,27 @@ public class MainActivity extends AppCompatActivity
                             "To have own payment system that allows customers/client to pay online in order to book using debit/credit card.\n")
                     .show();
         } else if (id == R.id.nav_terms_and_conditions){
-            new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+            if(sweetAlertDialog != null){
+                sweetAlertDialog.dismissWithAnimation();
+            }
+
+            sweetAlertDialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
                     .setTitleText("Oops! We're sorry!")
                     .setContentText("Terms & Conditions section still an ongoing feature. Thank you.")
-                    .setConfirmText("Ok, I understand!")
-                    .show();
+                    .setConfirmText("Ok, I understand!");
+
+            sweetAlertDialog.show();
         } else if (id == R.id.nav_privacy_policy){
-            new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+            if(sweetAlertDialog != null){
+                sweetAlertDialog.dismissWithAnimation();
+            }
+
+            sweetAlertDialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
                     .setTitleText("Oops! We're sorry!")
                     .setContentText("Privacy Policy section still an ongoing feature. Thank you.")
-                    .setConfirmText("Ok, I understand!")
-                    .show();
+                    .setConfirmText("Ok, I understand!");
+
+            sweetAlertDialog.show();
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -260,18 +297,24 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void showLogoutPrompt(String title, String message) {
-        new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+        if(sweetAlertDialog != null){
+            sweetAlertDialog.dismissWithAnimation();
+        }
+
+        sweetAlertDialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
                 .setTitleText(title)
                 .setContentText(message)
                 .setConfirmText("Yes")
                 .setConfirmClickListener(sDialog -> {
+                    sDialog.dismissWithAnimation();
                     SharedPrefManager.getInstance(getApplicationContext()).logoutUser();
                     startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                     finish();
                 })
                 .setCancelText("No")
-                .setCancelClickListener(SweetAlertDialog::dismissWithAnimation)
-                .show();
+                .setCancelClickListener(SweetAlertDialog::dismissWithAnimation);
+
+        sweetAlertDialog.show();
     }
 
     public void showInfoOfLoggedInUser(NavigationView navigationView){
