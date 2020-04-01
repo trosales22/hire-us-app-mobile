@@ -6,10 +6,11 @@ public class ClientBookingsDO {
     private int bookingId;
     private String bookingGeneratedId, bookingEventTitle, bookingTalentFee, bookingVenueLocation,
             bookingPaymentOption,  bookingDate, bookingTime, bookingOtherDetails, bookingOfferStatus,
-            bookingCreatedDate, bookingDeclineReason, bookingApprovedOrDeclinedDate, bookingDatePaid, bookingPayUntil;
+            bookingCreatedDate, bookingDeclineReason, bookingApprovedOrDeclinedDate, bookingDatePaid,
+            bookingPayUntil, bookingPaymentStatus;
     private TalentsDO talentDetails;
 
-    public ClientBookingsDO(int bookingId, String bookingGeneratedId, String bookingEventTitle, String bookingTalentFee, String bookingVenueLocation, String bookingPaymentOption, String bookingDate, String bookingTime, String bookingOtherDetails, String bookingOfferStatus, String bookingCreatedDate, String bookingDeclineReason, String bookingApprovedOrDeclinedDate, String bookingDatePaid, String bookingPayUntil, TalentsDO talentDetails) {
+    public ClientBookingsDO(int bookingId, String bookingGeneratedId, String bookingEventTitle, String bookingTalentFee, String bookingVenueLocation, String bookingPaymentOption, String bookingDate, String bookingTime, String bookingOtherDetails, String bookingOfferStatus, String bookingCreatedDate, String bookingDeclineReason, String bookingApprovedOrDeclinedDate, String bookingDatePaid, String bookingPayUntil, String bookingPaymentStatus, TalentsDO talentDetails) {
         this.bookingId = bookingId;
         this.bookingGeneratedId = bookingGeneratedId;
         this.bookingEventTitle = bookingEventTitle;
@@ -25,6 +26,7 @@ public class ClientBookingsDO {
         this.bookingApprovedOrDeclinedDate = bookingApprovedOrDeclinedDate;
         this.bookingDatePaid = bookingDatePaid;
         this.bookingPayUntil = bookingPayUntil;
+        this.bookingPaymentStatus = bookingPaymentStatus;
         this.talentDetails = talentDetails;
     }
 
@@ -88,6 +90,10 @@ public class ClientBookingsDO {
         return bookingPayUntil;
     }
 
+    public String getBookingPaymentStatus() {
+        return bookingPaymentStatus;
+    }
+
     public TalentsDO getTalentDetails() {
         return talentDetails;
     }
@@ -111,6 +117,7 @@ public class ClientBookingsDO {
                 ", bookingApprovedOrDeclinedDate='" + bookingApprovedOrDeclinedDate + '\'' +
                 ", bookingDatePaid='" + bookingDatePaid + '\'' +
                 ", bookingPayUntil='" + bookingPayUntil + '\'' +
+                ", bookingPaymentStatus='" + bookingPaymentStatus + '\'' +
                 ", talentDetails=" + talentDetails +
                 '}';
     }

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import com.tjbr.hire_us_ph.R;
 import com.tjbr.hire_us_ph.activities.BookingListActivity;
 import com.tjbr.hire_us_ph.classes.wrappers.ClientBookingsDO;
 import com.tjbr.hire_us_ph.fragments.BookingAndTalentDetailsBottomSheetFragment;
+import com.tjbr.hire_us_ph.fragments.PayViaDebitCreditCardDialog;
 
 import java.util.List;
 
@@ -59,8 +61,28 @@ public class BookedTalentsAdapter extends RecyclerView.Adapter<BookedTalentsAdap
                 .into(viewHolder.imgTalentDisplayPhoto);
 
         if(clientBookingsDO.getBookingDatePaid().equalsIgnoreCase("PENDING")){
-            viewHolder.lblBookingPaymentStatus.setText("Pay on or before " + clientBookingsDO.getBookingPayUntil());
-            viewHolder.btnPayNow.setVisibility(View.VISIBLE);
+            switch (clientBookingsDO.getBookingOfferStatus()){
+                case "WAITING":
+                    viewHolder.lblBookingPaymentStatus.setVisibility(View.GONE);
+                    viewHolder.btnPayNow.setVisibility(View.GONE);
+
+                    break;
+                case "APPROVED":
+                    switch (clientBookingsDO.getBookingPaymentStatus()){
+                        case "ACTIVE":
+                            viewHolder.lblBookingPaymentStatus.setText("Pay " + Html.fromHtml("&#8369;") + clientBookingsDO.getBookingTalentFee() + " on or before " + clientBookingsDO.getBookingPayUntil());
+                            viewHolder.btnPayNow.setVisibility(View.VISIBLE);
+
+                            break;
+                        case "EXPIRED":
+                            viewHolder.lblBookingPaymentStatus.setText("Payment Expired");
+                            viewHolder.btnPayNow.setVisibility(View.GONE);
+
+                            break;
+                    }
+
+                    break;
+            }
         }else{
             viewHolder.lblBookingPaymentStatus.setText("Paid on " + clientBookingsDO.getBookingDatePaid());
             viewHolder.btnPayNow.setVisibility(View.GONE);
@@ -72,6 +94,24 @@ public class BookedTalentsAdapter extends RecyclerView.Adapter<BookedTalentsAdap
                     .setTitle("Pay Via")
                     .addButton("DEBIT/CREDIT CARD", Color.parseColor("#FFFFFF"), Color.parseColor("#48b1bf"), CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (dialog, which) -> {
                         dialog.dismiss();
+
+                        Bundle bookingsBundleArgs = new Bundle();
+                        bookingsBundleArgs.putString("talent_id", clientBookingsDO.getTalentDetails().getTalent_id());
+                        bookingsBundleArgs.putString("booking_generated_id", clientBookingsDO.getBookingGeneratedId());
+                        bookingsBundleArgs.putString("booking_event_title", clientBookingsDO.getBookingEventTitle());
+                        bookingsBundleArgs.putString("booking_talent_fee", clientBookingsDO.getBookingTalentFee());
+                        bookingsBundleArgs.putString("booking_venue_location", clientBookingsDO.getBookingVenueLocation());
+                        bookingsBundleArgs.putString("booking_payment_option", "DEBIT/CREDIT CARD");
+                        bookingsBundleArgs.putString("booking_date", clientBookingsDO.getBookingDate());
+                        bookingsBundleArgs.putString("booking_time", clientBookingsDO.getBookingTime());
+                        bookingsBundleArgs.putString("booking_other_details", clientBookingsDO.getBookingOtherDetails());
+                        bookingsBundleArgs.putString("booking_offer_status", clientBookingsDO.getBookingOfferStatus());
+                        bookingsBundleArgs.putString("booking_created_date", clientBookingsDO.getBookingCreatedDate());
+                        bookingsBundleArgs.putString("booking_decline_reason", clientBookingsDO.getBookingDeclineReason());
+                        bookingsBundleArgs.putString("booking_approved_or_declined_date", clientBookingsDO.getBookingApprovedOrDeclinedDate());
+
+                        PayViaDebitCreditCardDialog payViaDebitCreditCardDialog = new PayViaDebitCreditCardDialog(bookingsBundleArgs);
+                        payViaDebitCreditCardDialog.show(((BookingListActivity) context).getSupportFragmentManager(), "payViaDebitCreditCardDialog");
                     })
                     .addButton("BANK TRANSFER", Color.parseColor("#FFFFFF"), Color.parseColor("#003f3f"), CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (dialog, which) -> {
                         dialog.dismiss();

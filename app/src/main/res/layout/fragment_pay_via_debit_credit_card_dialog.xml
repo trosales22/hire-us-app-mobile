@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="20dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragments.PayViaDebitCreditCardDialog"
+    android:background="@color/gainsboro">
+
+    <RelativeLayout
+        android:id="@+id/relativeLayoutTalentDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/lblDialogCaption"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/colorPrimary"
+            android:text="Pay Using Debit/Credit Card"
+            android:textAlignment="center"
+            android:gravity="center_vertical"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            tools:ignore="HardcodedText,RtlCompat" />
+
+        <com.stripe.android.view.CardMultilineWidget
+            android:id="@+id/cardMultilineWidget"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lblDialogCaption"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            app:shouldShowPostalCode="false" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnContinuePayment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/cardMultilineWidget"
+            android:layout_marginTop="10dp"
+            android:background="@color/colorPrimary"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:drawablePadding="10dp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:text="Continue"
+            tools:ignore="HardcodedText" />
+
+    </RelativeLayout>
+
+</FrameLayout>
