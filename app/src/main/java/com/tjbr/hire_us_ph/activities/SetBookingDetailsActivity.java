@@ -240,7 +240,7 @@ public class SetBookingDetailsActivity extends AppCompatActivity {
                 }
 
                 sweetAlertDialog = new SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
-                        .setTitleText("Congratulations! Your offer was successfully send to the chosen talent/s.")
+                        .setTitleText("Congratulations!")
                         .setContentText(msg)
                         .setConfirmClickListener(sweetAlertDialog -> {
                             sweetAlertDialog.dismissWithAnimation();

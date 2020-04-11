@@ -21,7 +21,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
@@ -336,6 +335,8 @@ public class BookingAndClientDetailsBottomSheetFragment extends BottomSheetDialo
         try {
             int flag = response.getInt("flag");
             String msg = response.has("msg") ? response.getString("msg") : "";
+
+            BookingAndClientDetailsBottomSheetFragment.this.dismiss();
 
             if(flag == 1){
                 if(sweetAlertDialog != null){

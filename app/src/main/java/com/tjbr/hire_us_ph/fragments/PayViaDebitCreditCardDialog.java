@@ -44,6 +44,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 public class PayViaDebitCreditCardDialog extends DialogFragment {
     @BindView(R.id.cardMultilineWidget) CardMultilineWidget cardMultilineWidget;
     @BindView(R.id.btnContinuePayment) AppCompatButton btnContinuePayment;
+    @BindView(R.id.btnClosePayment) AppCompatButton btnClosePayment;
 
     private Stripe stripe;
     private SweetAlertDialog sweetAlertDialog;
@@ -79,6 +80,8 @@ public class PayViaDebitCreditCardDialog extends DialogFragment {
         ButterKnife.bind(this, view);
 
         stripe = new Stripe(view.getContext(), "pk_test_pHHixfchBGl7tkRAanAoe7TN00O13SSzVp");
+
+        btnClosePayment.setOnClickListener(v -> this.dismiss());
 
         btnContinuePayment.setOnClickListener(v -> {
             final Card cardToSave = cardMultilineWidget.getCard();

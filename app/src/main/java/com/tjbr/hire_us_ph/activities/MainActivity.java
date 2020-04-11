@@ -344,13 +344,35 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onError(ANError anError) {
                         progressDialog.dismiss();
-                        Log.d("anError", String.valueOf(anError.getErrorCode()));
-                        Snackbar.make(findViewById(android.R.id.content), anError.getErrorDetail(), Snackbar.LENGTH_LONG).show();
+
+                        card_view_talents.setVisibility(View.GONE);
+                        card_view_announcements.setVisibility(View.GONE);
+                        card_view_news.setVisibility(View.GONE);
+                        card_view_feedback.setVisibility(View.GONE);
+                        card_view_faqs.setVisibility(View.GONE);
 
                         if(anError.getErrorCode() == 0){
                             SharedPrefManager.getInstance(getApplicationContext()).logoutUser();
                             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                             finish();
+                        }else{
+                            if(sweetAlertDialog != null){
+                                sweetAlertDialog.dismissWithAnimation();
+                            }
+
+                            sweetAlertDialog = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE)
+                                    .setTitleText("Internal Server Error")
+                                    .setContentText("Please contact the developer/administrator.")
+                                    .setConfirmText("Ok, Got It!")
+                                    .setConfirmClickListener(sDialog -> {
+                                        sDialog.dismissWithAnimation();
+                                        startActivity(new Intent(MainActivity.this, MainActivity.class));
+                                    });
+
+                            sweetAlertDialog.setCanceledOnTouchOutside(false);
+                            sweetAlertDialog.setCancelable(false);
+
+                            sweetAlertDialog.show();
                         }
                     }
                 });

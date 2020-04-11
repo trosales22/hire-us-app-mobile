@@ -22,6 +22,7 @@ import com.tjbr.hire_us_ph.R;
 import com.tjbr.hire_us_ph.activities.BookingListActivity;
 import com.tjbr.hire_us_ph.classes.wrappers.ClientBookingsDO;
 import com.tjbr.hire_us_ph.fragments.BookingAndTalentDetailsBottomSheetFragment;
+import com.tjbr.hire_us_ph.fragments.PayViaBankTransferOrDepositDialog;
 import com.tjbr.hire_us_ph.fragments.PayViaDebitCreditCardDialog;
 
 import java.util.List;
@@ -113,8 +114,26 @@ public class BookedTalentsAdapter extends RecyclerView.Adapter<BookedTalentsAdap
                         PayViaDebitCreditCardDialog payViaDebitCreditCardDialog = new PayViaDebitCreditCardDialog(bookingsBundleArgs);
                         payViaDebitCreditCardDialog.show(((BookingListActivity) context).getSupportFragmentManager(), "payViaDebitCreditCardDialog");
                     })
-                    .addButton("BANK TRANSFER", Color.parseColor("#FFFFFF"), Color.parseColor("#003f3f"), CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (dialog, which) -> {
+                    .addButton("BANK DEPOSIT/TRANSFER", Color.parseColor("#FFFFFF"), Color.parseColor("#003f3f"), CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (dialog, which) -> {
                         dialog.dismiss();
+
+                        Bundle bookingsBundleArgs = new Bundle();
+                        bookingsBundleArgs.putString("talent_id", clientBookingsDO.getTalentDetails().getTalent_id());
+                        bookingsBundleArgs.putString("booking_generated_id", clientBookingsDO.getBookingGeneratedId());
+                        bookingsBundleArgs.putString("booking_event_title", clientBookingsDO.getBookingEventTitle());
+                        bookingsBundleArgs.putString("booking_talent_fee", clientBookingsDO.getBookingTalentFee());
+                        bookingsBundleArgs.putString("booking_venue_location", clientBookingsDO.getBookingVenueLocation());
+                        bookingsBundleArgs.putString("booking_payment_option", "DEBIT/CREDIT CARD");
+                        bookingsBundleArgs.putString("booking_date", clientBookingsDO.getBookingDate());
+                        bookingsBundleArgs.putString("booking_time", clientBookingsDO.getBookingTime());
+                        bookingsBundleArgs.putString("booking_other_details", clientBookingsDO.getBookingOtherDetails());
+                        bookingsBundleArgs.putString("booking_offer_status", clientBookingsDO.getBookingOfferStatus());
+                        bookingsBundleArgs.putString("booking_created_date", clientBookingsDO.getBookingCreatedDate());
+                        bookingsBundleArgs.putString("booking_decline_reason", clientBookingsDO.getBookingDeclineReason());
+                        bookingsBundleArgs.putString("booking_approved_or_declined_date", clientBookingsDO.getBookingApprovedOrDeclinedDate());
+
+                        PayViaBankTransferOrDepositDialog payViaBankTransferOrDepositDialog = new PayViaBankTransferOrDepositDialog(bookingsBundleArgs);
+                        payViaBankTransferOrDepositDialog.show(((BookingListActivity) context).getSupportFragmentManager(), "payViaBankTransferOrDepositDialog");
                     });
 
             builder.show();
