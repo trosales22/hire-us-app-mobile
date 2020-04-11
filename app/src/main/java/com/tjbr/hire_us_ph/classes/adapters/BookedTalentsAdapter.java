@@ -117,22 +117,7 @@ public class BookedTalentsAdapter extends RecyclerView.Adapter<BookedTalentsAdap
                     .addButton("BANK DEPOSIT/TRANSFER", Color.parseColor("#FFFFFF"), Color.parseColor("#003f3f"), CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (dialog, which) -> {
                         dialog.dismiss();
 
-                        Bundle bookingsBundleArgs = new Bundle();
-                        bookingsBundleArgs.putString("talent_id", clientBookingsDO.getTalentDetails().getTalent_id());
-                        bookingsBundleArgs.putString("booking_generated_id", clientBookingsDO.getBookingGeneratedId());
-                        bookingsBundleArgs.putString("booking_event_title", clientBookingsDO.getBookingEventTitle());
-                        bookingsBundleArgs.putString("booking_talent_fee", clientBookingsDO.getBookingTalentFee());
-                        bookingsBundleArgs.putString("booking_venue_location", clientBookingsDO.getBookingVenueLocation());
-                        bookingsBundleArgs.putString("booking_payment_option", "DEBIT/CREDIT CARD");
-                        bookingsBundleArgs.putString("booking_date", clientBookingsDO.getBookingDate());
-                        bookingsBundleArgs.putString("booking_time", clientBookingsDO.getBookingTime());
-                        bookingsBundleArgs.putString("booking_other_details", clientBookingsDO.getBookingOtherDetails());
-                        bookingsBundleArgs.putString("booking_offer_status", clientBookingsDO.getBookingOfferStatus());
-                        bookingsBundleArgs.putString("booking_created_date", clientBookingsDO.getBookingCreatedDate());
-                        bookingsBundleArgs.putString("booking_decline_reason", clientBookingsDO.getBookingDeclineReason());
-                        bookingsBundleArgs.putString("booking_approved_or_declined_date", clientBookingsDO.getBookingApprovedOrDeclinedDate());
-
-                        PayViaBankTransferOrDepositDialog payViaBankTransferOrDepositDialog = new PayViaBankTransferOrDepositDialog(bookingsBundleArgs);
+                        PayViaBankTransferOrDepositDialog payViaBankTransferOrDepositDialog = new PayViaBankTransferOrDepositDialog();
                         payViaBankTransferOrDepositDialog.show(((BookingListActivity) context).getSupportFragmentManager(), "payViaBankTransferOrDepositDialog");
                     });
 
@@ -154,6 +139,8 @@ public class BookedTalentsAdapter extends RecyclerView.Adapter<BookedTalentsAdap
             bookingsBundleArgs.putString("booking_created_date", clientBookingsDO.getBookingCreatedDate());
             bookingsBundleArgs.putString("booking_decline_reason", clientBookingsDO.getBookingDeclineReason());
             bookingsBundleArgs.putString("booking_approved_or_declined_date", clientBookingsDO.getBookingApprovedOrDeclinedDate());
+            bookingsBundleArgs.putString("booking_pay_on_or_before", clientBookingsDO.getBookingPayUntil());
+            bookingsBundleArgs.putString("booking_payment_status", clientBookingsDO.getBookingPaymentStatus());
 
             BookingAndTalentDetailsBottomSheetFragment bookingAndTalentDetailsBottomSheetFragment = new BookingAndTalentDetailsBottomSheetFragment(bookingsBundleArgs, view.getContext());
             bookingAndTalentDetailsBottomSheetFragment.setCancelable(false);
@@ -162,7 +149,12 @@ public class BookedTalentsAdapter extends RecyclerView.Adapter<BookedTalentsAdap
 
         viewHolder.lblTalentFullName.setText(clientBookingsDO.getTalentDetails().getFullname());
         viewHolder.lblBookingGeneratedId.setText(clientBookingsDO.getBookingGeneratedId());
-        viewHolder.lblBookingOfferStatus.setText(clientBookingsDO.getBookingOfferStatus());
+
+        if(clientBookingsDO.getBookingPayUntil().equalsIgnoreCase("NOT YET APPROVED/DECLINED") && clientBookingsDO.getBookingPaymentStatus().equalsIgnoreCase("NOT YET APPROVED/DECLINED")){
+            viewHolder.lblBookingOfferStatus.setText(clientBookingsDO.getBookingPaymentStatus());
+        }else{
+            viewHolder.lblBookingOfferStatus.setText(clientBookingsDO.getBookingOfferStatus());
+        }
     }
 
     @Override

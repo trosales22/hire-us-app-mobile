@@ -42,23 +42,6 @@ public class PotentialClientsAdapter extends RecyclerView.Adapter<PotentialClien
         return new ViewHolder(view);
     }
 
-//    private String getPaymentOption(String paymentOption){
-//        String returnValue = null;
-//        switch (paymentOption){
-//            case "DEBIT_CREDIT_CARD":
-//                returnValue = "Debit/Credit Card";
-//                break;
-//            case "BANK_TRANSFER":
-//                returnValue = "Bank Transfer";
-//                break;
-//            case "BANK_DEPOSIT":
-//                returnValue = "Bank Deposit";
-//                break;
-//
-//        }
-//        return returnValue;
-//    }
-
     @Override
     public void onBindViewHolder(@NonNull PotentialClientsAdapter.ViewHolder viewHolder, int i) {
         final ClientsBookedDO clientsBookedDO = clientsBookedDOList.get(i);
@@ -110,6 +93,8 @@ public class PotentialClientsAdapter extends RecyclerView.Adapter<PotentialClien
             bookingAndClientDetailsBundleArgs.putString("booking_created_date", clientsBookedDO.getClientBookingsDO().getBookingCreatedDate());
             bookingAndClientDetailsBundleArgs.putString("booking_decline_reason", clientsBookedDO.getClientBookingsDO().getBookingDeclineReason());
             bookingAndClientDetailsBundleArgs.putString("booking_approved_or_declined_date", clientsBookedDO.getClientBookingsDO().getBookingApprovedOrDeclinedDate());
+            bookingAndClientDetailsBundleArgs.putString("booking_pay_on_or_before", clientsBookedDO.getClientBookingsDO().getBookingPayUntil());
+            bookingAndClientDetailsBundleArgs.putString("booking_payment_status", clientsBookedDO.getClientBookingsDO().getBookingPaymentStatus());
 
             //client information
             bookingAndClientDetailsBundleArgs.putString("client_full_name", clientsBookedDO.getClientDetailsDO().getClientFullname());

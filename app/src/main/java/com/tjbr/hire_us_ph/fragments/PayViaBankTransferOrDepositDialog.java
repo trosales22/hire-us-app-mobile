@@ -26,10 +26,8 @@ import butterknife.ButterKnife;
 public class PayViaBankTransferOrDepositDialog extends DialogFragment {
     @BindView(R.id.lblBankTransferOrDepositDetails) TextView lblBankTransferOrDepositDetails;
     @BindView(R.id.btnCloseBankTransferDialog) AppCompatButton btnCloseBankTransferDialog;
-    private Bundle bookingArgs;
 
-    public PayViaBankTransferOrDepositDialog(Bundle bookingArgs) {
-        this.bookingArgs = bookingArgs;
+    public PayViaBankTransferOrDepositDialog() {
     }
 
     @NotNull

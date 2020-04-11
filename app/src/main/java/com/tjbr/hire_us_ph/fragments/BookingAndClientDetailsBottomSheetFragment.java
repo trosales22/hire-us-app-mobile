@@ -123,6 +123,7 @@ public class BookingAndClientDetailsBottomSheetFragment extends BottomSheetDialo
         lblBookingDate.setText(bookingAndClientDetailsBundleArgs.getString("booking_date"));
         lblBookingTime.setText(bookingAndClientDetailsBundleArgs.getString("booking_time"));
         lblBookingOtherDetails.setText(bookingAndClientDetailsBundleArgs.getString("booking_other_details"));
+
         lblBookingOfferStatus.setText(bookingAndClientDetailsBundleArgs.getString("booking_offer_status"));
 
         switch (bookingAndClientDetailsBundleArgs.getString("booking_offer_status")){
@@ -182,6 +183,8 @@ public class BookingAndClientDetailsBottomSheetFragment extends BottomSheetDialo
                         "\nCompany Name: " + bookingAndClientDetailsBundleArgs.getString("client_full_name"));
                 break;
         }
+
+        rbTalentFee.setChecked(true);
 
         rbTalentFee.setOnClickListener(view -> {
             chooseDeclineReason(rbTalentFee);

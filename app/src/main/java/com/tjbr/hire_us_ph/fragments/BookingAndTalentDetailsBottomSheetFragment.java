@@ -112,7 +112,13 @@ public class BookingAndTalentDetailsBottomSheetFragment extends BottomSheetDialo
         lblBookingDate.setText(bookingDetailsBundleArgs.getString("booking_date"));
         lblBookingTime.setText(bookingDetailsBundleArgs.getString("booking_time"));
         lblBookingOtherDetails.setText(bookingDetailsBundleArgs.getString("booking_other_details"));
-        lblBookingOfferStatus.setText(bookingDetailsBundleArgs.getString("booking_offer_status"));
+
+        if(bookingDetailsBundleArgs.getString("booking_pay_on_or_before").equalsIgnoreCase("NOT YET APPROVED/DECLINED") && bookingDetailsBundleArgs.getString("booking_payment_status").equalsIgnoreCase("NOT YET APPROVED/DECLINED")){
+            lblBookingOfferStatus.setText(bookingDetailsBundleArgs.getString("booking_payment_status"));
+        }else{
+            lblBookingOfferStatus.setText(bookingDetailsBundleArgs.getString("booking_offer_status"));
+        }
+
         lblBookingCreatedDate.setText(bookingDetailsBundleArgs.getString("booking_created_date"));
         lblBookingDeclineReason.setText(bookingDetailsBundleArgs.getString("booking_decline_reason"));
         lblBookingApprovedOrDeclinedDate.setText(bookingDetailsBundleArgs.getString("booking_approved_or_declined_date"));
