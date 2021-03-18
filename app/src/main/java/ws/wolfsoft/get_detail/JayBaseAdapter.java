@@ -10,8 +10,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.tjbr.hire_us_ph.R;
-import com.tjbr.hire_us_ph.classes.beans.Reviews;
+import com.agentcoder.hire_us_ph.R;
+import com.agentcoder.hire_us_ph.classes.beans.Reviews;
 
 import java.util.ArrayList;
 

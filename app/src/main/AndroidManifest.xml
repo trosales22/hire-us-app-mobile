@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dist="http://schemas.android.com/apk/distribution"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.tjbr.hire_us_ph">
+    package="com.agentcoder.hire_us_ph">
 
     <dist:module dist:instant="true" />
 
@@ -11,7 +11,8 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.CAMERA" />
 
@@ -23,66 +24,66 @@
         android:roundIcon="@drawable/hire_us_logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:ignore="GoogleAppIndexingWarning,UnusedAttribute"
+        tools:ignore="AllowBackup,GoogleAppIndexingWarning,UnusedAttribute"
         tools:replace="android:icon">
         <activity
-            android:name="com.tjbr.hire_us_ph.activities.TalentsActivity"
+            android:name=".activities.TalentsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_talents"
             android:screenOrientation="fullSensor" />
         <activity
-            android:name="com.tjbr.hire_us_ph.activities.NewsActivity"
+            android:name=".activities.NewsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_news"
             android:screenOrientation="fullSensor" />
         <activity
-            android:name="com.tjbr.hire_us_ph.activities.AnnouncementsActivity"
+            android:name=".activities.AnnouncementsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_announcements"
             android:screenOrientation="fullSensor" />
         <activity
-            android:name="com.tjbr.hire_us_ph.activities.MainActivity"
+            android:name=".activities.MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_main"
             android:screenOrientation="fullSensor"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="com.tjbr.hire_us_ph.activities.CheckoutActivity"
+            android:name=".activities.CheckoutActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_checkout"
             android:screenOrientation="fullSensor" />
         <activity
-            android:name="com.tjbr.hire_us_ph.activities.SetBookingDetailsActivity"
+            android:name=".activities.SetBookingDetailsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_booking_date_and_time"
             android:screenOrientation="fullSensor"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name="com.tjbr.hire_us_ph.activities.BookingListActivity"
+            android:name=".activities.BookingListActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_booking_list"
             android:screenOrientation="fullSensor" />
         <activity
-            android:name="com.tjbr.hire_us_ph.activities.PotentialClientsActivity"
+            android:name=".activities.PotentialClientsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_clients_booked"
             android:screenOrientation="fullSensor" />
         <activity
-            android:name="com.tjbr.hire_us_ph.activities.SettingsActivity"
+            android:name=".activities.SettingsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_settings"
             android:screenOrientation="fullSensor" />
         <activity
-            android:name="com.tjbr.hire_us_ph.activities.FilteringActivity"
+            android:name=".activities.FilteringActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="fullSensor" />
         <activity
-            android:name="com.tjbr.hire_us_ph.activities.TalentModelProfileActivity"
+            android:name=".activities.TalentModelProfileActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="fullSensor"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="com.tjbr.hire_us_ph.activities.SplashScreenActivity"
+            android:name=".activities.SplashScreenActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="fullSensor"
             android:theme="@style/AppTheme.Dark">
@@ -93,7 +94,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.tjbr.hire_us_ph.activities.LoginActivity"
+            android:name=".activities.LoginActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="fullSensor"
             android:theme="@style/AppTheme.Dark" />
